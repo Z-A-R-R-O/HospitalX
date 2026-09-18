@@ -1,0 +1,6 @@
+import { NextResponse } from "next/server";
+import { sql } from "@/lib/db";
+export const runtime="nodejs";
+async function ensure(){const db=sql();await db`CREATE TABLE IF NOT EXISTS audit_events (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), event_type TEXT NOT NULL, actor TEXT NOT NULL, payload JSONB NOT NULL DEFAULT '{}'::jsonb, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;return db}
+export async function GET(){try{const db=await ensure();const events=await db`SELECT id,event_type,actor,payload,created_at FROM audit_events ORDER BY created_at DESC LIMIT 200`;return NextResponse.json({events,source:"neon"})}catch(e){console.error("audit_read_failed",e);return NextResponse.json({error:"Database unavailable"},{status:503})}}
+export async function POST(request:Request){try{const b=await request.json();if(!b.eventType||!b.actor)return NextResponse.json({error:"eventType and actor are required"},{status:400});const db=await ensure();const rows=await db`INSERT INTO audit_events (event_type,actor,payload) VALUES (${b.eventType},${b.actor},${b.payload??{}}) RETURNING *`;return NextResponse.json({event:Array.isArray(rows)?rows[0]:null,source:"neon"},{status:201})}catch(e){console.error("audit_create_failed",e);return NextResponse.json({error:"Unable to create audit event"},{status:500})}}
