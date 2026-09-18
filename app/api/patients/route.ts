@@ -6,6 +6,8 @@ export const runtime = "nodejs";
 export async function GET() {
   try {
     const db = sql();
+    await db`CREATE TABLE IF NOT EXISTS patients (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id TEXT NOT NULL, external_identifier TEXT, full_name TEXT NOT NULL, date_of_birth DATE, sex TEXT, phone TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
+    await db`CREATE TABLE IF NOT EXISTS appointments (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), patient_id UUID NOT NULL REFERENCES patients(id), provider_name TEXT NOT NULL, appointment_type TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'scheduled', starts_at TIMESTAMPTZ NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
     const patients = await db`
       SELECT p.id, p.external_identifier, p.full_name, p.sex,
              EXTRACT(YEAR FROM age(current_date, p.date_of_birth))::int AS age,
@@ -29,6 +31,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     if (!body.fullName || !body.organizationId) return NextResponse.json({ error: "fullName and organizationId are required" }, { status: 400 });
     const db = sql();
+    await db`CREATE TABLE IF NOT EXISTS patients (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id TEXT NOT NULL, external_identifier TEXT, full_name TEXT NOT NULL, date_of_birth DATE, sex TEXT, phone TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
     const result = await db`
       INSERT INTO patients (organization_id, external_identifier, full_name, date_of_birth, sex, phone)
       VALUES (${body.organizationId}, ${body.externalIdentifier ?? null}, ${body.fullName}, ${body.dateOfBirth ?? null}, ${body.sex ?? null}, ${body.phone ?? null})
