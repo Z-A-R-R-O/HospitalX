@@ -3,6 +3,7 @@ import "./globals.css";
 import "./backgrounds.css";
 import "./responsive.css";
 import "./desktop.css";
+import "./font.css";
 
 export const metadata: Metadata = {
   title: "HospitalX | Command Center",
