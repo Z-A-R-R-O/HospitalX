@@ -1,0 +1,6 @@
+import { NextResponse } from "next/server";
+import { sql } from "@/lib/db";
+export const runtime = "nodejs";
+async function ensure(){const db=sql();await db`CREATE TABLE IF NOT EXISTS hospital_tasks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), text TEXT NOT NULL, severity TEXT NOT NULL DEFAULT 'attention', owner TEXT NOT NULL DEFAULT 'Operations', resolved_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;return db}
+export async function GET(){try{const db=await ensure();const tasks=await db`SELECT id,text,severity,owner,created_at FROM hospital_tasks WHERE resolved_at IS NULL ORDER BY created_at DESC`;return NextResponse.json({tasks,source:"neon"})}catch(e){console.error("tasks_read_failed",e);return NextResponse.json({error:"Database unavailable"},{status:503})}}
+export async function POST(request:Request){try{const b=await request.json();if(!b.text)return NextResponse.json({error:"text is required"},{status:400});const db=await ensure();const rows=await db`INSERT INTO hospital_tasks (text,severity,owner) VALUES (${b.text},${b.severity??"attention"},${b.owner??"Operations"}) RETURNING *`;return NextResponse.json({task:Array.isArray(rows)?rows[0]:null,source:"neon"},{status:201})}catch(e){console.error("task_create_failed",e);return NextResponse.json({error:"Unable to create task"},{status:500})}}
