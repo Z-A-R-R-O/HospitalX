@@ -1,0 +1,8 @@
+/* Clean generated liquid-glass asset: never use the annotated source sheet as a tile. */
+.hero{background-image:linear-gradient(90deg,rgba(255,255,255,.28),rgba(255,255,255,.06)),url('/hospitalx-liquid-hero.png')!important;background-size:cover!important;background-position:center!important}
+.metric,.panel,.prompts,.attention,.quick{background-color:rgba(255,255,255,.88)!important;background-image:linear-gradient(135deg,rgba(255,255,255,.90),rgba(248,251,255,.68))!important;backdrop-filter:blur(18px);transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s cubic-bezier(.22,1,.36,1),border-color .5s ease}
+.metric:hover,.panel:hover,.prompts:hover,.attention:hover,.quick:hover{transform:translateY(-3px);box-shadow:0 22px 48px rgba(45,67,101,.13);border-color:rgba(255,255,255,1)}
+.hero:after{animation:liquidDrift 12s cubic-bezier(.45,.05,.55,.95) infinite alternate}.ai>i{animation:float 5.5s ease-in-out infinite}
+button{transition:transform .32s cubic-bezier(.22,1,.36,1),background-color .32s ease,box-shadow .32s ease}button:hover{transform:translateY(-1px)}button:active{transform:scale(.97)}
+@keyframes liquidDrift{from{transform:translate3d(-10px,0,0) rotate(-1deg)}to{transform:translate3d(14px,-5px,0) rotate(1deg)}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

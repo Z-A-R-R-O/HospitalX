@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./backgrounds.css";
 
 export const metadata: Metadata = {
   title: "HospitalX | Command Center",
