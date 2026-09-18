@@ -20,7 +20,8 @@ export async function GET() {
     const appointmentCount = Array.isArray(appointmentRows) ? appointmentRows[0] : null;
     const admissionCount = Array.isArray(admissionRows) ? admissionRows[0] : null;
     const bedCount = Array.isArray(bedRows) ? bedRows[0] : null;
-    return NextResponse.json({ tasks, metrics: { patients: patientCount?.count ?? 0, appointmentsToday: appointmentCount?.count ?? 0, admissions: admissionCount?.count ?? 0, beds: bedCount?.count ?? 0 }, source: "neon" });
+    const count = (row: unknown) => Number((row as { count?: number } | null)?.count ?? 0);
+    return NextResponse.json({ tasks, metrics: { patients: count(patientCount), appointmentsToday: count(appointmentCount), admissions: count(admissionCount), beds: count(bedCount) }, source: "neon" });
   } catch (error) {
     console.error("overview_read_failed", error);
     return NextResponse.json({ error: "Database unavailable" }, { status: 503 });
