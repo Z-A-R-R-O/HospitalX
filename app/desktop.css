@@ -1,0 +1,19 @@
+/* Desktop viewport sizing: keep the shell inside the browser frame. */
+@media (min-width:901px){
+  html,body{height:100%;overflow:hidden}
+  .app{height:100vh;min-height:0;overflow:hidden}
+  .app>aside{height:calc(100vh - 42px);min-height:0}
+  main{height:100vh;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+}
+@media (min-width:901px) and (max-height:900px){
+  main{padding-top:14px;padding-bottom:8px}
+  main>header{margin-bottom:18px}
+  .hero{min-height:112px;margin-bottom:12px}
+  .hero h1{margin:4px 0;font-size:36px}
+  .metrics article{min-height:96px;padding:12px}
+  .grid{margin-top:10px}
+  .panel header{padding:13px 16px}
+  .chart{min-height:205px;padding:16px}
+  .charts{margin-top:10px}
+  footer{margin-top:18px}
+}
