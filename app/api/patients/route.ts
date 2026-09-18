@@ -29,11 +29,12 @@ export async function POST(request: Request) {
     const body = await request.json();
     if (!body.fullName || !body.organizationId) return NextResponse.json({ error: "fullName and organizationId are required" }, { status: 400 });
     const db = sql();
-    const [patient] = await db`
+    const result = await db`
       INSERT INTO patients (organization_id, external_identifier, full_name, date_of_birth, sex, phone)
       VALUES (${body.organizationId}, ${body.externalIdentifier ?? null}, ${body.fullName}, ${body.dateOfBirth ?? null}, ${body.sex ?? null}, ${body.phone ?? null})
       RETURNING id, external_identifier, full_name, date_of_birth, sex, phone, created_at
     `;
+    const patient = Array.isArray(result) ? result[0] : null;
     return NextResponse.json({ patient, source: "neon" }, { status: 201 });
   } catch (error) {
     console.error("patient_create_failed", error);
