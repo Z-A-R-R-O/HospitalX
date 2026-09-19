@@ -63,6 +63,7 @@ export default function Home() {
   const [clock, setClock] = useState<Date | null>(null);
   const [toast, setToast] = useState("");
   const [navOpen, setNavOpen] = useState(false);
+  const [queueFilter, setQueueFilter] = useState("All");
 
   useEffect(() => {
     const updateClock = () => setClock(new Date());
@@ -119,6 +120,19 @@ export default function Home() {
     { icon: BedDouble, value: overview?.metrics?.admissions, label: "Admissions", tone: "indigo" },
     { icon: LogOut, value: overview?.metrics?.availableBeds, label: "Available Beds", tone: "orange" },
   ];
+  const queueFilters = useMemo(() => {
+    const count = (matcher: (status: string) => boolean) => people.filter((row) => matcher(row[5].toLowerCase())).length;
+    return [
+      { label: "All", count: people.length, match: () => true },
+      { label: "Waiting", count: count((status) => status.includes("waiting")), match: (status: string) => status.includes("waiting") },
+      { label: "In Consultation", count: count((status) => status.includes("consultation")), match: (status: string) => status.includes("consultation") },
+      { label: "Completed", count: count((status) => status.includes("completed")), match: (status: string) => status.includes("completed") },
+    ];
+  }, [people]);
+  const filteredPeople = useMemo(() => {
+    const filter = queueFilters.find((item) => item.label === queueFilter);
+    return filter ? people.filter((row) => filter.match(row[5].toLowerCase())) : people;
+  }, [people, queueFilter, queueFilters]);
 
   return (
     <div className="app-shell">
@@ -178,13 +192,21 @@ export default function Home() {
           <section className="dashboard-grid">
             <div className="primary-column">
               <section className="panel glass queue">
-                <header><h2>Today’s Patient Queue <small><CircleDot /> Live</small></h2><span>{peopleLoading ? "Loading…" : `${people.length} registered`}<button type="button" onClick={() => router.push("/patients")}>View All <ArrowUpRight /></button></span></header>
+                <header>
+                  <h2>Today’s Patient Queue <small><CircleDot /> Live</small></h2>
+                  <div className="queue-tools">
+                    <div className="queue-tabs" role="tablist" aria-label="Patient queue status">
+                      {queueFilters.map((filter) => <button type="button" role="tab" aria-selected={queueFilter === filter.label} className={queueFilter === filter.label ? "active" : ""} key={filter.label} onClick={() => setQueueFilter(filter.label)}>{filter.label} <span>({filter.count})</span></button>)}
+                    </div>
+                    <button className="view-all" type="button" onClick={() => router.push("/patients")}>View All <ArrowUpRight /></button>
+                  </div>
+                </header>
                 <div className="table-wrap"><table>
                   <thead><tr><th>#</th><th>Patient</th><th>Age / Gender</th><th>Type</th><th>Doctor</th><th>Status</th><th>ETA</th><th><span className="sr-only">Actions</span></th></tr></thead>
-                  <tbody>{peopleLoading ? <tr><td colSpan={8} className="table-message">Loading live patients…</td></tr> : people.length ? people.map((row) => <tr key={row[0]}>
+                  <tbody>{peopleLoading ? <tr><td colSpan={8} className="table-message">Loading live patients…</td></tr> : filteredPeople.length ? filteredPeople.map((row) => <tr key={row[0]}>
                     {row.map((cell, index) => <td key={`${row[0]}-${index}`} className={cell === "Emergency" ? "red" : ""}>{index === 1 ? <strong>{cell}</strong> : index === 5 ? <span className={`status ${statusClass(cell)}`}><i />{cell}</span> : cell}</td>)}
                     <td><button className="row-action" type="button" aria-label={`More actions for ${row[1]}`}>•••</button></td>
-                  </tr>) : <tr><td colSpan={8} className="table-message">No patients registered yet. Use New Patient to create the first record.</td></tr>}</tbody>
+                  </tr>) : <tr><td colSpan={8} className="table-message">{people.length ? `No ${queueFilter.toLowerCase()} patients in the queue.` : "No patients registered yet. Use New Patient to create the first record."}</td></tr>}</tbody>
                 </table></div>
               </section>
               <section className="analytics-grid"><BedUtilization overview={overview} /><DepartmentLoad appointments={overview?.metrics?.appointmentsToday} /><RevenueCard /></section>
