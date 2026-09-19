@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 const nav = ["Home", "Patients", "Appointments", "OPD", "IPD & Beds", "Doctors", "Nursing", "Laboratory", "Radiology", "Pharmacy", "Billing", "Inventory", "Reports", "AI Assistant"];
 const routes: Record<string, string> = {
@@ -97,7 +98,7 @@ export default function Home() {
       <header>
         <label>⌕<input aria-label="Search HospitalX" placeholder="Search patients, staff, beds, or ask anything..." /></label>
         <div>{dateLabel}<br /><b>{timeLabel}</b></div>
-        <button type="button" aria-label="Display settings">☼</button><button type="button" aria-label="Recent activity">◔</button><button type="button" aria-label="Account">♧</button>
+        <button type="button" aria-label="Display settings">☼</button><button type="button" aria-label="Recent activity">◔</button><div className="auth-controls"><Show when="signed-out"><SignInButton><button type="button">Sign in</button></SignInButton><SignUpButton><button type="button" className="auth-signup">Sign up</button></SignUpButton></Show><Show when="signed-in"><UserButton /></Show></div>
       </header>
       {active === "Home" ? <>
         <section className="hero"><div><p>CITY CARE HOSPITAL</p><h1>Good morning, Dr. Arunez.</h1><span>Here’s what’s happening at your hospital today.</span></div><aside>People First.<br />Always.</aside></section>
