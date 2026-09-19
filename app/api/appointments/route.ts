@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
-import { sql } from "@/lib/db";
+import { getOrganizationContext } from "@/lib/request-context";
+import { cleanText, ensurePatientSchedulingSchema, validDateTime, writeAudit } from "@/lib/patient-scheduling";
 
 export const runtime = "nodejs";
 
-async function ensureTables() {
-  const db = sql();
-  await db`CREATE TABLE IF NOT EXISTS patients (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id TEXT NOT NULL, full_name TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
-  await db`CREATE TABLE IF NOT EXISTS appointments (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), patient_id UUID NOT NULL REFERENCES patients(id), provider_name TEXT NOT NULL, appointment_type TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'scheduled', starts_at TIMESTAMPTZ NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
-  return db;
-}
-
 export async function GET() {
+  const context = await getOrganizationContext();
+  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!context.organizationId) return NextResponse.json({ error: "Select a hospital organization before viewing appointments" }, { status: 403 });
   try {
-    const db = await ensureTables();
-    const appointments = await db`SELECT a.id, a.patient_id, p.full_name, a.provider_name, a.appointment_type, a.status, a.starts_at FROM appointments a JOIN patients p ON p.id = a.patient_id ORDER BY a.starts_at DESC LIMIT 100`;
+    const db = await ensurePatientSchedulingSchema();
+    const appointments = await db`SELECT a.id, a.patient_id, p.full_name, a.provider_name, a.appointment_type, a.status, a.starts_at FROM appointments a JOIN patients p ON p.id = a.patient_id WHERE p.organization_id = ${context.organizationId} ORDER BY a.starts_at DESC LIMIT 100`;
     return NextResponse.json({ appointments, source: "neon" });
   } catch (error) {
     console.error("appointments_read_failed", error);
@@ -22,12 +19,26 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const context = await getOrganizationContext();
+  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!context.organizationId) return NextResponse.json({ error: "Select a hospital organization before booking appointments" }, { status: 403 });
   try {
     const body = await request.json();
-    if (!body.patientId || !body.providerName || !body.appointmentType || !body.startsAt) return NextResponse.json({ error: "patientId, providerName, appointmentType, and startsAt are required" }, { status: 400 });
-    const db = await ensureTables();
-    const result = await db`INSERT INTO appointments (patient_id, provider_name, appointment_type, starts_at) VALUES (${body.patientId}, ${body.providerName}, ${body.appointmentType}, ${body.startsAt}) RETURNING *`;
-    return NextResponse.json({ appointment: Array.isArray(result) ? result[0] : null, source: "neon" }, { status: 201 });
+    const patientId = cleanText(body.patientId, 64);
+    const providerName = cleanText(body.providerName, 120);
+    const appointmentType = cleanText(body.appointmentType, 60);
+    const startsAt = cleanText(body.startsAt, 40);
+    if (!patientId || !providerName || !appointmentType || !startsAt) return NextResponse.json({ error: "patientId, providerName, appointmentType, and startsAt are required" }, { status: 400 });
+    if (!validDateTime(startsAt)) return NextResponse.json({ error: "startsAt must be a valid date and time" }, { status: 400 });
+    const db = await ensurePatientSchedulingSchema();
+    const patients = await db`SELECT id FROM patients WHERE id = ${patientId} AND organization_id = ${context.organizationId} LIMIT 1`;
+    if (!Array.isArray(patients) || !patients.length) return NextResponse.json({ error: "Patient not found in the selected hospital" }, { status: 404 });
+    const conflicts = await db`SELECT id FROM appointments WHERE provider_name = ${providerName} AND starts_at = ${startsAt}::timestamptz AND status IN ('scheduled', 'arrived', 'queued', 'in_consultation') LIMIT 1`;
+    if (Array.isArray(conflicts) && conflicts.length) return NextResponse.json({ error: "Provider already has an active appointment at this time" }, { status: 409 });
+    const result = await db`INSERT INTO appointments (patient_id, provider_name, appointment_type, starts_at) VALUES (${patientId}, ${providerName}, ${appointmentType}, ${startsAt}) RETURNING *`;
+    const appointment = (Array.isArray(result) ? result[0] : null) as { id?: string } | null;
+    if (appointment) await writeAudit({ eventType: "appointment.scheduled.v1", actor: context.userId, subjectType: "appointment", subjectId: String(appointment.id), organizationId: context.organizationId, outcome: "accepted" });
+    return NextResponse.json({ appointment, source: "neon" }, { status: 201 });
   } catch (error) {
     console.error("appointment_create_failed", error);
     return NextResponse.json({ error: "Unable to create appointment" }, { status: 500 });
