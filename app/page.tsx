@@ -13,8 +13,9 @@ const routes: Record<string, string> = {
   Billing: "/billing",
 };
 type PatientRow = string[];
+type OperationalTask = { id?: string; text: string; owner?: string; severity?: string; due_at?: string; created_at?: string };
 type Overview = {
-  tasks?: { text: string }[];
+  tasks?: OperationalTask[];
   metrics?: { patients: number; appointmentsToday: number; admissions: number; beds: number; availableBeds: number };
   source?: string;
 };
@@ -31,7 +32,7 @@ const formatPatient = (p: any): PatientRow => [
 export default function Home() {
   const router = useRouter();
   const [active, setActive] = useState("Home");
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<OperationalTask[]>([]);
   const [tasksLoading, setTasksLoading] = useState(true);
   const [people, setPeople] = useState<PatientRow[]>([]);
   const [peopleLoading, setPeopleLoading] = useState(true);
@@ -43,7 +44,7 @@ export default function Home() {
     fetch("/api/overview")
       .then((r) => r.ok ? r.json() : Promise.reject())
       .then((d: Overview) => {
-        setTasks((d.tasks ?? []).map((t) => t.text));
+        setTasks(d.tasks ?? []);
         setOverview(d);
         setUpdatedAt(new Date());
       })
@@ -114,7 +115,7 @@ export default function Home() {
           </div>
           <div className="rail">
             <section className="prompts">{["Show today’s delayed discharges", "Which patients are waiting for lab results?", "Summarize ICU status", "Generate tomorrow’s briefing"].map((x) => <button type="button" key={x} onClick={() => setToast(`${x} is being prepared.`)}>▧　{x}</button>)}<label><input aria-label="Ask HospitalX AI" placeholder="Ask anything..." /><b>›</b></label></section>
-            <section className="attention"><header><h2>⚠　Needs Attention</h2><b>{tasksLoading ? "…" : tasks.length}</b></header>{tasksLoading ? <p className="attention-empty">Loading live tasks…</p> : tasks.length ? tasks.map((x, i) => <button type="button" key={x} onClick={() => setTasks((t) => t.filter((_, n) => n !== i))}><i /> <span>{x}</span><em>{12 + i * 6} min ago</em></button>) : <p className="attention-empty">No live operational tasks.</p>}</section>
+            <section className="attention"><header><h2>⚠　Needs Attention</h2><b>{tasksLoading ? "…" : tasks.length}</b></header>{tasksLoading ? <p className="attention-empty">Loading live tasks…</p> : tasks.length ? tasks.map((task, i) => <button type="button" key={task.id ?? task.text} onClick={() => setTasks((t) => t.filter((_, n) => n !== i))}><i /> <span>{task.text}</span><em>{task.owner ?? "Unassigned"}</em></button>) : <p className="attention-empty">No live operational tasks.</p>}</section>
             <section className="quick"><h2>Quick Actions</h2><button type="button" onClick={() => go("Patients")}>♙<span>New Patient</span></button><button type="button" onClick={() => go("Appointments")}>▣<span>Book Appointment</span></button><button type="button" onClick={() => setToast("Admit Patient flow opened.")}>♙<span>Admit Patient</span></button><button type="button" onClick={() => go("Billing")}>▤<span>Generate Bill</span></button></section>
           </div>
         </section>
