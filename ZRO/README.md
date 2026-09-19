@@ -25,7 +25,7 @@ Every person should be able to open HospitalX and understand their next step:
 | [06-security-compliance.md](06-security-compliance.md) | Access, audit, privacy, safety and India-first compliance posture |
 | [07-api-and-integrations.md](07-api-and-integrations.md) | API conventions and adapter boundaries |
 | [08-ux-and-design.md](08-ux-and-design.md) | Experience principles and role workspaces |
-| [09-delivery-plan.md](09-delivery-plan.md) | Build sequence, team decisions and definition of done |
+| [09-delivery-plan.md](09-delivery-plan.md) | Build sequence, team decisions and definition of done |\n| [10-current-implementation.md](10-current-implementation.md) | Current prototype coverage and pilot-blocking gaps |
 
 ## Terms
 
