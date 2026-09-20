@@ -9,7 +9,7 @@ main{
   padding-inline:var(--page-gutter);
   overflow-x:clip;
 }
-main>header,.hero,.metric-strip,.dashboard-grid,footer,.empty{
+main>header,.hero,.metric-strip,.dashboard-grid,.data-freshness,footer,.empty{
   width:min(100%,var(--content-max));
   margin-inline:auto;
 }
@@ -19,78 +19,73 @@ main>header,.hero,.metric-strip,.dashboard-grid,footer,.empty{
 .dashboard-grid{grid-template-columns:minmax(0,1fr) minmax(18rem,22vw)}
 .metric-strip{grid-template-columns:minmax(0,1fr) minmax(18rem,25rem)}
 .metrics article{min-width:0}
-.metrics article>span{max-width:45%;overflow:hidden}
-.ai{min-width:0}
-.ai>div{min-width:0}
-.ai span{overflow-wrap:anywhere}
 .queue{max-width:100%}
 .queue table{margin:0}
 .analytics-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.rail{min-width:0}
+.right-rail{min-width:0}
 .attention button span,.attention em{min-width:0;overflow-wrap:anywhere}
 footer{flex-wrap:wrap}
 
 @media (min-width:1800px){
   :root{--content-max:1840px}
-  .app{grid-template-columns:280px minmax(0,1fr)}
-  .app>aside{margin-left:clamp(1.125rem,1.4vw,2rem)}
+  .app-shell{grid-template-columns:280px minmax(0,1fr)}
+  .sidebar{margin-left:clamp(1.125rem,1.4vw,2rem)}
   .dashboard-grid{grid-template-columns:minmax(0,1fr) minmax(21rem,24vw)}
   .metric-strip{grid-template-columns:minmax(0,1fr) minmax(22rem,27rem)}
   .metrics article{padding:clamp(1rem,1.1vw,1.35rem)}
-  .chart{min-height:clamp(14rem,17vh,18rem)}
+  .analytics-card{min-height:clamp(14rem,17vh,18rem)}
 }
 
 @media (min-width:1201px) and (max-width:1439px){
-  .app{grid-template-columns:230px minmax(0,1fr)}
-  .app>aside{margin-left:14px}
+  .app-shell{grid-template-columns:230px minmax(0,1fr)}
+  .sidebar{margin-left:14px}
   main{padding-inline:clamp(1rem,1.7vw,1.5rem)}
   .dashboard-grid{grid-template-columns:minmax(0,1fr) minmax(17rem,20rem)}
   .metric-strip{grid-template-columns:minmax(0,1fr) minmax(16rem,19rem)}
   .metrics article{padding:12px;gap:10px}
-  .metric-icon{width:40px;height:40px;font-size:19px}
+  .metric-icon{width:40px;height:40px}
   .metric-card strong{font-size:clamp(1.15rem,1.8vw,1.5rem)}
 }
 
 @media (max-width:1200px){
-  .app{grid-template-columns:220px minmax(0,1fr)}
+  .app-shell{grid-template-columns:220px minmax(0,1fr)}
   .dashboard-grid{grid-template-columns:minmax(0,1fr) minmax(17rem,19rem)}
   .metric-strip{grid-template-columns:minmax(0,1fr) minmax(15rem,18rem)}
   .hero h1{font-size:clamp(2rem,3.5vw,2.7rem)}
   .metrics article{padding:12px;gap:9px}
-  .metric-icon{width:40px;height:40px;font-size:18px}
+  .metric-icon{width:40px;height:40px}
   .metric-card strong{font-size:1.25rem}
-  .metrics em{margin-top:9px}
   .panel header{gap:12px}
 }
 
 @media (max-width:1040px){
   main{padding-inline:16px}
   .metric-strip,.dashboard-grid{grid-template-columns:1fr}
-  .ai{min-height:96px}
-  .rail{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ai-card{min-height:96px}
+  .right-rail{grid-template-columns:repeat(2,minmax(0,1fr))}
   .quick{grid-column:span 2}
   .analytics-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
 @media (max-width:900px){
-  .app{display:block;min-height:100dvh}
-  .app>aside{
+  .app-shell{display:block;min-height:100dvh}
+  .sidebar{
     position:sticky;top:0;z-index:20;margin:0;min-height:64px;
     border-radius:0;border-inline:0;flex-direction:row;align-items:center;padding:12px 16px
   }
   .brand{padding:0 12px 0 0;flex:none}
   .brand strong{font-size:18px}
-  .quote,.user{display:none}
+  .motto-card,.profile-card{display:none}
   nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
   nav::-webkit-scrollbar{display:none}
   nav button{white-space:nowrap;padding:9px 12px}
   main{height:auto;overflow:visible;padding:18px 16px}
   main>header{margin:0 auto 20px;gap:8px}
   main>header label{width:auto;min-width:0;flex:1}
-  main>header>div{display:none}
+  .date-time{display:none}
   .hero{margin-inline:auto}
   .metric-strip,.dashboard-grid{grid-template-columns:1fr}
-  .rail{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .right-rail{grid-template-columns:repeat(2,minmax(0,1fr))}
   .quick{grid-column:span 2}
 }
 
@@ -102,26 +97,21 @@ footer{flex-wrap:wrap}
   main>header button{width:36px;height:38px;flex:none}
   main>header button:last-child{display:none}
   .brand span{display:none}
-  .brand>b{width:32px;height:32px}
   nav button{font-size:12px;padding:8px 10px}
-  nav button i{width:18px;font-size:15px}
   .hero{min-height:150px;padding:20px 18px}
   .hero h1{font-size:clamp(1.8rem,9vw,2rem);line-height:1.05;letter-spacing:-.055em}
   .hero span{font-size:14px}
   .hero aside,.queue header>span{display:none}
   .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
   .metrics article{min-height:98px;padding:11px;gap:8px}
-  .metric-icon{width:35px;height:35px;font-size:16px;flex:none}
+  .metric-icon{width:35px;height:35px;flex:none}
   .metric-card strong{font-size:19px;min-width:0}
-  .metrics em{margin-top:8px}
-  .metrics article>span{font-size:18px;right:7px}
-  .ai{min-height:92px;padding:10px 12px}
-  .ai>i{font-size:42px}
+  .ai-card{min-height:92px;padding:10px 12px}
   .dashboard-grid{gap:10px}
   .panel header{padding:14px}
   .analytics-grid{grid-template-columns:1fr;gap:10px}
-  .chart{min-height:185px;padding:16px}
-  .rail{grid-template-columns:1fr;gap:10px}
+  .analytics-card{min-height:185px;padding:16px}
+  .right-rail{grid-template-columns:1fr;gap:10px}
   .quick{grid-column:auto}
   .quick button{padding:6px 0}
   footer{display:block;margin:24px auto 0;line-height:1.8}
@@ -136,12 +126,12 @@ footer{flex-wrap:wrap}
 
 @media (max-width:380px){
   main{padding:10px}
-  .app>aside{padding-inline:10px}
+  .sidebar{padding-inline:10px}
   .metrics{grid-template-columns:1fr}
   .metrics article{min-height:82px}
   .quick button span{font-size:9px}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .app *{scroll-behavior:auto!important}
+  *{scroll-behavior:auto!important}
 }
