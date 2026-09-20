@@ -16,11 +16,11 @@ export function AppointmentsView() {
           <p>Manage upcoming visits, telehealth, and in-person consultations.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search patient or ID..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Book</button>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Book</button>
         </div>
       </header>
 
@@ -54,8 +54,8 @@ export function AppointmentsView() {
           <div className="timeline-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ margin: 0, fontSize: '16px' }}>Sunday, Sep 20</h3>
             <div className="view-toggles" style={{ display: 'flex', background: 'var(--c-glass-40)', borderRadius: '8px', padding: '4px' }}>
-              <button style={{ padding: '4px 12px', borderRadius: '6px', background: 'var(--c-white)', boxShadow: 'var(--c-shadow-sm)', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--c-dark-text)', cursor: 'pointer' }}>List</button>
-              <button style={{ padding: '4px 12px', borderRadius: '6px', background: 'transparent', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--muted)', cursor: 'pointer' }}>Timeline</button>
+              <button style={{ padding: '4px 12px', borderRadius: '9999px', background: 'var(--c-white)', boxShadow: 'var(--c-shadow-sm)', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--c-dark-text)', cursor: 'pointer' }}>List</button>
+              <button style={{ padding: '4px 12px', borderRadius: '9999px', background: 'transparent', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--muted)', cursor: 'pointer' }}>Timeline</button>
             </div>
           </div>
 
@@ -119,7 +119,7 @@ export function OPDView() {
         <Activity size={14} color="var(--blue)" /> {apt.vitals}
       </div>
       <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-        <button className="row-action" style={{ flex: 1, padding: '6px', fontSize: '12px', background: 'var(--c-white)', borderRadius: '8px', border: '1px solid var(--c-glass-80)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
+        <button className="row-action" style={{ flex: 1, padding: '6px', fontSize: '12px', background: 'var(--c-white)', borderRadius: '9999px', border: '1px solid var(--c-glass-80)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
       </div>
     </div>
   );
@@ -132,8 +132,8 @@ export function OPDView() {
           <p>Live tracking of walk-in patients, triaging, and active consultations.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <button className="glass-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Dept</button>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Issue Token</button>
+          <button className="glass-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Dept</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Issue Token</button>
         </div>
       </header>
 
@@ -212,10 +212,10 @@ export function IPDView() {
           <p>Real-time occupancy, ward tracking, and patient admissions.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search bed or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Admit Patient</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Admit Patient</button>
         </div>
       </header>
 
@@ -321,10 +321,10 @@ export function DoctorsView() {
           <p>Live availability, current physical locations, and shift schedules.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search doctor or dept..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Add Staff</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Add Staff</button>
         </div>
       </header>
 
@@ -415,10 +415,10 @@ export function NursingView() {
           <p>Shift handovers, ward assignments, and live task tracking.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search nurse or ward..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Assign Shift</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Assign Shift</button>
         </div>
       </header>
 
@@ -538,10 +538,10 @@ export function LaboratoryView() {
           <p>Process pathology requests, manage samples, and verify results.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search barcode or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> New Request</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> New Request</button>
         </div>
       </header>
 
@@ -632,10 +632,10 @@ export function RadiologyView() {
           <p>Manage X-Ray, MRI, CT Scans, and Ultrasound queues.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search scan ID or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Schedule Scan</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Schedule Scan</button>
         </div>
       </header>
 
@@ -727,10 +727,10 @@ export function PharmacyView() {
           <p>Prescription fulfillment, point-of-sale, and stock alerts.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search RX or Patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><ShoppingCart size={18} /> OTC / POS Sale</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><ShoppingCart size={18} /> OTC / POS Sale</button>
         </div>
       </header>
 
@@ -848,10 +848,10 @@ export function BillingView() {
           <p>Invoices, claims, and revenue cycle management.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search invoice or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Create Invoice</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Create Invoice</button>
         </div>
       </header>
 
@@ -969,10 +969,10 @@ export function InventoryView() {
           <p>Monitor stock levels for medical and surgical supplies.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search item or SKU..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Purchase Order</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Purchase Order</button>
         </div>
       </header>
 
@@ -1072,10 +1072,10 @@ export function ReportsView() {
           <p>Generate clinical, operational, and financial insights.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search reports..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Custom Report</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Custom Report</button>
         </div>
       </header>
 
@@ -1101,7 +1101,7 @@ export function ReportsView() {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '8px' }}><FileText size={18}/> Recent Exports</h3>
-             <button style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--c-dark-05)', border: 'none', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', color: 'var(--ink)' }}><Filter size={14}/> Filter</button>
+             <button style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--c-dark-05)', border: 'none', padding: '6px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', color: 'var(--ink)' }}><Filter size={14}/> Filter</button>
           </div>
 
           <div className="report-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', paddingRight: '8px' }}>
