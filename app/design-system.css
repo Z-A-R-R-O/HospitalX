@@ -617,3 +617,22 @@ html.dark .quick button:hover { background: rgba(255,255,255,0.08); }
 html.dark .attention > button { background: transparent; }
 html.dark .attention > button:hover { background: rgba(239, 68, 68, 0.15); }
 
+
+/* AI Modal */
+.ai-modal-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(15,23,42,.3); backdrop-filter: blur(8px); animation: fadeIn var(--motion-fast) ease; padding: 20px; }
+.ai-modal { width: 100%; max-width: 640px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; border-radius: 20px; box-shadow: 0 24px 64px rgba(0,0,0,0.15); animation: cardIn var(--motion-normal) var(--ease-soft) both; }
+.ai-modal header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(15,23,42,.08); }
+.ai-modal header h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 18px; color: var(--ink); }
+.ai-modal header h3 svg { width: 22px; color: var(--blue); }
+.ai-modal header button { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; border: 0; background: transparent; color: var(--muted); transition: background 0.2s; }
+.ai-modal header button:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+.ai-modal-content { padding: 24px 24px 32px; overflow-y: auto; font-size: 15px; line-height: 1.6; color: var(--ink); }
+.ai-modal-content p { margin: 0 0 1em; }
+.ai-modal-content p:last-child { margin: 0; }
+
+html.dark .ai-modal-backdrop { background: rgba(0,0,0,0.5); }
+html.dark .ai-modal header { border-bottom-color: rgba(255,255,255,0.08); }
+html.dark .ai-modal header h3 { color: #ffffff; }
+html.dark .ai-modal header button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+html.dark .ai-modal-content { color: #cbd5e1; }
+

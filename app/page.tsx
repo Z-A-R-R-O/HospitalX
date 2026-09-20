@@ -194,11 +194,33 @@ export default function Home() {
   };
 
   const [aiQuery, setAiQuery] = useState("");
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [aiResponse, setAiResponse] = useState("");
   const aiInputRef = useRef<HTMLInputElement>(null);
-  const handleAiSubmit = (e: React.FormEvent) => {
+
+  const handleAiSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (aiQuery.trim()) {
-      showToast("HospitalX AI is analyzing your request...");
+    if (!aiQuery.trim() || isAiLoading) return;
+    
+    setIsAiLoading(true);
+    showToast("HospitalX AI is analyzing your request...");
+    
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: aiQuery })
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast(data.error);
+      } else {
+        setAiResponse(data.text);
+      }
+    } catch (err) {
+      showToast("Failed to connect to AI.");
+    } finally {
+      setIsAiLoading(false);
       setAiQuery("");
     }
   };
@@ -311,6 +333,23 @@ export default function Home() {
 
         <footer><span>HospitalX v1.0　│　 People × Technology × Better Care</span><span><i /> All Systems Operational　│　 Built for a Healthier India</span></footer>
       </main>
+
+      {aiResponse && (
+        <div className="ai-modal-backdrop" onClick={() => setAiResponse("")}>
+          <div className="ai-modal glass" onClick={(e) => e.stopPropagation()}>
+            <header>
+              <h3><Bot /> HospitalX AI</h3>
+              <button type="button" onClick={() => setAiResponse("")}><X /></button>
+            </header>
+            <div className="ai-modal-content">
+              {aiResponse.split('\n').map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`toast ${toast ? "show" : ""}`} role="status">{toast}</div>
     </div>
   );
