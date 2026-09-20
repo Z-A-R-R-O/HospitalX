@@ -16,16 +16,16 @@ export function AppointmentsView() {
           <p>Manage upcoming visits, telehealth, and in-person consultations.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search patient or ID..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Book</button>
         </div>
       </header>
 
       <div className="appointments-layout" style={{ display: 'flex', gap: '20px', padding: '24px', height: 'calc(100% - 70px)' }}>
-        <aside className="calendar-sidebar glass" style={{ width: '280px', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px', background: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.5)' }}>
+        <aside className="calendar-sidebar glass" style={{ width: '280px', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
            <div className="mini-calendar">
              <h3 style={{ margin: '0 0 16px', fontSize: '15px' }}>September 2026</h3>
              <div className="cal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', fontSize: '12px', fontWeight: 600 }}>
@@ -34,7 +34,7 @@ export function AppointmentsView() {
                  <span key={i} style={{ 
                    padding: '6px 0', borderRadius: '50%', cursor: 'pointer',
                    background: i+1 === 20 ? 'var(--blue)' : 'transparent', 
-                   color: i+1 === 20 ? '#fff' : 'inherit',
+                   color: i+1 === 20 ? 'var(--c-white)' : 'inherit',
                    border: [14, 21, 28].includes(i) ? '1px solid var(--red)' : '1px solid transparent'
                  }}>{i + 1}</span>
                ))}
@@ -53,24 +53,24 @@ export function AppointmentsView() {
         <main className="timeline-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden' }}>
           <div className="timeline-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ margin: 0, fontSize: '16px' }}>Sunday, Sep 20</h3>
-            <div className="view-toggles" style={{ display: 'flex', background: 'rgba(255,255,255,0.4)', borderRadius: '8px', padding: '4px' }}>
-              <button style={{ padding: '4px 12px', borderRadius: '6px', background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', border: 'none', fontWeight: 600, fontSize: '12px', color: '#0f172a', cursor: 'pointer' }}>List</button>
+            <div className="view-toggles" style={{ display: 'flex', background: 'var(--c-glass-40)', borderRadius: '8px', padding: '4px' }}>
+              <button style={{ padding: '4px 12px', borderRadius: '6px', background: 'var(--c-white)', boxShadow: 'var(--c-shadow-sm)', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--c-dark-text)', cursor: 'pointer' }}>List</button>
               <button style={{ padding: '4px 12px', borderRadius: '6px', background: 'transparent', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--muted)', cursor: 'pointer' }}>Timeline</button>
             </div>
           </div>
 
           <div className="appointment-list" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', paddingRight: '8px' }}>
             {appointments.map(apt => (
-              <div key={apt.id} className="apt-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.45)' }}>
+              <div key={apt.id} className="apt-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 20px', borderRadius: '16px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-45)' }}>
                 <div className="apt-time" style={{ width: '80px', flexShrink: 0 }}>
                   <strong style={{ display: 'block', fontSize: '15px' }}>{apt.time}</strong>
                   <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{apt.duration}</span>
                 </div>
-                <div className="apt-divider" style={{ width: '2px', height: '40px', background: 'rgba(15,23,42,0.1)', borderRadius: '2px' }} />
+                <div className="apt-divider" style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
                 <div className="apt-info" style={{ flex: 1 }}>
                   <div className="apt-patient" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                     <h4 style={{ margin: 0, fontSize: '15px' }}>{apt.patient}</h4>
-                    <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(15,23,42,0.05)', borderRadius: '4px', fontWeight: 600 }}>{apt.id}</span>
+                    <span style={{ fontSize: '10px', padding: '2px 6px', background: 'var(--c-dark-05)', borderRadius: '4px', fontWeight: 600 }}>{apt.id}</span>
                     {apt.type === "Telehealth" && <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(139,92,246,0.1)', color: 'var(--purple)', borderRadius: '4px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Video size={10}/> Telehealth</span>}
                   </div>
                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} · {apt.dept}</p>
@@ -79,7 +79,7 @@ export function AppointmentsView() {
                   <span className={`status ${apt.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {apt.status}</span>
                 </div>
                 <div className="action-buttons" style={{ display: 'flex', gap: '8px' }}>
-                  <button className="row-action" style={{ background: '#fff' }}>Check In</button>
+                  <button className="row-action" style={{ background: 'var(--c-white)' }}>Check In</button>
                   <button className="row-action" style={{ padding: '4px 6px' }}><MoreHorizontal size={16}/></button>
                 </div>
               </div>
@@ -103,7 +103,7 @@ export function OPDView() {
   const getCol = (status: string) => queue.filter(q => q.status === status);
 
   const renderCard = (apt: any) => (
-    <div key={apt.id} className="opd-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.6)', border: apt.priority === 'high' ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(255,255,255,0.5)', position: 'relative', boxShadow: '0 4px 12px rgba(31,48,71,0.03)' }}>
+    <div key={apt.id} className="opd-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: apt.priority === 'high' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-50)', position: 'relative', boxShadow: 'var(--c-shadow-lg)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
            <span style={{ fontSize: '18px', fontWeight: 700, color: 'var(--ink)' }}>{apt.id}</span>
@@ -115,11 +115,11 @@ export function OPDView() {
          <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {apt.age}</span></h4>
          <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor}</p>
       </div>
-      <div style={{ padding: '8px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--ink)', fontWeight: 500 }}>
+      <div style={{ padding: '8px', background: 'var(--c-black-03)', borderRadius: '8px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--ink)', fontWeight: 500 }}>
         <Activity size={14} color="var(--blue)" /> {apt.vitals}
       </div>
       <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-        <button className="row-action" style={{ flex: 1, padding: '6px', fontSize: '12px', background: '#fff', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.8)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
+        <button className="row-action" style={{ flex: 1, padding: '6px', fontSize: '12px', background: 'var(--c-white)', borderRadius: '8px', border: '1px solid var(--c-glass-80)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
       </div>
     </div>
   );
@@ -132,7 +132,7 @@ export function OPDView() {
           <p>Live tracking of walk-in patients, triaging, and active consultations.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <button className="glass-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Dept</button>
+          <button className="glass-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Dept</button>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Issue Token</button>
         </div>
       </header>
@@ -145,7 +145,7 @@ export function OPDView() {
             { label: "Active Consults", value: "8", trend: "0%" },
             { label: "Pharmacy Queue", value: "12", trend: "+4%" }
           ].map(kpi => (
-            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.5)' }}>
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
                <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                  <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
@@ -161,10 +161,10 @@ export function OPDView() {
             { title: "In Consultation", status: "Consultation", color: "var(--orange)" },
             { title: "Post-Consult / Pharmacy", status: "Post-Consult", color: "var(--green)" }
           ].map(col => (
-            <div key={col.title} className="kanban-col glass" style={{ display: 'flex', flexDirection: 'column', padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)', overflowY: 'auto' }}>
+            <div key={col.title} className="kanban-col glass" style={{ display: 'flex', flexDirection: 'column', padding: '16px', borderRadius: '16px', background: 'var(--c-glass-25)', border: '1px solid var(--c-glass-40)', overflowY: 'auto' }}>
                <h4 style={{ margin: '0 0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '15px' }}>
                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><i style={{ width: '8px', height: '8px', borderRadius: '50%', background: col.color }}/> {col.title}</span>
-                 <span className="badge" style={{ padding: '2px 8px', borderRadius: '12px', background: 'rgba(15,23,42,0.05)', fontSize: '12px' }}>{getCol(col.status).length}</span>
+                 <span className="badge" style={{ padding: '2px 8px', borderRadius: '12px', background: 'var(--c-dark-05)', fontSize: '12px' }}>{getCol(col.status).length}</span>
                </h4>
                <div className="kanban-cards" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {getCol(col.status).map(renderCard)}
@@ -212,7 +212,7 @@ export function IPDView() {
           <p>Real-time occupancy, ward tracking, and patient admissions.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search bed or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Admit Patient</button>
@@ -228,7 +228,7 @@ export function IPDView() {
             { label: "Available Beds", value: "32", trend: "" },
             { label: "Pending Discharges", value: "14", trend: "-3" }
           ].map(kpi => (
-            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.5)' }}>
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
                <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                  <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
@@ -241,7 +241,7 @@ export function IPDView() {
         <div className="wards-container" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
           {wards.map(ward => (
             <div key={ward.name} className="ward-section">
-              <div className="ward-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid rgba(15,23,42,0.1)', paddingBottom: '12px' }}>
+              <div className="ward-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--c-dark-10)', paddingBottom: '12px' }}>
                 <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <i style={{ width: '12px', height: '12px', borderRadius: '4px', background: ward.type === 'critical' ? 'var(--red)' : 'var(--blue)' }}></i> 
                   {ward.name}
@@ -253,7 +253,7 @@ export function IPDView() {
               
               <div className="beds-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
                 {ward.beds.map(bed => (
-                  <div key={bed.id} className={`bed-card glass status-${bed.status.toLowerCase()}`} style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.5)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div key={bed.id} className={`bed-card glass status-${bed.status.toLowerCase()}`} style={{ padding: '16px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <div className="bed-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <h4 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><BedDouble size={16}/> {bed.id}</h4>
                       <span className={`status ${bed.tone}`} style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '10px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -261,7 +261,7 @@ export function IPDView() {
                       </span>
                     </div>
                     
-                    <div className="bed-divider" style={{ height: '1px', background: 'rgba(15,23,42,0.05)' }} />
+                    <div className="bed-divider" style={{ height: '1px', background: 'var(--c-dark-05)' }} />
 
                     {bed.status === 'Occupied' ? (
                       <div className="bed-details" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -321,7 +321,7 @@ export function DoctorsView() {
           <p>Live availability, current physical locations, and shift schedules.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search doctor or dept..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Add Staff</button>
@@ -336,7 +336,7 @@ export function DoctorsView() {
             { label: "Consulting (OPD)", value: "18", trend: "" },
             { label: "Available / On Call", value: "16", trend: "" }
           ].map(kpi => (
-            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.5)' }}>
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
                <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                <h3 style={{ margin: '4px 0 0', fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
             </div>
@@ -345,9 +345,9 @@ export function DoctorsView() {
 
         <div className="doctors-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
           {doctors.map(doc => (
-            <div key={doc.id} className="doc-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.5)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div key={doc.id} className="doc-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${doc.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '18px', flexShrink: 0, border: '2px solid rgba(255,255,255,0.5)', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${doc.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--c-white)', fontWeight: 600, fontSize: '18px', flexShrink: 0, border: '2px solid var(--c-glass-50)', boxShadow: 'var(--c-shadow-md)' }}>
                    {getInitials(doc.name)}
                  </div>
                  <div style={{ flex: 1, minWidth: 0 }}>
@@ -356,7 +356,7 @@ export function DoctorsView() {
                  </div>
               </div>
               
-              <div style={{ background: 'rgba(0,0,0,0.03)', borderRadius: '12px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ background: 'var(--c-black-03)', borderRadius: '12px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14}/> Location</span>
                     <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{doc.location}</strong>
@@ -371,8 +371,8 @@ export function DoctorsView() {
                  <span className={`status ${doc.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {doc.status}</span>
                  
                  <div style={{ display: 'flex', gap: '8px' }}>
-                   <button className="icon-btn" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.8)', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)', cursor: 'pointer', transition: 'transform 0.2s' }} aria-label="Message"><MessageSquare size={14}/></button>
-                   <button className="icon-btn" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.8)', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--green)', cursor: 'pointer', transition: 'transform 0.2s' }} aria-label="Call"><Phone size={14}/></button>
+                   <button className="icon-btn" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--c-glass-80)', background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)', cursor: 'pointer', transition: 'transform 0.2s' }} aria-label="Message"><MessageSquare size={14}/></button>
+                   <button className="icon-btn" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--c-glass-80)', background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--green)', cursor: 'pointer', transition: 'transform 0.2s' }} aria-label="Call"><Phone size={14}/></button>
                  </div>
               </div>
             </div>
@@ -415,7 +415,7 @@ export function NursingView() {
           <p>Shift handovers, ward assignments, and live task tracking.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search nurse or ward..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Assign Shift</button>
@@ -431,7 +431,7 @@ export function NursingView() {
               { label: "Critical Alerts", value: "2", trend: "+1", isRed: true },
               { label: "Pending Tasks", value: "48", trend: "" }
             ].map(kpi => (
-              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
                  <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                    <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
@@ -447,10 +447,10 @@ export function NursingView() {
               const pct = totalTasks === 0 ? 100 : (nurse.tasks.done / totalTasks) * 100;
 
               return (
-                <div key={nurse.id} className="nurse-card glass" style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.5)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div key={nurse.id} className="nurse-card glass" style={{ padding: '16px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${nurse.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '14px', flexShrink: 0 }}>
+                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${nurse.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--c-white)', fontWeight: 600, fontSize: '14px', flexShrink: 0 }}>
                          {getInitials(nurse.name)}
                        </div>
                        <div>
@@ -463,7 +463,7 @@ export function NursingView() {
                     </span>
                   </div>
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.02)', padding: '12px', borderRadius: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'var(--c-black-02)', padding: '12px', borderRadius: '12px' }}>
                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14}/> Ward</span>
                         <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{nurse.ward}</strong>
@@ -479,7 +479,7 @@ export function NursingView() {
                         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckSquare size={14}/> Tasks Completed</span>
                         <span>{nurse.tasks.done} / {totalTasks}</span>
                      </div>
-                     <div style={{ height: '6px', background: 'rgba(15,23,42,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                     <div style={{ height: '6px', background: 'var(--c-dark-10)', borderRadius: '3px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${pct}%`, background: nurse.tasks.pending > 0 ? 'var(--blue)' : 'var(--green)', borderRadius: '3px', transition: 'width 0.3s ease' }} />
                      </div>
                   </div>
@@ -489,14 +489,14 @@ export function NursingView() {
           </div>
         </div>
 
-        <aside className="alerts-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.5)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid rgba(15,23,42,0.1)', background: 'rgba(255,255,255,0.5)' }}>
+        <aside className="alerts-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
             <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Bell size={18}/> Live Feed & Alerts</h3>
           </div>
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', flex: 1 }}>
              {alerts.map((alert, i) => (
                 <div key={i} className="alert-item" style={{ display: 'flex', gap: '12px', position: 'relative' }}>
-                   {i !== alerts.length - 1 && <div style={{ position: 'absolute', left: '15px', top: '24px', bottom: '-24px', width: '2px', background: 'rgba(15,23,42,0.05)' }} />}
+                   {i !== alerts.length - 1 && <div style={{ position: 'absolute', left: '15px', top: '24px', bottom: '-24px', width: '2px', background: 'var(--c-dark-05)' }} />}
                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `var(--${alert.tone})`, opacity: 0.1, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 0, top: 0, color: `var(--${alert.tone})` }}>
                       {alert.type === 'Urgent' ? <AlertTriangle size={16} /> : alert.type === 'Task' ? <Syringe size={16} /> : alert.type === 'Handover' ? <ClipboardList size={16} /> : <Bell size={16} />}
@@ -504,8 +504,8 @@ export function NursingView() {
                    <div style={{ paddingTop: '6px' }}>
                       <p style={{ margin: '0 0 6px', fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>{alert.msg}</p>
                       <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                         <span style={{ background: 'rgba(15,23,42,0.05)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{alert.loc}</span>
-                         <span>·</span>
+<span style={{ background: 'var(--c-dark-05)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{alert.loc}</span>
+                         <span>&bull;</span>
                          <span style={{ fontWeight: 500 }}>{alert.time}</span>
                       </div>
                    </div>
@@ -538,7 +538,7 @@ export function LaboratoryView() {
           <p>Process pathology requests, manage samples, and verify results.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search barcode or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> New Request</button>
@@ -554,7 +554,7 @@ export function LaboratoryView() {
             { label: "Results Ready", value: "112", trend: "" },
             { label: "Critical Values", value: "3", trend: "URGENT", isRed: true }
           ].map(kpi => (
-            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
                <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                  <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
@@ -574,14 +574,14 @@ export function LaboratoryView() {
           </div>
           
           {labTests.map(test => (
-             <div key={test.id} className="lab-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: test.priority === 'STAT' ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(255,255,255,0.6)', background: test.priority === 'STAT' ? 'rgba(239,68,68,0.05)' : 'rgba(255,255,255,0.5)' }}>
+             <div key={test.id} className="lab-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: test.priority === 'STAT' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-60)', background: test.priority === 'STAT' ? 'rgba(239,68,68,0.05)' : 'var(--c-glass-50)' }}>
                 
                 <div style={{ width: '100px', flexShrink: 0 }}>
                   <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{test.id}</strong>
                   <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{test.time}</span>
                 </div>
                 
-                <div style={{ width: '2px', height: '40px', background: 'rgba(15,23,42,0.1)', borderRadius: '2px' }} />
+                <div style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
                 
                 <div style={{ width: '200px', flexShrink: 0 }}>
                   <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{test.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {test.age}</span></h4>
@@ -592,7 +592,7 @@ export function LaboratoryView() {
                    <strong style={{ display: 'block', fontSize: '14px', marginBottom: '6px', color: 'var(--ink)' }}>{test.test}</strong>
                    {test.priority === 'STAT' 
                       ? <span style={{ fontSize: '10px', padding: '2px 8px', background: 'rgba(239,68,68,0.1)', color: 'var(--red)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>STAT / URGENT</span>
-                      : <span style={{ fontSize: '10px', padding: '2px 8px', background: 'rgba(15,23,42,0.05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>ROUTINE</span>
+                      : <span style={{ fontSize: '10px', padding: '2px 8px', background: 'var(--c-dark-05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>ROUTINE</span>
                    }
                 </div>
                 
@@ -601,10 +601,10 @@ export function LaboratoryView() {
                 </div>
                 
                 <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                  {test.status === 'Awaiting Sample' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Printer size={14}/> Label</button>}
-                  {test.status === 'Processing' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Microscope size={14}/> Results</button>}
-                  {test.status === 'Verified' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileCheck size={14}/> Report</button>}
-                  {test.status === 'Critical Value' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14}/> Alert Dr.</button>}
+                  {test.status === 'Awaiting Sample' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Printer size={14}/> Label</button>}
+                  {test.status === 'Processing' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Microscope size={14}/> Results</button>}
+                  {test.status === 'Verified' && <button className="row-action" style={{ background: 'var(--green)', color: 'var(--c-white)', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileCheck size={14}/> Report</button>}
+                  {test.status === 'Critical Value' && <button className="row-action" style={{ background: 'var(--red)', color: 'var(--c-white)', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14}/> Alert Dr.</button>}
                 </div>
              </div>
           ))}
@@ -632,7 +632,7 @@ export function RadiologyView() {
           <p>Manage X-Ray, MRI, CT Scans, and Ultrasound queues.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search scan ID or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Schedule Scan</button>
@@ -648,7 +648,7 @@ export function RadiologyView() {
             { label: "CT Queue", value: "4", trend: "15m wait" },
             { label: "Pending Reports", value: "12", trend: "Dr. Zarro to review", isRed: true }
           ].map(kpi => (
-            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
                <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                  <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
@@ -662,7 +662,7 @@ export function RadiologyView() {
           {scans.map(scan => {
             const Icon = scan.icon;
             return (
-               <div key={scan.id} className="rad-card glass" style={{ display: 'flex', gap: '16px', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.5)' }}>
+               <div key={scan.id} className="rad-card glass" style={{ display: 'flex', gap: '16px', padding: '16px', borderRadius: '16px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-50)' }}>
                   
                   <div className="modality-block" style={{ width: '80px', height: '80px', borderRadius: '12px', background: `rgba(var(--${scan.tone}-rgb, 15,23,42), 0.08)`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: `var(--${scan.tone})`, flexShrink: 0 }}>
                     <Icon size={32} strokeWidth={1.5} />
@@ -687,10 +687,10 @@ export function RadiologyView() {
                       </div>
                       
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        {scan.status === 'Scheduled' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Activity size={14}/> Start</button>}
-                        {scan.status === 'In Progress' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><UploadCloud size={14}/> Upload DICOM</button>}
-                        {scan.status === 'Ready for Review' && <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={14}/> Review</button>}
-                        {scan.status === 'Reported' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileImage size={14}/> Report</button>}
+                        {scan.status === 'Scheduled' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Activity size={14}/> Start</button>}
+                        {scan.status === 'In Progress' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><UploadCloud size={14}/> Upload DICOM</button>}
+                        {scan.status === 'Ready for Review' && <button className="row-action" style={{ background: 'var(--blue)', color: 'var(--c-white)', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={14}/> Review</button>}
+                        {scan.status === 'Reported' && <button className="row-action" style={{ background: 'var(--green)', color: 'var(--c-white)', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileImage size={14}/> Report</button>}
                       </div>
                     </div>
                   </div>
@@ -727,7 +727,7 @@ export function PharmacyView() {
           <p>Prescription fulfillment, point-of-sale, and stock alerts.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search RX or Patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><ShoppingCart size={18} /> OTC / POS Sale</button>
@@ -744,7 +744,7 @@ export function PharmacyView() {
               { label: "Pending Dispense", value: "14", trend: "" },
               { label: "Low Stock Items", value: "8", trend: "Action Required", isRed: true }
             ].map(kpi => (
-              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
                  <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                    <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
@@ -756,7 +756,7 @@ export function PharmacyView() {
 
           <div className="rx-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', paddingRight: '8px' }}>
             {prescriptions.map(rx => (
-               <div key={rx.id} className="rx-card glass" style={{ padding: '20px', borderRadius: '16px', display: 'flex', gap: '24px', border: '1px solid rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.5)' }}>
+               <div key={rx.id} className="rx-card glass" style={{ padding: '20px', borderRadius: '16px', display: 'flex', gap: '24px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-50)' }}>
                   
                   <div style={{ width: '100px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <strong style={{ display: 'block', fontSize: '16px', color: 'var(--ink)' }}>{rx.id}</strong>
@@ -766,7 +766,7 @@ export function PharmacyView() {
                     </span>
                   </div>
                   
-                  <div style={{ width: '2px', alignSelf: 'stretch', background: 'rgba(15,23,42,0.1)', borderRadius: '2px' }} />
+                  <div style={{ width: '2px', alignSelf: 'stretch', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
                   
                   <div style={{ width: '180px', flexShrink: 0 }}>
                     <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{rx.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {rx.age}</span></h4>
@@ -782,7 +782,7 @@ export function PharmacyView() {
                      <strong style={{ display: 'block', fontSize: '12px', color: 'var(--muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Prescribed Items</strong>
                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {rx.items.map((item, i) => (
-                           <span key={i} style={{ fontSize: '12px', padding: '4px 10px', background: 'rgba(15,23,42,0.05)', color: 'var(--ink)', borderRadius: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                           <span key={i} style={{ fontSize: '12px', padding: '4px 10px', background: 'var(--c-dark-05)', color: 'var(--ink)', borderRadius: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
                               <Pill size={12} color="var(--blue)"/> {item}
                            </span>
                         ))}
@@ -790,29 +790,29 @@ export function PharmacyView() {
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '120px', justifyContent: 'center', flexShrink: 0 }}>
-                    {rx.status === 'Ready to Dispense' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><PackageOpen size={14}/> Dispense</button>}
-                    {rx.status === 'Processing' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><ShoppingCart size={14}/> Invoice</button>}
-                    {rx.status === 'Awaiting Stock' && <button className="row-action" style={{ background: '#fff', color: 'var(--red)', borderColor: 'rgba(239,68,68,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}>Order Stock</button>}
-                    {rx.status === 'Dispensed' && <button className="row-action" style={{ background: 'transparent', color: 'var(--muted)', borderColor: 'rgba(15,23,42,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }} disabled>Completed</button>}
+                    {rx.status === 'Ready to Dispense' && <button className="row-action" style={{ background: 'var(--green)', color: 'var(--c-white)', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><PackageOpen size={14}/> Dispense</button>}
+                    {rx.status === 'Processing' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><ShoppingCart size={14}/> Invoice</button>}
+                    {rx.status === 'Awaiting Stock' && <button className="row-action" style={{ background: 'var(--c-white)', color: 'var(--red)', borderColor: 'rgba(239,68,68,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}>Order Stock</button>}
+                    {rx.status === 'Dispensed' && <button className="row-action" style={{ background: 'transparent', color: 'var(--muted)', borderColor: 'var(--c-dark-10)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }} disabled>Completed</button>}
                   </div>
                </div>
             ))}
           </div>
         </div>
 
-        <aside className="inventory-sidebar glass" style={{ width: '300px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.5)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid rgba(15,23,42,0.1)', background: 'rgba(255,255,255,0.5)' }}>
+        <aside className="inventory-sidebar glass" style={{ width: '300px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
             <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--ink)' }}><PackageOpen size={18}/> Low Stock Alerts</h3>
           </div>
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1 }}>
              {lowStock.map((item, i) => (
-                <div key={i} className="stock-alert-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.6)', border: `1px solid var(--${item.tone})`, borderLeft: `4px solid var(--${item.tone})` }}>
+                <div key={i} className="stock-alert-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: `1px solid var(--${item.tone})`, borderLeft: `4px solid var(--${item.tone})` }}>
                    <h4 style={{ margin: '0 0 8px', fontSize: '14px', color: 'var(--ink)' }}>{item.name}</h4>
                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '12px' }}>
                       <span style={{ color: 'var(--muted)', fontWeight: 600 }}>Stock: <strong style={{ color: `var(--${item.tone})` }}>{item.current}</strong></span>
                       <span style={{ color: 'var(--muted)', fontWeight: 600 }}>Min: {item.threshold}</span>
                    </div>
-                   <button className="row-action" style={{ width: '100%', padding: '6px', background: '#fff', fontSize: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}><ShoppingCart size={14}/> Reorder Now</button>
+                   <button className="row-action" style={{ width: '100%', padding: '6px', background: 'var(--c-white)', fontSize: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}><ShoppingCart size={14}/> Reorder Now</button>
                 </div>
              ))}
           </div>
@@ -848,7 +848,7 @@ export function BillingView() {
           <p>Invoices, claims, and revenue cycle management.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search invoice or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Create Invoice</button>
@@ -866,7 +866,7 @@ export function BillingView() {
               { label: "Overdue Payments", value: "₹ 2.1L", trend: "Action Required", isRed: true },
               { label: "Cash Collections", value: "₹ 48K", trend: "34% of total", isRed: false }
             ].map(kpi => (
-              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
                  <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                    <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
@@ -886,14 +886,14 @@ export function BillingView() {
             </div>
             
             {invoices.map(inv => (
-               <div key={inv.id} className="invoice-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: inv.status === 'Overdue' ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(255,255,255,0.6)', background: inv.status === 'Overdue' ? 'rgba(239,68,68,0.05)' : 'rgba(255,255,255,0.5)' }}>
+               <div key={inv.id} className="invoice-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: inv.status === 'Overdue' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-60)', background: inv.status === 'Overdue' ? 'rgba(239,68,68,0.05)' : 'var(--c-glass-50)' }}>
                   
                   <div style={{ width: '120px', flexShrink: 0 }}>
                     <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{inv.id}</strong>
                     <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{inv.time}</span>
                   </div>
                   
-                  <div style={{ width: '2px', height: '40px', background: 'rgba(15,23,42,0.1)', borderRadius: '2px' }} />
+                  <div style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
                   
                   <div style={{ width: '200px', flexShrink: 0 }}>
                     <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{inv.patient}</h4>
@@ -902,7 +902,7 @@ export function BillingView() {
                   
                   <div style={{ flex: 1 }}>
                      <strong style={{ display: 'block', fontSize: '18px', marginBottom: '4px', color: 'var(--ink)', fontFamily: 'monospace' }}>{inv.amount}</strong>
-                     <span style={{ fontSize: '11px', padding: '2px 8px', background: 'rgba(15,23,42,0.05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                     <span style={{ fontSize: '11px', padding: '2px 8px', background: 'var(--c-dark-05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                         <Wallet size={12}/> {inv.insurer}
                      </span>
                   </div>
@@ -912,23 +912,23 @@ export function BillingView() {
                   </div>
                   
                   <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                    {inv.status === 'Draft' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Banknote size={14}/> Collect</button>}
-                    {inv.status === 'Pending Insurance' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Landmark size={14}/> Claim</button>}
-                    {inv.status === 'Paid' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Download size={14}/> Receipt</button>}
-                    {inv.status === 'Overdue' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><Send size={14}/> Remind</button>}
+                    {inv.status === 'Draft' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Banknote size={14}/> Collect</button>}
+                    {inv.status === 'Pending Insurance' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Landmark size={14}/> Claim</button>}
+                    {inv.status === 'Paid' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Download size={14}/> Receipt</button>}
+                    {inv.status === 'Overdue' && <button className="row-action" style={{ background: 'var(--red)', color: 'var(--c-white)', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><Send size={14}/> Remind</button>}
                   </div>
                </div>
             ))}
           </div>
         </div>
 
-        <aside className="claims-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.5)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid rgba(15,23,42,0.1)', background: 'rgba(255,255,255,0.5)' }}>
+        <aside className="claims-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
             <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--ink)' }}><Landmark size={18}/> Insurance Claims</h3>
           </div>
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1 }}>
              {claims.map((claim, i) => (
-                <div key={i} className="claim-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.6)', border: `1px solid rgba(15,23,42,0.1)` }}>
+                <div key={i} className="claim-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: `1px solid rgba(15,23,42,0.1)` }}>
                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                       <div>
                          <h4 style={{ margin: '0 0 4px', fontSize: '13px', color: 'var(--ink)' }}>{claim.provider}</h4>
@@ -969,7 +969,7 @@ export function InventoryView() {
           <p>Monitor stock levels for medical and surgical supplies.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search item or SKU..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Purchase Order</button>
@@ -985,7 +985,7 @@ export function InventoryView() {
             { label: "Pending Deliveries", value: "8", trend: "Arriving Today" },
             { label: "Monthly Spend", value: "₹ 4.2L", trend: "-5% vs Last Month" }
           ].map(kpi => (
-            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
                <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                  <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
@@ -1007,13 +1007,13 @@ export function InventoryView() {
           {inventory.map(item => {
             const pct = item.max === 0 ? 0 : Math.min(100, Math.max(0, (item.current / item.max) * 100));
             return (
-               <div key={item.id} className="inventory-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: item.status === 'Critical' || item.status === 'Out of Stock' ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(255,255,255,0.6)', background: item.status === 'Critical' || item.status === 'Out of Stock' ? 'rgba(239,68,68,0.05)' : 'rgba(255,255,255,0.5)' }}>
+               <div key={item.id} className="inventory-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: item.status === 'Critical' || item.status === 'Out of Stock' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-60)', background: item.status === 'Critical' || item.status === 'Out of Stock' ? 'rgba(239,68,68,0.05)' : 'var(--c-glass-50)' }}>
                   
                   <div style={{ width: '120px', flexShrink: 0 }}>
                     <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{item.id}</strong>
                   </div>
                   
-                  <div style={{ width: '2px', height: '40px', background: 'rgba(15,23,42,0.1)', borderRadius: '2px' }} />
+                  <div style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
                   
                   <div style={{ width: '260px', flexShrink: 0 }}>
                     <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{item.name}</h4>
@@ -1025,7 +1025,7 @@ export function InventoryView() {
                         <span>{item.current} Units</span>
                         <span style={{ color: 'var(--muted)' }}>Max: {item.max}</span>
                      </div>
-                     <div style={{ height: '8px', background: 'rgba(15,23,42,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                     <div style={{ height: '8px', background: 'var(--c-dark-10)', borderRadius: '4px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${pct}%`, background: `var(--${item.tone})`, borderRadius: '4px', transition: 'width 0.3s ease' }} />
                      </div>
                   </div>
@@ -1035,8 +1035,8 @@ export function InventoryView() {
                   </div>
                   
                   <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                    {item.status === 'In Stock' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Package size={14}/> Audit</button>}
-                    {(item.status === 'Low Stock' || item.status === 'Critical' || item.status === 'Out of Stock') && <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Truck size={14}/> Reorder</button>}
+                    {item.status === 'In Stock' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Package size={14}/> Audit</button>}
+                    {(item.status === 'Low Stock' || item.status === 'Critical' || item.status === 'Out of Stock') && <button className="row-action" style={{ background: 'var(--blue)', color: 'var(--c-white)', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Truck size={14}/> Reorder</button>}
                   </div>
                </div>
             );
@@ -1072,7 +1072,7 @@ export function ReportsView() {
           <p>Generate clinical, operational, and financial insights.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search reports..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Custom Report</button>
@@ -1089,7 +1089,7 @@ export function ReportsView() {
               { label: "Scheduled Jobs", value: "8", trend: "Active automated exports" },
               { label: "Storage Used", value: "4.2 GB", trend: "Of 100GB limit" }
             ].map(kpi => (
-              <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.5)' }}>
+              <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
                    <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
@@ -1101,14 +1101,14 @@ export function ReportsView() {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '8px' }}><FileText size={18}/> Recent Exports</h3>
-             <button style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(15,23,42,0.05)', border: 'none', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', color: 'var(--ink)' }}><Filter size={14}/> Filter</button>
+             <button style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--c-dark-05)', border: 'none', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', color: 'var(--ink)' }}><Filter size={14}/> Filter</button>
           </div>
 
           <div className="report-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', paddingRight: '8px' }}>
             {recentReports.map(rep => {
               const Icon = rep.icon;
               return (
-                 <div key={rep.id} className="report-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.5)' }}>
+                 <div key={rep.id} className="report-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 20px', borderRadius: '16px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-50)' }}>
                     
                     <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `rgba(var(--${rep.tone}-rgb, 15,23,42), 0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: `var(--${rep.tone})`, flexShrink: 0 }}>
                       <Icon size={24} strokeWidth={1.5} />
@@ -1124,14 +1124,14 @@ export function ReportsView() {
                     </div>
                     
                     <div style={{ width: '100px', flexShrink: 0 }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, padding: '4px 8px', borderRadius: '6px', background: rep.format === 'PDF' ? 'rgba(239,68,68,0.1)' : rep.format === 'Excel' ? 'rgba(34,197,94,0.1)' : 'rgba(15,23,42,0.05)', color: rep.format === 'PDF' ? 'var(--red)' : rep.format === 'Excel' ? 'var(--green)' : 'var(--muted)' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, padding: '4px 8px', borderRadius: '6px', background: rep.format === 'PDF' ? 'rgba(239,68,68,0.1)' : rep.format === 'Excel' ? 'rgba(34,197,94,0.1)' : 'var(--c-dark-05)', color: rep.format === 'PDF' ? 'var(--red)' : rep.format === 'Excel' ? 'var(--green)' : 'var(--muted)' }}>
                         {rep.format === 'PDF' ? <FileText size={12}/> : rep.format === 'Excel' ? <FileSpreadsheet size={12}/> : <FileText size={12}/>}
                         {rep.format}
                       </span>
                     </div>
                     
                     <div style={{ display: 'flex', gap: '8px', width: '100px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                      <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><Download size={14}/> Save</button>
+                      <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><Download size={14}/> Save</button>
                     </div>
                  </div>
               );
@@ -1139,15 +1139,15 @@ export function ReportsView() {
           </div>
         </div>
 
-        <aside className="templates-sidebar glass" style={{ flex: 1, borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.5)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid rgba(15,23,42,0.1)', background: 'rgba(255,255,255,0.5)' }}>
+        <aside className="templates-sidebar glass" style={{ flex: 1, borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
             <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--ink)' }}><PieChart size={18}/> Standard Templates</h3>
           </div>
           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1 }}>
              {templates.map((tpl, i) => {
                 const Icon = tpl.icon;
                 return (
-                  <div key={i} className="template-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.6)', border: `1px solid rgba(15,23,42,0.1)` }}>
+                  <div key={i} className="template-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: `1px solid rgba(15,23,42,0.1)` }}>
                      <div style={{ display: 'flex', gap: '12px' }}>
                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: `rgba(var(--${tpl.tone}-rgb, 15,23,42), 0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: `var(--${tpl.tone})`, flexShrink: 0 }}>
                            <Icon size={18} />
@@ -1158,7 +1158,7 @@ export function ReportsView() {
                         </div>
                      </div>
                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
-                        <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px' }}><Play size={12} fill="currentColor"/> Generate Now</button>
+                        <button className="row-action" style={{ background: 'var(--blue)', color: 'var(--c-white)', borderColor: 'var(--blue)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px' }}><Play size={12} fill="currentColor"/> Generate Now</button>
                      </div>
                   </div>
                 );

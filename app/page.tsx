@@ -500,18 +500,18 @@ function BedUtilization({ overview }: { overview: Overview | null }) {
   const occupied = total - available;
   const percentage = Math.round((occupied / total) * 100);
   return <article className="panel glass analytics-card bed-card"><h2>Bed Utilization</h2>
-    <div className="bed-visual"><div className="donut" style={{ "--progress": `${percentage * 3.6}deg` } as React.CSSProperties}><span><strong>{percentage}%</strong><small>{occupied} / {total}</small></span></div><div className="bed-legend"><p><b><i style={{ background: '#101827' }} /> ICU</b><span>16 / 20</span></p><p><b><i style={{ background: '#277cf4' }} /> General</b><span>120 / 150</span></p><p><b><i style={{ background: '#ef4148' }} /> Emergency</b><span>18 / 20</span></p><p><b><i style={{ background: '#ef9519' }} /> Isolation</b><span>10 / 10</span></p></div></div>
+    <div className="bed-visual"><div className="donut" style={{ "--progress": `${percentage * 3.6}deg` } as React.CSSProperties}><span><strong>{percentage}%</strong><small>{occupied} / {total}</small></span></div><div className="bed-legend"><p><b><i style={{ background: 'var(--c-legend-icu)' }} /> ICU</b><span>16 / 20</span></p><p><b><i style={{ background: 'var(--c-legend-gen)' }} /> General</b><span>120 / 150</span></p><p><b><i style={{ background: 'var(--c-legend-em)' }} /> Emergency</b><span>18 / 20</span></p><p><b><i style={{ background: 'var(--c-legend-iso)' }} /> Isolation</b><span>10 / 10</span></p></div></div>
     <button type="button">View Beds <ChevronRight /></button>
   </article>;
 }
 
 function DepartmentLoad({ appointments }: { appointments?: number }) {
   const loads = [
-    { label: "OPD", value: 68, color: "#277cf4" },
-    { label: "Emergency", value: 92, color: "#ef4148" },
-    { label: "Radiology", value: 54, color: "#277cf4" },
-    { label: "Laboratory", value: 76, color: "#277cf4" },
-    { label: "Pharmacy", value: 61, color: "#277cf4" },
+    { label: "OPD", value: 68, color: "var(--c-legend-gen)" },
+    { label: "Emergency", value: 92, color: "var(--c-legend-em)" },
+    { label: "Radiology", value: 54, color: "var(--c-legend-gen)" },
+    { label: "Laboratory", value: 76, color: "var(--c-legend-gen)" },
+    { label: "Pharmacy", value: 61, color: "var(--c-legend-gen)" },
   ];
   return <article className="panel glass analytics-card department-card"><h2>Department Load</h2>
     {loads.length ? <div className="load-bars">{loads.map((load, index) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%`, background: load.color, animationDelay: `${index * 80 + 350}ms` }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}

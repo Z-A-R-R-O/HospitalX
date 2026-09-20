@@ -22,6 +22,29 @@
   --motion-fast: 180ms;
   --motion-normal: 360ms;
   --motion-slow: 760ms;
+
+  --c-white: #fff;
+  --c-dark-text: #0f172a;
+  --c-shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --c-shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+  --c-shadow-lg: 0 4px 12px rgba(31,48,71,0.03);
+  --c-dark-10: rgba(15,23,42,0.1);
+  --c-dark-05: rgba(15,23,42,0.05);
+  --c-glass-80: rgba(255,255,255,0.8);
+  --c-glass-60: rgba(255,255,255,0.6);
+  --c-glass-50: rgba(255,255,255,0.5);
+  --c-glass-45: rgba(255,255,255,0.45);
+  --c-glass-40: rgba(255,255,255,0.4);
+  --c-glass-35: rgba(255,255,255,0.35);
+  --c-glass-30: rgba(255,255,255,0.3);
+  --c-glass-25: rgba(255,255,255,0.25);
+  --c-black-02: rgba(0,0,0,0.02);
+  --c-black-03: rgba(0,0,0,0.03);
+  
+  --c-legend-icu: #101827;
+  --c-legend-gen: #277cf4;
+  --c-legend-em: #ef4148;
+  --c-legend-iso: #ef9519;
 }
 
 * { box-sizing: border-box; }
@@ -505,6 +528,29 @@ html.dark {
   --ink: #f8fafc;
   --muted: #94a3b8;
   --dim: #475569;
+
+  --c-white: rgba(30,41,59,0.8);
+  --c-dark-text: #f8fafc;
+  --c-shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+  --c-shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --c-shadow-lg: 0 4px 12px rgba(0,0,0,0.5);
+  --c-dark-10: rgba(255,255,255,0.12);
+  --c-dark-05: rgba(255,255,255,0.08);
+  --c-glass-80: rgba(30,41,59,0.8);
+  --c-glass-60: rgba(30,41,59,0.5);
+  --c-glass-50: rgba(30,41,59,0.4);
+  --c-glass-45: rgba(30,41,59,0.4);
+  --c-glass-40: rgba(30,41,59,0.35);
+  --c-glass-35: rgba(15,23,35,0.5);
+  --c-glass-30: rgba(15,23,35,0.4);
+  --c-glass-25: rgba(15,23,35,0.3);
+  --c-black-02: rgba(255,255,255,0.03);
+  --c-black-03: rgba(255,255,255,0.05);
+
+  --c-legend-icu: #f8fafc;
+  --c-legend-gen: #60a5fa;
+  --c-legend-em: #f87171;
+  --c-legend-iso: #fbbf24;
 }
 html.dark body { background: var(--background); }
 html.dark .app-shell { background: linear-gradient(145deg, #0b101a, #06080d, #040508, #070a11); }
@@ -1021,348 +1067,3 @@ html.dark .primary:hover { background: #ffffff; box-shadow: 0 8px 24px rgba(248,
 html.dark .back { background: rgba(20,28,42,0.6); border-color: rgba(255,255,255,.1); color: #f8fafc; }
 html.dark .back:hover { background: rgba(30,41,59,0.85); }
 html.dark .form-status { color: #94a3b8; }
-
-
-/* =======================================================================
-   INLINE-STYLE OVERRIDES for components.tsx
-   Counters hardcoded rgba(255,255,255,...) backgrounds, #fff buttons,
-   and light borders/dividers using !important.
-   ======================================================================= */
-
-/* --- Generic patterns: search bars used across all module views --- */
-html.dark .search-bar,
-html.dark [class*="-view"] label[class*="search"],
-html.dark .appointments-view label.search-bar {
-  background: rgba(20,28,42,0.6) !important;
-  border-color: rgba(255,255,255,0.12) !important;
-}
-html.dark .appointments-view label.search-bar input,
-html.dark [class*="-view"] label input[placeholder*="Search"] {
-  color: #f8fafc !important;
-}
-
-/* --- Generic: filter/action buttons with white bg across all views --- */
-html.dark [class*="-view"] button.row-action[style*="background: '#fff'"],
-html.dark [class*="-view"] button.row-action[style*="background: rgb(255, 255, 255)"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-  border-color: rgba(255,255,255,0.1) !important;
-}
-
-/* --- Generic KPI cards across all module views --- */
-html.dark [class*="-view"] [class*="kpi"] > div[style*="background"],
-html.dark .opd-view .opd-kpis > div[style*="rgba(255"],
-html.dark [class*="-view"] [style*="rgba(255,255,255,0.4)"] {
-  background: rgba(20,28,42,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-
-/* ---- APPOINTMENTS VIEW ---- */
-html.dark .appointments-view .calendar-sidebar {
-  background: rgba(15,23,35,0.5) !important;
-  border-color: rgba(255,255,255,0.08) !important;
-}
-html.dark .appointments-view .cal-grid .day-name { color: #94a3b8 !important; }
-html.dark .appointments-view .view-toggles,
-html.dark .appointments-view div[style*="rgba(255,255,255,0.4)"][style*="borderRadius"] {
-  background: rgba(15,23,35,0.5) !important;
-}
-html.dark .appointments-view .view-toggles button[style*="background: '#fff'"],
-html.dark .appointments-view button[style*="background: rgb(255, 255, 255)"] {
-  background: rgba(30,41,59,0.9) !important;
-  color: #f8fafc !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
-}
-html.dark .appointments-view .apt-card {
-  background: rgba(30,41,59,0.4) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-html.dark .appointments-view .apt-divider {
-  background: rgba(255,255,255,0.1) !important;
-}
-html.dark .appointments-view .apt-info span[style*="rgba(15,23,42,0.05)"],
-html.dark .appointments-view span[style*="rgba(15,23,42,0.05)"] {
-  background: rgba(255,255,255,0.08) !important;
-  color: #cbd5e1 !important;
-}
-html.dark .appointments-view .apt-info h4 { color: #f8fafc !important; }
-html.dark .appointments-view .apt-info p { color: #94a3b8 !important; }
-html.dark .appointments-view .schedule-stats li { color: #cbd5e1 !important; }
-html.dark .appointments-view .schedule-stats h4 { color: #94a3b8 !important; }
-html.dark .appointments-layout .action-buttons .row-action {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-  border-color: rgba(255,255,255,0.1) !important;
-}
-html.dark .appointments-layout .action-buttons .row-action:hover {
-  background: rgba(51,65,85,0.8) !important;
-  color: #fff !important;
-}
-
-/* ---- OPD VIEW ---- */
-html.dark .opd-view .opd-card {
-  background: rgba(30,41,59,0.4) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
-}
-html.dark .opd-view .opd-card[style*="rgba(239,68,68"] {
-  border-color: rgba(239,68,68,0.4) !important;
-}
-html.dark .opd-view .opd-card span[style*="color: 'var(--ink)'"] { color: #f8fafc !important; }
-html.dark .opd-view .opd-card div[style*="background: 'rgba(0,0,0,0.03)'"],
-html.dark .opd-view div[style*="rgba(0,0,0,0.03)"] {
-  background: rgba(255,255,255,0.05) !important;
-}
-html.dark .opd-view .kanban-col {
-  background: rgba(15,23,35,0.3) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .opd-view span[style*="rgba(15,23,42,0.05)"] {
-  background: rgba(255,255,255,0.08) !important;
-  color: #cbd5e1 !important;
-}
-html.dark .opd-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-
-/* ---- IPD VIEW ---- */
-html.dark .ipd-view .bed-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .ipd-view .ward-header {
-  background: rgba(15,23,35,0.85) !important;
-  border-bottom-color: rgba(255,255,255,0.08) !important;
-}
-html.dark .ipd-view .bed-divider,
-html.dark .ipd-view div[style*="rgba(15,23,42,0.05)"] {
-  background: rgba(255,255,255,0.06) !important;
-}
-html.dark .ipd-view span[style*="rgba(255,255,255,0.6)"],
-html.dark .ipd-view div[style*="rgba(255,255,255,0.6)"] {
-  background: rgba(30,41,59,0.4) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-
-/* ---- DOCTORS VIEW ---- */
-html.dark .doctors-view .doc-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .doctors-view div[style*="rgba(0,0,0,0.03)"] {
-  background: rgba(255,255,255,0.04) !important;
-}
-html.dark .doctors-view .icon-btn,
-html.dark .doctors-view button[style*="background: '#fff'"] {
-  background: rgba(15,23,35,0.6) !important;
-  color: #e2e8f0 !important;
-  border-color: rgba(255,255,255,0.1) !important;
-}
-
-/* ---- NURSING VIEW ---- */
-html.dark .nursing-view .nurse-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .nursing-view div[style*="rgba(0,0,0,0.02)"],
-html.dark .nursing-view div[style*="rgba(0,0,0,0.03)"] {
-  background: rgba(255,255,255,0.03) !important;
-}
-html.dark .nursing-view .alert-card {
-  background: rgba(239,68,68,0.12) !important;
-  border-color: rgba(239,68,68,0.25) !important;
-}
-html.dark .nursing-view aside[style*="rgba(255,255,255,0.35)"] {
-  background: rgba(15,23,35,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-html.dark .nursing-view div[style*="rgba(15,23,42,0.1)"] {
-  background: rgba(255,255,255,0.08) !important;
-}
-
-/* ---- LABORATORY VIEW ---- */
-html.dark .lab-view .lab-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .lab-view .lab-card[style*="rgba(239,68,68"] {
-  background: rgba(239,68,68,0.08) !important;
-  border-color: rgba(239,68,68,0.35) !important;
-}
-html.dark .lab-view div[style*="rgba(15,23,42,0.1)"] {
-  background: rgba(255,255,255,0.06) !important;
-}
-html.dark .lab-view span[style*="rgba(15,23,42,0.05)"] {
-  background: rgba(255,255,255,0.08) !important;
-  color: #cbd5e1 !important;
-}
-html.dark .lab-view span[style*="rgba(239,68,68,0.1)"] {
-  background: rgba(239,68,68,0.2) !important;
-}
-html.dark .lab-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-
-/* ---- RADIOLOGY VIEW ---- */
-html.dark .rad-view .rad-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .rad-view .modality-block {
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.03) !important;
-}
-html.dark .rad-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-
-/* ---- PHARMACY VIEW ---- */
-html.dark .pharmacy-view .rx-card,
-html.dark .pharmacy-view .stock-alert-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .pharmacy-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-html.dark .pharmacy-view aside[style*="rgba(255,255,255,0.35)"] {
-  background: rgba(15,23,35,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-
-/* ---- BILLING VIEW ---- */
-html.dark .billing-view .invoice-card,
-html.dark .billing-view .claim-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .billing-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-
-/* ---- INVENTORY VIEW ---- */
-html.dark .inventory-view .inventory-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .inventory-view aside[style*="rgba(255,255,255,0.35)"] {
-  background: rgba(15,23,35,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-html.dark .inventory-view div[style*="rgba(255,255,255,0.5)"] {
-  background: rgba(20,28,42,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-html.dark .inventory-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-
-/* ---- REPORTS VIEW ---- */
-html.dark .reports-view .report-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-html.dark .reports-view aside[style*="rgba(255,255,255,0.35)"] {
-  background: rgba(15,23,35,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-html.dark .reports-view div[style*="rgba(255,255,255,0.5)"],
-html.dark .reports-view div[style*="rgba(255,255,255,0.6)"] {
-  background: rgba(20,28,42,0.5) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-}
-html.dark .reports-view button[style*="background: '#fff'"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-}
-html.dark .reports-view .template-card {
-  background: rgba(30,41,59,0.35) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-/* --- Reports audit page inline styles --- */
-html.dark [style*="border: \"1px solid #e8ebf1\""],
-html.dark [style*="border: 1px solid #e8ebf1"] {
-  border-color: rgba(255,255,255,0.08) !important;
-}
-html.dark [style*="color: \"#6b758c\""],
-html.dark [style*="color: #6b758c"] {
-  color: #94a3b8 !important;
-}
-
-
-/* =======================================================================
-   UNIVERSAL INLINE-STYLE DARK OVERRIDES
-   These target all elements across all views that use common inline
-   patterns from components.tsx
-   ======================================================================= */
-
-/* White-background glass elements → dark glass */
-html.dark [style*="background: 'rgba(255,255,255,0.5)'"],
-html.dark [style*="background: 'rgba(255,255,255,0.45)'"],
-html.dark [style*="background: 'rgba(255,255,255,0.4)'"],
-html.dark [style*="background: 'rgba(255,255,255,0.3)'"],
-html.dark [style*="background: 'rgba(255,255,255,0.25)'"] {
-  background: rgba(20,28,42,0.5) !important;
-}
-
-html.dark [style*="background: 'rgba(255,255,255,0.6)'"],
-html.dark [style*="background: 'rgba(255,255,255,0.8)'"] {
-  background: rgba(30,41,59,0.5) !important;
-}
-
-/* White borders → subtle light borders */
-html.dark [style*="border: '1px solid rgba(255,255,255,0.4)'"],
-html.dark [style*="border: '1px solid rgba(255,255,255,0.5)'"],
-html.dark [style*="border: '1px solid rgba(255,255,255,0.6)'"] {
-  border-color: rgba(255,255,255,0.08) !important;
-}
-html.dark [style*="border: '1px solid rgba(255,255,255,0.8)'"] {
-  border-color: rgba(255,255,255,0.12) !important;
-}
-
-/* Dark subtle backgrounds → visible in dark mode */
-html.dark [style*="background: 'rgba(15,23,42,0.05)'"],
-html.dark [style*="background: 'rgba(0,0,0,0.03)'"],
-html.dark [style*="background: 'rgba(0,0,0,0.02)'"],
-html.dark [style*="background: 'rgba(0,0,0,0.05)'"] {
-  background: rgba(255,255,255,0.06) !important;
-}
-
-/* Dark border/divider lines → visible in dark mode */
-html.dark [style*="background: 'rgba(15,23,42,0.1)'"] {
-  background: rgba(255,255,255,0.08) !important;
-}
-
-/* Hardcoded #fff on buttons (inline) → dark surface */
-html.dark button[style*="background: '#fff'"],
-html.dark button[style*="background: rgb(255, 255, 255)"] {
-  background: rgba(30,41,59,0.6) !important;
-  color: #e2e8f0 !important;
-  border-color: rgba(255,255,255,0.1) !important;
-}
-
-/* Hardcoded #0f172a text → readable on dark bg */
-html.dark [style*="color: '#0f172a'"],
-html.dark [style*="color: rgb(15, 23, 42)"] {
-  color: #f8fafc !important;
-}
-
-/* Page header description on all module views */
-html.dark .page-header p { color: #94a3b8; }
-
-/* Bed legend — ensure ICU dot is visible on dark */
-html.dark .bed-legend p:nth-child(1) b i[style*="background: '#101827'"] {
-  background: #f8fafc !important;
-}
-
-/* Full chat bottom disclaimer */
-html.dark .full-chat-bottom > p { color: #64748b; }
-
-/* Chat empty message */
-html.dark .chat-empty { color: #94a3b8; }
