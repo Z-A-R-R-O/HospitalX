@@ -81,7 +81,8 @@ footer{flex-wrap:wrap}
   nav button{white-space:nowrap;padding:9px 12px}
   main{height:auto;overflow:visible;padding:18px 16px}
   main>header{margin:0 auto 20px;gap:8px}
-  main>header label{width:auto;min-width:0;flex:1}
+  .search{width:auto;min-width:0;flex:1}
+  .search:focus-within{width:auto}
   .date-time{display:none}
   .hero{margin-inline:auto}
   .metric-strip,.dashboard-grid{grid-template-columns:1fr}
@@ -93,7 +94,7 @@ footer{flex-wrap:wrap}
   :root{--section-gap:.625rem}
   main{padding:12px}
   main>header{height:38px}
-  main>header label{height:38px}
+  .search{height:38px}
   main>header button{width:36px;height:38px;flex:none}
   main>header button:last-child{display:none}
   .brand span{display:none}

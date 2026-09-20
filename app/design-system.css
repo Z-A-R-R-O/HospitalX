@@ -127,8 +127,9 @@ input { min-width: 0; border: 0; outline: 0; color: var(--ink); background: tran
 main { height: 100dvh; padding: 22px clamp(18px, 2vw, 32px) 14px; overflow: auto; scrollbar-width: thin; }
 .topbar, .hero, .metric-strip, .dashboard-grid, .data-freshness, footer, .empty { width: min(100%, 1700px); margin-inline: auto; }
 .topbar { min-height: 42px; display: flex; align-items: center; gap: 9px; margin-bottom: 20px; animation: fadeDown .72s var(--ease-soft) both; }
-.search { width: min(540px, 48vw); height: 42px; padding: 0 12px; border-radius: 14px; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.32); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(255,255,255,.55); box-shadow: 0 4px 12px rgba(31,48,71,.04), inset 0 1px 0 rgba(255,255,255,.75); transition: background var(--motion-normal) ease, box-shadow var(--motion-normal) ease; }
-.search:hover, .search:focus-within { background: rgba(255,255,255,.45); box-shadow: 0 8px 24px rgba(31,48,71,.06), inset 0 1px 0 rgba(255,255,255,.85); }
+.search { width: 280px; height: 42px; padding: 0 12px; border-radius: 14px; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.32); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(255,255,255,.55); box-shadow: 0 4px 12px rgba(31,48,71,.04), inset 0 1px 0 rgba(255,255,255,.75); transition: width .4s cubic-bezier(0.175, 0.885, 0.32, 1.1), background var(--motion-normal) ease, box-shadow var(--motion-normal) ease; }
+.search:hover { background: rgba(255,255,255,.45); box-shadow: 0 8px 24px rgba(31,48,71,.06), inset 0 1px 0 rgba(255,255,255,.85); }
+.search:focus-within { width: min(540px, 48vw); background: rgba(255,255,255,.5); box-shadow: 0 12px 32px rgba(31,48,71,.08), inset 0 1px 0 rgba(255,255,255,.9); }
 .search > svg { width: 17px; flex: none; color: #475569; }
 .search input { position: relative; z-index: 1; flex: 1; font-size: 13px; font-weight: 500; }
 .search input::placeholder { color: #6d7789; opacity: 1; font-weight: 500; }
