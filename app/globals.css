@@ -26,3 +26,8 @@ html { scroll-behavior: smooth; }
 
 /* Selection color */
 ::selection { background: rgba(39,124,244,.18); }
+
+/* Dark mode globals */
+html.dark ::selection { background: rgba(99,102,241,.3); }
+html.dark input { color: var(--ink); }
+html.dark body { color: var(--ink); }

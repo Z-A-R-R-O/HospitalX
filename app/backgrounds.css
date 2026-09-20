@@ -2,3 +2,6 @@
 .form-shell{min-height:100vh;padding:42px;display:grid;place-items:center;background:linear-gradient(135deg,#e7ebee,#fff 50%,#ebedf1)}
 
 /* Data freshness – design-system.css owns the primary rule; this is a fallback */
+
+/* Dark mode form shell */
+html.dark .form-shell{background:linear-gradient(135deg,#0b101a,#06080d 50%,#070a11)}
