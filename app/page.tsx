@@ -24,7 +24,7 @@ type NavItem = { label: string; icon: LucideIcon; href?: string };
 const nav: NavItem[] = [
   { label: "Home", icon: HomeIcon },
   { label: "AI Co-pilot", icon: Bot },
-  { label: "Patients", icon: Users, href: "/patients" },
+  { label: "Patients", icon: Users },
   { label: "Appointments", icon: CalendarDays, href: "/appointments" },
   { label: "OPD", icon: Clock3 },
   { label: "IPD & Beds", icon: BedDouble },
@@ -388,6 +388,47 @@ export default function Home() {
                 <button type="submit" disabled={isAiLoading || !aiQuery.trim()}><ArrowUpRight /></button>
               </form>
               <p>HospitalX AI can make mistakes. Verify important operational data.</p>
+            </div>
+          </section>
+        ) : active === "Patients" ? (
+          <section className="page-view glass">
+            <header className="page-header">
+              <div>
+                <h2>Patient Registry</h2>
+                <p>Manage all registered patients across the hospital network.</p>
+              </div>
+              <button className="primary" type="button" onClick={() => router.push("/patients/new")}><UserPlus /> Register New Patient</button>
+            </header>
+            <div className="table-wrap full-height">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Age / Gender</th>
+                    <th>Patient Type</th>
+                    <th>Assigned Doctor</th>
+                    <th>Status</th>
+                    <th>ETA / Priority</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {peopleLoading ? <tr><td colSpan={8} className="table-message">Loading registry...</td></tr> : 
+                    people.length ? people.map((row) => (
+                      <tr key={row[0]}>
+                        {row.map((cell, index) => <td key={`${row[0]}-${index}`} className={cell === "Emergency" ? "red" : ""}>{index === 1 ? <strong>{cell}</strong> : index === 5 ? <span className={`status ${statusClass(cell)}`}><i />{cell}</span> : cell}</td>)}
+                        <td>
+                          <div className="action-buttons">
+                            <button className="row-action" type="button" aria-label={`View details for ${row[1]}`}>View</button>
+                            <button className="row-action" type="button" aria-label={`Edit ${row[1]}`}>Edit</button>
+                          </div>
+                        </td>
+                      </tr>
+                    )) : <tr><td colSpan={8} className="table-message">No patients found. Click Register New Patient to begin.</td></tr>
+                  }
+                </tbody>
+              </table>
             </div>
           </section>
         ) : <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>}
