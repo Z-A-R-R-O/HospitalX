@@ -1,4 +1,4 @@
-import { MessageSquare, MapPin, Phone, Sparkles, CheckCircle2, Wrench, Activity, AlertCircle, ArrowRight, UserPlus, CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
+import { Syringe, ClipboardList, CheckSquare, AlertTriangle, MessageSquare, MapPin, Phone, Sparkles, CheckCircle2, Wrench, Activity, AlertCircle, ArrowRight, UserPlus, CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
 
 export function AppointmentsView() {
   const appointments = [
@@ -73,7 +73,7 @@ export function AppointmentsView() {
                     <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(15,23,42,0.05)', borderRadius: '4px', fontWeight: 600 }}>{apt.id}</span>
                     {apt.type === "Telehealth" && <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(139,92,246,0.1)', color: 'var(--purple)', borderRadius: '4px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Video size={10}/> Telehealth</span>}
                   </div>
-                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {apt.dept}</p>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ {apt.dept}</p>
                 </div>
                 <div className="apt-status" style={{ width: '120px' }}>
                   <span className={`status ${apt.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {apt.status}</span>
@@ -93,11 +93,11 @@ export function AppointmentsView() {
 
 export function OPDView() {
   const queue = [
-    { id: "A-102", patient: "Sunita Verma", age: "45y", doctor: "Dr. Iyer", vitals: "BP: 120/80 Ã¢â‚¬Â¢ HR: 72", status: "Triage", waitTime: "12m", priority: "normal" },
-    { id: "A-103", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", vitals: "BP: 155/95 Ã¢â‚¬Â¢ HR: 90", status: "Triage", waitTime: "4m", priority: "high" },
-    { id: "B-041", patient: "Neha Gupta", age: "29y", doctor: "Dr. Sharma", vitals: "BP: 118/76 Ã¢â‚¬Â¢ HR: 65", status: "Consultation", waitTime: "Room 4", priority: "normal" },
-    { id: "C-019", patient: "Rohan Das", age: "12y", doctor: "Dr. Patel", vitals: "BP: 110/70 Ã¢â‚¬Â¢ Temp: 101F", status: "Consultation", waitTime: "Room 2", priority: "high" },
-    { id: "A-100", patient: "Priya Singh", age: "34y", doctor: "Dr. Iyer", vitals: "BP: 125/82 Ã¢â‚¬Â¢ HR: 78", status: "Post-Consult", waitTime: "Pharmacy", priority: "normal" },
+    { id: "A-102", patient: "Sunita Verma", age: "45y", doctor: "Dr. Iyer", vitals: "BP: 120/80 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 72", status: "Triage", waitTime: "12m", priority: "normal" },
+    { id: "A-103", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", vitals: "BP: 155/95 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 90", status: "Triage", waitTime: "4m", priority: "high" },
+    { id: "B-041", patient: "Neha Gupta", age: "29y", doctor: "Dr. Sharma", vitals: "BP: 118/76 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 65", status: "Consultation", waitTime: "Room 4", priority: "normal" },
+    { id: "C-019", patient: "Rohan Das", age: "12y", doctor: "Dr. Patel", vitals: "BP: 110/70 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Temp: 101F", status: "Consultation", waitTime: "Room 2", priority: "high" },
+    { id: "A-100", patient: "Priya Singh", age: "34y", doctor: "Dr. Iyer", vitals: "BP: 125/82 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 78", status: "Post-Consult", waitTime: "Pharmacy", priority: "normal" },
   ];
 
   const getCol = (status: string) => queue.filter(q => q.status === status);
@@ -112,7 +112,7 @@ export function OPDView() {
          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock3 size={12}/> {apt.waitTime}</span>
       </div>
       <div style={{ marginBottom: '12px' }}>
-         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>Ã¢â‚¬Â¢ {apt.age}</span></h4>
+         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {apt.age}</span></h4>
          <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor}</p>
       </div>
       <div style={{ padding: '8px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--ink)', fontWeight: 500 }}>
@@ -265,7 +265,7 @@ export function IPDView() {
 
                     {bed.status === 'Occupied' ? (
                       <div className="bed-details" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <p style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>{bed.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>â€¢ {bed.age}</span></p>
+                        <p style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>{bed.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>Ã¢â‚¬Â¢ {bed.age}</span></p>
                         <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {bed.doctor}</p>
                         <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={14}/> Admitted: {bed.admitted}</p>
                       </div>
@@ -303,7 +303,7 @@ export function DoctorsView() {
     { id: "DOC-03", name: "Dr. Amit Mehta", spec: "Orthopedics", role: "Consultant", status: "Available", location: "Staff Room A", shift: "10:00 AM - 06:00 PM", tone: "green" },
     { id: "DOC-04", name: "Dr. Kavita Nair", spec: "Pediatrics", role: "Attending", status: "Rounding", location: "General Ward A", shift: "07:00 AM - 03:00 PM", tone: "blue" },
     { id: "DOC-05", name: "Dr. Suresh Patil", spec: "Emergency", role: "ER Physician", status: "Busy", location: "Triage", shift: "12:00 PM - 08:00 PM", tone: "red" },
-    { id: "DOC-06", name: "Dr. Neha Gupta", spec: "Oncology", role: "Consultant", status: "Off Duty", location: "—", shift: "Off Today", tone: "gray" },
+    { id: "DOC-06", name: "Dr. Neha Gupta", spec: "Oncology", role: "Consultant", status: "Off Duty", location: "â€”", shift: "Off Today", tone: "gray" },
     { id: "DOC-07", name: "Dr. Anjali Desai", spec: "Cardiology", role: "Attending", status: "Consulting", location: "OPD Room 1", shift: "09:00 AM - 05:00 PM", tone: "orange" },
     { id: "DOC-08", name: "Dr. Vikram Singh", spec: "Anesthesiology", role: "Consultant", status: "In Surgery", location: "OT 2", shift: "08:00 AM - 04:00 PM", tone: "red" },
   ];
@@ -352,7 +352,7 @@ export function DoctorsView() {
                  </div>
                  <div style={{ flex: 1, minWidth: 0 }}>
                    <h3 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 700, color: 'var(--ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.name}</h3>
-                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.spec} • {doc.role}</p>
+                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.spec} â€¢ {doc.role}</p>
                  </div>
               </div>
               
@@ -383,17 +383,144 @@ export function DoctorsView() {
   );
 }
 
+export function NursingView() {
+  const nurses = [
+    { id: "N-102", name: "Sister Mary", role: "Charge Nurse", ward: "Intensive Care (ICU)", shift: "Morning (07:00 - 15:00)", load: 4, tasks: { done: 12, pending: 3 }, tone: "blue", status: "Active" },
+    { id: "N-105", name: "Jacob Thomas", role: "Staff Nurse", ward: "General Ward A", shift: "Morning (07:00 - 15:00)", load: 12, tasks: { done: 18, pending: 7 }, tone: "green", status: "Active" },
+    { id: "N-108", name: "Anita Patel", role: "Staff Nurse", ward: "Emergency (ER)", shift: "Morning (07:00 - 15:00)", load: 8, tasks: { done: 22, pending: 1 }, tone: "orange", status: "Busy" },
+    { id: "N-112", name: "Sarah Khan", role: "Trainee Nurse", ward: "Pediatrics", shift: "Morning (07:00 - 15:00)", load: 6, tasks: { done: 8, pending: 4 }, tone: "blue", status: "Active" },
+    { id: "N-101", name: "Mercy John", role: "Head Nurse", ward: "Floor Supervisor", shift: "Morning (07:00 - 15:00)", load: 0, tasks: { done: 5, pending: 0 }, tone: "gray", status: "On Break" },
+    { id: "N-115", name: "David Chen", role: "Staff Nurse", ward: "General Ward B", shift: "Morning (07:00 - 15:00)", load: 10, tasks: { done: 14, pending: 5 }, tone: "green", status: "Active" },
+  ];
+
+  const alerts = [
+    { time: "Just now", type: "Urgent", msg: "Call Bell Ringing", loc: "ICU - Bed 02", tone: "red" },
+    { time: "5m ago", type: "Task", msg: "Administer Medication (IV)", loc: "Gen A - Bed 14", tone: "orange" },
+    { time: "12m ago", type: "Alert", msg: "IV Fluid < 10%", loc: "ER - Bed 04", tone: "red" },
+    { time: "28m ago", type: "Task", msg: "Record Vitals", loc: "Gen A - Bed 15", tone: "blue" },
+    { time: "45m ago", type: "Task", msg: "Post-Op Wound Check", loc: "Gen B - Bed 01", tone: "blue" },
+    { time: "1h ago", type: "Handover", msg: "Night shift handover complete", loc: "Nursing Station", tone: "green" },
+  ];
+
+  const getInitials = (name: string) => {
+    const parts = name.split(' ');
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  };
+
+  return (
+    <section className="page-view nursing-view glass" style={{ padding: 0 }}>
+      <header className="page-header" style={{ padding: "24px 24px 0" }}>
+        <div>
+          <h2><ClipboardList /> Nursing Station</h2>
+          <p>Shift handovers, ward assignments, and live task tracking.</p>
+        </div>
+        <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+            <Search size={16} /><input placeholder="Search nurse or ward..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+          </label>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Assign Shift</button>
+        </div>
+      </header>
+
+      <div className="nursing-layout" style={{ display: 'flex', gap: '24px', padding: '24px', height: 'calc(100% - 70px)', overflow: 'hidden' }}>
+        
+        <div className="nurses-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden' }}>
+          <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', flexShrink: 0 }}>
+            {[
+              { label: "Active Nurses", value: "34", trend: "" },
+              { label: "Critical Alerts", value: "2", trend: "+1", isRed: true },
+              { label: "Pending Tasks", value: "48", trend: "" }
+            ].map(kpi => (
+              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+                 <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
+                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
+                   <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
+                   {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--red)' }}>{kpi.trend}</span>}
+                 </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="nurses-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', overflowY: 'auto', paddingRight: '8px' }}>
+            {nurses.map(nurse => {
+              const totalTasks = nurse.tasks.done + nurse.tasks.pending;
+              const pct = totalTasks === 0 ? 100 : (nurse.tasks.done / totalTasks) * 100;
+
+              return (
+                <div key={nurse.id} className="nurse-card glass" style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.5)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${nurse.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '14px', flexShrink: 0 }}>
+                         {getInitials(nurse.name)}
+                       </div>
+                       <div>
+                         <h3 style={{ margin: '0 0 2px', fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{nurse.name}</h3>
+                         <p style={{ margin: 0, fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{nurse.role}</p>
+                       </div>
+                    </div>
+                    <span className={`status ${nurse.status === 'Busy' ? 'red' : nurse.status === 'Active' ? 'green' : 'gray'}`} style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '10px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {nurse.status}
+                    </span>
+                  </div>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.02)', padding: '12px', borderRadius: '12px' }}>
+                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14}/> Ward</span>
+                        <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{nurse.ward}</strong>
+                     </div>
+                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><BedDouble size={14}/> Load</span>
+                        <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{nurse.load} Patients</strong>
+                     </div>
+                  </div>
+
+                  <div className="task-progress" style={{ marginTop: 'auto' }}>
+                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px', fontWeight: 600, color: 'var(--muted)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckSquare size={14}/> Tasks Completed</span>
+                        <span>{nurse.tasks.done} / {totalTasks}</span>
+                     </div>
+                     <div style={{ height: '6px', background: 'rgba(15,23,42,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${pct}%`, background: nurse.tasks.pending > 0 ? 'var(--blue)' : 'var(--green)', borderRadius: '3px', transition: 'width 0.3s ease' }} />
+                     </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <aside className="alerts-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.5)', flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '20px', borderBottom: '1px solid rgba(15,23,42,0.1)', background: 'rgba(255,255,255,0.5)' }}>
+            <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Bell size={18}/> Live Feed & Alerts</h3>
+          </div>
+          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', flex: 1 }}>
+             {alerts.map((alert, i) => (
+                <div key={i} className="alert-item" style={{ display: 'flex', gap: '12px', position: 'relative' }}>
+                   {i !== alerts.length - 1 && <div style={{ position: 'absolute', left: '15px', top: '24px', bottom: '-24px', width: '2px', background: 'rgba(15,23,42,0.05)' }} />}
+                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `var(--${alert.tone})`, opacity: 0.1, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 0, top: 0, color: `var(--${alert.tone})` }}>
+                      {alert.type === 'Urgent' ? <AlertTriangle size={16} /> : alert.type === 'Task' ? <Syringe size={16} /> : alert.type === 'Handover' ? <ClipboardList size={16} /> : <Bell size={16} />}
+                   </div>
+                   <div style={{ paddingTop: '6px' }}>
+                      <p style={{ margin: '0 0 6px', fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>{alert.msg}</p>
+                      <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                         <span style={{ background: 'rgba(15,23,42,0.05)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{alert.loc}</span>
+                         <span>•</span>
+                         <span style={{ fontWeight: 500 }}>{alert.time}</span>
+                      </div>
+                   </div>
+                </div>
+             ))}
+          </div>
+        </aside>
+
+      </div>
+    </section>
+  );
+}
+
 export function GenericModuleView({ active }: { active: string }) {
   const config: Record<string, any> = {
-    "Nursing": {
-      title: "Nursing Station", desc: "Shift handovers, ward assignments, and critical alerts.",
-      cols: ["Nurse", "Ward Assignment", "Shift", "Patients", "Status"],
-      rows: [
-        ["Sister Mary", "ICU", "Morning", "4", "Active"],
-        ["Nurse Jacob", "General Ward A", "Morning", "12", "Active"],
-        ["Nurse Anita", "Emergency", "Morning", "8", "Busy"],
-      ]
-    },
     "Laboratory": {
       title: "Laboratory & Diagnostics", desc: "Process pathology, hematology, and biochemistry requests.",
       cols: ["Req ID", "Patient", "Test Type", "Sample", "Status"],
@@ -423,8 +550,8 @@ export function GenericModuleView({ active }: { active: string }) {
       title: "Billing & Insurance", desc: "Invoices, claims, and revenue cycle management.",
       cols: ["Invoice #", "Patient", "Amount", "Insurance", "Status"],
       rows: [
-        ["INV-2041", "Ananya Rao", "ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹ 1,500", "HDFC ERGO", "Paid"],
-        ["INV-2042", "Ramesh Das", "ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹ 45,000", "Star Health", "Claim Pending"],
+        ["INV-2041", "Ananya Rao", "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹ 1,500", "HDFC ERGO", "Paid"],
+        ["INV-2042", "Ramesh Das", "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹ 45,000", "Star Health", "Claim Pending"],
       ]
     },
     "Inventory": {
