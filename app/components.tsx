@@ -1,4 +1,4 @@
-import { Aperture, Disc, FileImage, UploadCloud, Eye, Brain, TestTube, Microscope, Printer, FileCheck, Syringe, ClipboardList, CheckSquare, AlertTriangle, MessageSquare, MapPin, Phone, Sparkles, CheckCircle2, Wrench, Activity, AlertCircle, ArrowRight, UserPlus, CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
+import { Aperture, Archive, Banknote, BarChart3, BedDouble, Bell, Boxes, Brain, CalendarDays, CheckCircle2, CheckSquare, ClipboardList, Clock, Clock3, CreditCard, Disc, Download, Eye, FileCheck, FileImage, FileSpreadsheet, FileText, Filter, FlaskConical, HeartPulse, Landmark, MapPin, MessageSquare, Microscope, MoreHorizontal, Package, PackageOpen, Phone, PieChart, Pill, Play, Plus, Printer, Receipt, ReceiptText, ScanLine, Search, Send, ShieldCheck, ShoppingCart, Sparkles, Stethoscope, Syringe, TestTube, TrendingUp, Truck, UploadCloud, User, UserPlus, Users, Video, Wallet, Wrench, Activity, AlertCircle, AlertTriangle, ArrowRight } from "lucide-react";
 
 export function AppointmentsView() {
   const appointments = [
