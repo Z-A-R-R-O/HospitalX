@@ -820,3 +820,13 @@ html.dark .ipd-view .bed-card.status-cleaning { border-left-color: var(--orange)
 html.dark .ipd-view .bed-divider { background: rgba(255,255,255,0.1) !important; }
 html.dark .ipd-view .bed-card h4, html.dark .ipd-view .bed-card .patient-name { color: #f8fafc !important; }
 
+
+/* Doctors View Specific CSS */
+.doctors-view .doc-card { transition: transform 0.2s, box-shadow 0.2s; }
+.doctors-view .doc-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(31,48,71,0.1), inset 0 1px 0 rgba(255,255,255,1); }
+.doctors-view .icon-btn:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(31,48,71,0.1); }
+
+html.dark .doctors-view .doc-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .doctors-view .doc-card h3 { color: #f8fafc !important; }
+html.dark .doctors-view .doc-card .icon-btn { background: rgba(15,23,35,0.8) !important; border-color: rgba(255,255,255,0.1) !important; }
+
