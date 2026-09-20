@@ -455,8 +455,8 @@ export default function Home() {
         ) : active === "Reports" ? (
           <ReportsView />
         ) : (
-          <GenericModuleView active={active} />
-        ) : <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>}
+          <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>
+        )}
 
         <footer><span>HospitalX v1.0　│　 People × Technology × Better Care</span><span><i /> All Systems Operational　│　 Built for a Healthier India</span></footer>
       </main>
