@@ -295,17 +295,17 @@ export default function Home() {
                 <small>dr.zarro@hospitalx.com</small>
               </div>
               <div className="profile-menu-divider"></div>
-              <button onClick={() => { setIsProfileMenuOpen(false); alert("Navigating to Profile Settings"); }}>
+              <button onClick={() => { setIsProfileMenuOpen(false); (window as any).Clerk ? (window as any).Clerk.openUserProfile() : router.push("/profile"); }}>
                 <User size={14} /> My Profile
               </button>
               <button onClick={() => { setIsDark(!isDark); setIsProfileMenuOpen(false); }}>
                 {isDark ? <Sun size={14} /> : <Moon size={14} />} {isDark ? "Light Mode" : "Dark Mode"}
               </button>
-              <button onClick={() => { setIsProfileMenuOpen(false); alert("Navigating to Preferences"); }}>
+              <button onClick={() => { setIsProfileMenuOpen(false); router.push("/?modal=preferences"); }}>
                 <Settings size={14} /> Preferences
               </button>
               <div className="profile-menu-divider"></div>
-              <button className="danger" onClick={() => { setIsProfileMenuOpen(false); alert("Logging out..."); }}>
+              <button className="danger" onClick={() => { setIsProfileMenuOpen(false); (window as any).Clerk ? (window as any).Clerk.signOut(() => router.push("/sign-in")) : router.push("/sign-in"); }}>
                 <LogOut size={14} /> Sign Out
               </button>
             </div>
