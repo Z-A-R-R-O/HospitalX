@@ -766,3 +766,18 @@ html.dark .table-wrap.full-height { background: rgba(30,41,59,0.3); border-color
 html.dark .action-buttons .row-action { background: rgba(255,255,255,0.05); color: #cbd5e1; border-color: rgba(255,255,255,0.1); }
 html.dark .action-buttons .row-action:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
+
+/* Appointments View Specific CSS */
+.appointments-view .calendar-sidebar h3 { font-size: 16px; font-weight: 600; color: var(--ink); }
+.appointments-view .day-name { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.appointments-view .day { font-size: 13px; font-weight: 500; transition: transform 0.2s; }
+.appointments-view .day:hover { transform: scale(1.1); background: rgba(0,0,0,0.05); }
+.appointments-view .schedule-stats ul li { margin-bottom: 8px; }
+.appointments-layout .apt-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1); }
+
+html.dark .appointments-view .day:hover { background: rgba(255,255,255,0.1); }
+html.dark .appointments-view .apt-divider { background: rgba(255,255,255,0.1) !important; }
+html.dark .appointments-view .apt-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .appointments-view .apt-time strong { color: #fff; }
+html.dark .appointments-view h3, html.dark .appointments-view h4 { color: #f8fafc !important; }
+
