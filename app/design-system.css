@@ -798,3 +798,25 @@ html.dark .opd-view .opd-card span, html.dark .opd-view .opd-card h4 { color: #f
 html.dark .opd-view .opd-card .row-action { background: rgba(255,255,255,0.05) !important; color: #fff !important; border-color: rgba(255,255,255,0.1) !important; }
 html.dark .opd-view .opd-card .row-action:hover { background: rgba(255,255,255,0.1) !important; }
 
+
+/* IPD View Specific CSS */
+.ipd-view .kpi-card { transition: transform 0.2s; cursor: default; }
+.ipd-view .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(31,48,71,0.06); }
+.ipd-view .ward-header { position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); z-index: 10; margin: 0 -24px 16px; padding: 12px 24px; border-bottom: 1px solid rgba(15,23,42,0.1) !important; }
+.ipd-view .bed-card { transition: transform 0.2s, box-shadow 0.2s; }
+.ipd-view .bed-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1); }
+.ipd-view .status-occupied { border-left: 4px solid var(--blue) !important; }
+.ipd-view .status-available { border-left: 4px solid var(--green) !important; }
+.ipd-view .status-cleaning { border-left: 4px solid var(--orange) !important; }
+.ipd-view .status-maintenance { border-left: 4px solid var(--muted) !important; }
+
+html.dark .ipd-view .kpi-card { background: rgba(30,41,59,0.4) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .ipd-view .kpi-card h3 { color: #fff !important; }
+html.dark .ipd-view .ward-header { background: rgba(15,23,35,0.8); border-color: rgba(255,255,255,0.1) !important; }
+html.dark .ipd-view .bed-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .ipd-view .bed-card.status-occupied { border-left-color: var(--blue) !important; }
+html.dark .ipd-view .bed-card.status-available { border-left-color: var(--green) !important; }
+html.dark .ipd-view .bed-card.status-cleaning { border-left-color: var(--orange) !important; }
+html.dark .ipd-view .bed-divider { background: rgba(255,255,255,0.1) !important; }
+html.dark .ipd-view .bed-card h4, html.dark .ipd-view .bed-card .patient-name { color: #f8fafc !important; }
+
