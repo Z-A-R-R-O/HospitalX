@@ -347,7 +347,7 @@ export function DoctorsView() {
           {doctors.map(doc => (
             <div key={doc.id} className="doc-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${doc.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--c-white)', fontWeight: 600, fontSize: '18px', flexShrink: 0, border: '2px solid var(--c-glass-50)', boxShadow: 'var(--c-shadow-md)' }}>
+                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${doc.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '18px', flexShrink: 0, border: '2px solid var(--c-glass-50)', boxShadow: 'var(--c-shadow-md)' }}>
                    {getInitials(doc.name)}
                  </div>
                  <div style={{ flex: 1, minWidth: 0 }}>
@@ -450,7 +450,7 @@ export function NursingView() {
                 <div key={nurse.id} className="nurse-card glass" style={{ padding: '16px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${nurse.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--c-white)', fontWeight: 600, fontSize: '14px', flexShrink: 0 }}>
+                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${nurse.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '14px', flexShrink: 0 }}>
                          {getInitials(nurse.name)}
                        </div>
                        <div>
@@ -603,8 +603,8 @@ export function LaboratoryView() {
                 <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
                   {test.status === 'Awaiting Sample' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Printer size={14}/> Label</button>}
                   {test.status === 'Processing' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Microscope size={14}/> Results</button>}
-                  {test.status === 'Verified' && <button className="row-action" style={{ background: 'var(--green)', color: 'var(--c-white)', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileCheck size={14}/> Report</button>}
-                  {test.status === 'Critical Value' && <button className="row-action" style={{ background: 'var(--red)', color: 'var(--c-white)', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14}/> Alert Dr.</button>}
+                  {test.status === 'Verified' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileCheck size={14}/> Report</button>}
+                  {test.status === 'Critical Value' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14}/> Alert Dr.</button>}
                 </div>
              </div>
           ))}
@@ -689,8 +689,8 @@ export function RadiologyView() {
                       <div style={{ display: 'flex', gap: '8px' }}>
                         {scan.status === 'Scheduled' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Activity size={14}/> Start</button>}
                         {scan.status === 'In Progress' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><UploadCloud size={14}/> Upload DICOM</button>}
-                        {scan.status === 'Ready for Review' && <button className="row-action" style={{ background: 'var(--blue)', color: 'var(--c-white)', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={14}/> Review</button>}
-                        {scan.status === 'Reported' && <button className="row-action" style={{ background: 'var(--green)', color: 'var(--c-white)', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileImage size={14}/> Report</button>}
+                        {scan.status === 'Ready for Review' && <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={14}/> Review</button>}
+                        {scan.status === 'Reported' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileImage size={14}/> Report</button>}
                       </div>
                     </div>
                   </div>
@@ -790,7 +790,7 @@ export function PharmacyView() {
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '120px', justifyContent: 'center', flexShrink: 0 }}>
-                    {rx.status === 'Ready to Dispense' && <button className="row-action" style={{ background: 'var(--green)', color: 'var(--c-white)', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><PackageOpen size={14}/> Dispense</button>}
+                    {rx.status === 'Ready to Dispense' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><PackageOpen size={14}/> Dispense</button>}
                     {rx.status === 'Processing' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><ShoppingCart size={14}/> Invoice</button>}
                     {rx.status === 'Awaiting Stock' && <button className="row-action" style={{ background: 'var(--c-white)', color: 'var(--red)', borderColor: 'rgba(239,68,68,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}>Order Stock</button>}
                     {rx.status === 'Dispensed' && <button className="row-action" style={{ background: 'transparent', color: 'var(--muted)', borderColor: 'var(--c-dark-10)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }} disabled>Completed</button>}
@@ -915,7 +915,7 @@ export function BillingView() {
                     {inv.status === 'Draft' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Banknote size={14}/> Collect</button>}
                     {inv.status === 'Pending Insurance' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Landmark size={14}/> Claim</button>}
                     {inv.status === 'Paid' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Download size={14}/> Receipt</button>}
-                    {inv.status === 'Overdue' && <button className="row-action" style={{ background: 'var(--red)', color: 'var(--c-white)', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><Send size={14}/> Remind</button>}
+                    {inv.status === 'Overdue' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><Send size={14}/> Remind</button>}
                   </div>
                </div>
             ))}
@@ -1036,7 +1036,7 @@ export function InventoryView() {
                   
                   <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
                     {item.status === 'In Stock' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Package size={14}/> Audit</button>}
-                    {(item.status === 'Low Stock' || item.status === 'Critical' || item.status === 'Out of Stock') && <button className="row-action" style={{ background: 'var(--blue)', color: 'var(--c-white)', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Truck size={14}/> Reorder</button>}
+                    {(item.status === 'Low Stock' || item.status === 'Critical' || item.status === 'Out of Stock') && <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Truck size={14}/> Reorder</button>}
                   </div>
                </div>
             );
@@ -1158,7 +1158,7 @@ export function ReportsView() {
                         </div>
                      </div>
                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
-                        <button className="row-action" style={{ background: 'var(--blue)', color: 'var(--c-white)', borderColor: 'var(--blue)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px' }}><Play size={12} fill="currentColor"/> Generate Now</button>
+                        <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px' }}><Play size={12} fill="currentColor"/> Generate Now</button>
                      </div>
                   </div>
                 );

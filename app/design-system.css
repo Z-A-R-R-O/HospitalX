@@ -978,8 +978,8 @@ html.dark .icon-button { background: rgba(20,28,42,0.6); border-color: rgba(255,
 html.dark .icon-button:hover { background: rgba(30,41,59,0.85); box-shadow: 0 12px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1); }
 html.dark .auth-button { background: rgba(20,28,42,0.6); border-color: rgba(255,255,255,0.12); color: #e2e8f0; }
 html.dark .auth-button:hover { background: rgba(30,41,59,0.85); }
-html.dark .auth-button.primary { background: rgba(248,250,252,0.9); color: #0f172a; border-color: rgba(248,250,252,.8); }
-html.dark .auth-button.primary:hover { background: #f8fafc; }
+html.dark .auth-button.primary { background: var(--blue); color: #fff; border-color: rgba(39,124,244,.8); box-shadow: 0 4px 16px rgba(39,124,244,.2); }
+html.dark .auth-button.primary:hover { background: #3b82f6; box-shadow: 0 8px 24px rgba(39,124,244,.3); }
 
 /* --- Profile card --- */
 html.dark .profile-card { border-top-color: rgba(255,255,255,.08); }
@@ -1062,8 +1062,8 @@ html.dark .form-card input:focus, html.dark .form-card select:focus {
   box-shadow: 0 0 0 3px rgba(99,102,241,.2), inset 0 1px 2px rgba(0,0,0,.15);
 }
 html.dark .form-card input::placeholder { color: #64748b; }
-html.dark .primary { background: #f8fafc; color: #0f172a; box-shadow: 0 4px 12px rgba(248,250,252,.15); }
-html.dark .primary:hover { background: #ffffff; box-shadow: 0 8px 24px rgba(248,250,252,.2); }
+html.dark .primary { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(39,124,244,.2); }
+html.dark .primary:hover { background: #3b82f6; box-shadow: 0 8px 24px rgba(39,124,244,.3); }
 html.dark .back { background: rgba(20,28,42,0.6); border-color: rgba(255,255,255,.1); color: #f8fafc; }
 html.dark .back:hover { background: rgba(30,41,59,0.85); }
 html.dark .form-status { color: #94a3b8; }
