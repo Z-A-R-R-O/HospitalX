@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { GenericModuleView } from "./components";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity, AlertTriangle, ArrowUpRight, BedDouble, Bell, Bot, Boxes,
@@ -25,17 +26,17 @@ const nav: NavItem[] = [
   { label: "Home", icon: HomeIcon },
   { label: "AI Co-pilot", icon: Bot },
   { label: "Patients", icon: Users },
-  { label: "Appointments", icon: CalendarDays, href: "/appointments" },
+  { label: "Appointments", icon: CalendarDays },
   { label: "OPD", icon: Clock3 },
   { label: "IPD & Beds", icon: BedDouble },
   { label: "Doctors", icon: Stethoscope },
   { label: "Nursing", icon: HeartPulse },
-  { label: "Laboratory", icon: FlaskConical, href: "/laboratory" },
-  { label: "Radiology", icon: ScanLine, href: "/radiology" },
-  { label: "Pharmacy", icon: Pill, href: "/pharmacy" },
-  { label: "Billing", icon: ReceiptText, href: "/billing" },
-  { label: "Inventory", icon: Boxes, href: "/inventory" },
-  { label: "Reports", icon: FileText, href: "/reports" },
+  { label: "Laboratory", icon: FlaskConical },
+  { label: "Radiology", icon: ScanLine },
+  { label: "Pharmacy", icon: Pill },
+  { label: "Billing", icon: ReceiptText },
+  { label: "Inventory", icon: Boxes },
+  { label: "Reports", icon: FileText },
 ];
 
 const formatPatient = (patient: any): PatientRow => [
@@ -431,6 +432,8 @@ export default function Home() {
               </table>
             </div>
           </section>
+        ) : ["Appointments", "OPD", "IPD & Beds", "Doctors", "Nursing", "Laboratory", "Radiology", "Pharmacy", "Billing", "Inventory", "Reports"].includes(active) ? (
+          <GenericModuleView active={active} />
         ) : <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>}
 
         <footer><span>HospitalX v1.0　│　 People × Technology × Better Care</span><span><i /> All Systems Operational　│　 Built for a Healthier India</span></footer>
