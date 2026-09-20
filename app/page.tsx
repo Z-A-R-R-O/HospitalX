@@ -87,6 +87,11 @@ export default function Home() {
   const [toast, setToast] = useState("");
   const [navOpen, setNavOpen] = useState(false);
   const [queueFilter, setQueueFilter] = useState("All");
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDark);
+  }, [isDark]);
 
   useEffect(() => {
     const updateClock = () => setClock(new Date());
@@ -184,8 +189,10 @@ export default function Home() {
         <header className="topbar">
           <label className="search glass"><Search aria-hidden="true" /><input aria-label="Search HospitalX" placeholder="Search patients, staff, beds, or ask anything..." /><kbd><Command /> K</kbd></label>
           <div className="date-time"><span>{dateLabel}</span><strong>{timeLabel}</strong></div>
-          <button className="icon-button glass" type="button" aria-label="Light theme"><Sun /></button>
-          <button className="icon-button glass" type="button" aria-label="Dark theme"><Moon /></button>
+          <button className="icon-button glass theme-toggle" type="button" aria-label="Toggle theme" onClick={() => setIsDark(!isDark)}>
+            <Sun className="sun-icon" />
+            <Moon className="moon-icon" />
+          </button>
           <button className="icon-button glass notification" type="button" aria-label="Notifications"><Bell /><i /></button>
           <button className="icon-button glass desktop-only" type="button" aria-label="Enter fullscreen"><Expand /></button>
           <div className="auth-controls">

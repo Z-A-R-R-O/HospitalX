@@ -476,3 +476,84 @@ footer span:last-child { color: #475569; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+
+/* Theme Toggle & Dark Mode */
+.theme-toggle { position: relative; overflow: hidden; }
+.theme-toggle svg { position: absolute; inset: 0; margin: auto; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; }
+html:not(.dark) .theme-toggle .sun-icon { transform: rotate(0) scale(1); opacity: 1; }
+html:not(.dark) .theme-toggle .moon-icon { transform: rotate(90deg) scale(0.5); opacity: 0; }
+html.dark .theme-toggle .sun-icon { transform: rotate(-90deg) scale(0.5); opacity: 0; }
+html.dark .theme-toggle .moon-icon { transform: rotate(0) scale(1); opacity: 1; }
+
+html.dark {
+  --background: #090c14;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --dim: #475569;
+}
+html.dark body { background: var(--background); }
+html.dark .app-shell { background: linear-gradient(145deg, #0b101a, #06080d, #040508, #070a11); }
+html.dark .hero { background: url('/hero-bg-dark.jpg') center / cover no-repeat; }
+html.dark .sidebar { background: url('/sidebar-bg-dark.jpg') center / cover no-repeat; }
+html.dark .sidebar::before { background: rgba(10, 15, 25, 0.5); }
+html.dark .motto-card { background: url('/sidebar-bg-dark.jpg') 50% 60% / cover no-repeat; }
+
+html.dark .glass {
+  background: rgba(15, 23, 35, 0.45);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+html.dark .metric-card, html.dark .panel, html.dark .prompts, html.dark .attention, 
+html.dark .quick, html.dark .empty, html.dark .queue, html.dark .analytics-card {
+  background: rgba(20, 28, 42, 0.4);
+}
+html.dark .metric-card::after, html.dark .panel::before, html.dark .prompts::before, html.dark .attention::before, 
+html.dark .quick::before, html.dark .queue::before, html.dark .analytics-card::before {
+  background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.02) 40%, rgba(255,255,255,0) 100%);
+}
+
+html.dark h2, html.dark .metric-card strong, html.dark .queue h2, html.dark .hero h1 { color: #ffffff; }
+html.dark td strong, html.dark .date-time strong, html.dark .hero aside { color: #f8fafc; }
+html.dark .hero p, html.dark .metric-card small, html.dark .date-time span, html.dark th { color: #94a3b8; }
+
+html.dark .search { background: rgba(20, 28, 42, 0.6); border-color: rgba(255, 255, 255, 0.15); }
+html.dark .search input { color: #f8fafc; }
+html.dark .search input::placeholder { color: #64748b; }
+html.dark .search kbd { background: rgba(30, 41, 59, 0.8); color: #cbd5e1; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+
+html.dark tbody tr:hover td { color: #ffffff; background: rgba(30, 41, 59, 0.85); }
+html.dark th { background: rgba(15, 23, 35, 0.5); border-bottom-color: rgba(255, 255, 255, 0.08); }
+html.dark td { border-bottom-color: rgba(255, 255, 255, 0.04); color: #cbd5e1; }
+
+html.dark .status.in-consultation { color: #34d399; background: rgba(6, 78, 59, 0.6); }
+html.dark .status.waiting { color: #60a5fa; background: rgba(30, 58, 138, 0.6); }
+html.dark .status.triage, html.dark .status.emergency { color: #f87171; background: rgba(127, 29, 29, 0.6); }
+
+html.dark .metric-icon.blue { color: #60a5fa; background: rgba(30, 58, 138, 0.6); }
+html.dark .metric-icon.green { color: #34d399; background: rgba(6, 78, 59, 0.6); }
+html.dark .metric-icon.orange { color: #fbbf24; background: rgba(120, 53, 15, 0.6); }
+html.dark .icon-button, html.dark .auth-button.glass { color: #e2e8f0; }
+
+html.dark .queue-tabs { background: rgba(15, 23, 35, 0.5); border-color: rgba(255,255,255,0.1); }
+html.dark .queue-tabs button { color: #94a3b8; }
+html.dark .queue-tabs button.active { color: #f8fafc; background: rgba(30, 41, 59, 0.9); }
+
+html.dark .queue header .view-all, html.dark .analytics-card > button {
+  color: #e2e8f0; background: rgba(30, 41, 59, 0.6); border-color: rgba(255,255,255,0.15);
+}
+html.dark .queue header .view-all:hover, html.dark .analytics-card > button:hover {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+
+html.dark .bed-visual span strong { color: #ffffff; }
+html.dark .bed-visual span small, html.dark .bed-legend span { color: #94a3b8; }
+html.dark .donut::before { background: rgba(255,255,255,0.1); }
+html.dark .bed-legend p:nth-child(1) b i { background: #f8fafc !important; }
+html.dark .bed-legend p b { color: #e2e8f0; }
+html.dark .revenue-chart strong { color: #ffffff; }
+html.dark .load-bars span { color: #e2e8f0; }
+html.dark .load-bars i { background: rgba(255,255,255,0.1); }
+html.dark .revenue-labels span { color: #64748b; }
+
