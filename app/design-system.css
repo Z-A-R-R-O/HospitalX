@@ -133,16 +133,10 @@ input { min-width: 0; border: 0; outline: 0; color: var(--ink); background: tran
 .sidebar nav button svg { width: 17px; height: 17px; stroke-width: 1.8; }
 .sidebar nav button:hover { transform: translate3d(2px,-1px,0) scale(1.02); background: rgba(255,255,255,.52); box-shadow: 0 4px 12px rgba(31,48,71,.04); }
 .sidebar nav button.on { background: rgba(255,255,255,.8); border-color: rgba(255,255,255,.9); box-shadow: 0 8px 22px rgba(31,48,71,.06); font-weight: 700; color: #0f172a; }
-@keyframes auroraSpin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.2); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-.motto-card { position: relative; min-height: 142px; margin: auto 1px 10px; padding: 18px; display: flex; align-items: flex-end; overflow: hidden; border: 1px solid rgba(255,255,255,.75); border-radius: 20px; background: linear-gradient(135deg, #f8fafc, #f1f5f9); box-shadow: inset 0 1px rgba(255,255,255,.7); transition: transform var(--motion-normal) ease, box-shadow var(--motion-normal) ease; }
+.motto-card { position: relative; min-height: 142px; margin: auto 1px 10px; padding: 18px; display: flex; align-items: flex-end; overflow: hidden; border: 1px solid rgba(255,255,255,.75); border-radius: 20px; background: url('/sidebar-bg.jpg') 50% 60% / cover no-repeat; box-shadow: inset 0 1px rgba(255,255,255,.7); transition: , box-shadow var(--motion-normal) ease; }
 .motto-card:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 12px 24px rgba(31,48,71,.08), inset 0 1px rgba(255,255,255,.8); }
-.motto-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.2), transparent 45%), radial-gradient(circle at 70% 30%, rgba(168, 85, 247, 0.15), transparent 45%); animation: auroraSpin 16s linear infinite; pointer-events: none; z-index: 0; }
-.motto-card::after { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.2), transparent 55%); animation: auroraSpin 22s linear infinite reverse; pointer-events: none; z-index: 0; }
-.motto-card span { position: relative; z-index: 1; line-height: 1.35; color: #1d2a3e; font-weight: 600; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }
+.motto-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(246,248,250,.72), rgba(232,236,240,.12)); }
+.motto-card span { position: relative; z-index: 1; line-height: 1.35; color: #1d2a3e; font-weight: 600; }
 .profile-card { position: relative; z-index: 1; min-height: 58px; display: flex; align-items: center; gap: 10px; padding: 9px 6px; border-top: 1px solid rgba(255,255,255,.58); }
 .avatar { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border-radius: 50%; color: white; background: linear-gradient(145deg,#564439,#211b18); font-size: 11px; font-weight: 700; }
 .profile-card > span:nth-child(2) { min-width: 0; flex: 1; }
@@ -581,9 +575,7 @@ html.dark .app-shell { background: linear-gradient(145deg, #0b101a, #06080d, #04
 html.dark .hero { background: url('/hero-bg-dark.jpg') center / cover no-repeat; }
 html.dark .sidebar { background: url('/sidebar-bg-dark.jpg') center / cover no-repeat; }
 html.dark .sidebar::before { background: rgba(10, 15, 25, 0.5); }
-html.dark .motto-card { background: linear-gradient(135deg, #0f172a, #020617); border-color: rgba(255,255,255,0.1); }
-html.dark .motto-card::before { background: radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.3), transparent 45%), radial-gradient(circle at 70% 30%, rgba(168, 85, 247, 0.25), transparent 45%); }
-html.dark .motto-card::after { background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.25), transparent 55%); }
+html.dark .motto-card { background: url('/sidebar-bg-dark.jpg') 50% 60% / cover no-repeat; }
 
 html.dark .glass {
   background: rgba(15, 23, 35, 0.45);
@@ -654,8 +646,8 @@ html.dark .sidebar nav button { color: #94a3b8; }
 html.dark .sidebar nav button.on { color: #ffffff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 html.dark .sidebar nav button:hover:not(.on) { background: rgba(255,255,255,0.05); color: #e2e8f0; }
 
-html.dark .motto-card span { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
-
+html.dark .motto-card span { color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+html.dark .motto-card::after { background: linear-gradient(135deg, rgba(15,23,42,.7), rgba(15,23,42,.2)); }
 
 html.dark .profile-card strong { color: #ffffff; }
 html.dark .profile-card small { color: #94a3b8; }
