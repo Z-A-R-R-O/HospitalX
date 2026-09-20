@@ -194,25 +194,25 @@ main { height: 100dvh; padding: 22px clamp(18px, 2vw, 32px) 14px; overflow: auto
 
 .ai-card { 
   position: relative; min-height: 110px; padding: 15px 17px; display: flex; align-items: center; gap: 14px; overflow: hidden; border-radius: 18px; color: white;
-  background: linear-gradient(135deg, rgba(20,25,40,0.95), rgba(10,12,20,0.98));
-  box-shadow: var(--shadow-md), inset 0 1px rgba(255,255,255,.15); 
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.7), rgba(15, 23, 42, 0.8));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 12px 32px rgba(46, 16, 101, 0.25), inset 0 1px 1px rgba(255,255,255,0.25); 
   animation: cardIn .74s var(--ease-soft) 300ms both; transition: transform var(--motion-normal) var(--ease-soft), box-shadow var(--motion-normal) ease;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.15);
 }
 .ai-card::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 100% 0%, rgba(255,255,255,0.15) 0%, transparent 50%);
 }
 .ai-card::after {
   content: ""; position: absolute; inset: -50%; z-index: 0; pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, rgba(99,102,241,.15), transparent 60%),
-              radial-gradient(circle at 80% 20%, rgba(236,72,153,.15), transparent 50%);
+  background: radial-gradient(circle at 50% 50%, rgba(99,102,241,.25), transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(236,72,153,.25), transparent 50%);
   animation: bgDrift 15s linear infinite alternate;
 }
 @keyframes bgDrift { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(-5%, 5%) rotate(5deg); } }
-.ai-card:hover { transform: translate3d(0,-4px,0) scale(1.01); box-shadow: 0 32px 64px rgba(10,20,35,.4), inset 0 1px rgba(255,255,255,.25); }
+.ai-card:hover { transform: translate3d(0,-4px,0) scale(1.01); box-shadow: 0 32px 64px rgba(10,20,35,.5), inset 0 1px rgba(255,255,255,.3); }
 .ai-card strong, .ai-card span, .ai-card > button, .ai-orb { position: relative; z-index: 2; }
 .ai-card strong { display: block; font-size: 16px; font-weight: 700; }
 .ai-card strong small { margin-left: 4px; padding: 2px 5px; border-radius: 5px; color: #dce7f8; background: rgba(255,255,255,.15); font-size: 9px; font-weight: 600; }
@@ -339,17 +339,21 @@ td.red { color: var(--red); font-weight: 700; }
 .revenue-labels { display: flex; justify-content: space-between; margin-top: 8px; color: #475569; font-size: 10px; font-weight: 600; }
 .right-rail { display: grid; gap: 12px; align-content: start; }
 .right-rail > * { min-width: 0; }
-.prompts { padding: 12px; }
-.prompts > button { position: relative; width: 100%; min-height: 42px; margin-bottom: 6px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.6); border-radius: 12px; color: #0f172a; background: rgba(255,255,255,.45); text-align: left; font-size: 11px; font-weight: 600; transition: transform var(--motion-normal) var(--ease-soft), background var(--motion-normal) ease, box-shadow var(--motion-normal) ease; box-shadow: 0 4px 12px rgba(31,48,71,.03); }
-.prompts > button:hover { transform: translate3d(4px,-1px,0) scale(1.01); background: rgba(255,255,255,.85); box-shadow: 0 12px 24px rgba(31,48,71,.08); }
-.prompts > button svg:first-child { width: 16px; height: 16px; color: #277cf4; }.prompts > button svg:last-child { width: 14px; margin-left: auto; opacity: 0; transition: opacity var(--motion-fast) ease; }.prompts > button:hover svg:last-child { opacity: 1; }
-.prompts label { position: relative; min-height: 48px; margin-top: 12px; padding: 8px 8px 8px 14px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.7); border-radius: 16px; background: rgba(255,255,255,.5); box-shadow: inset 0 2px 6px rgba(31,48,71,.03); transition: background var(--motion-normal) ease, box-shadow var(--motion-normal) ease; }
-.prompts label:focus-within { background: rgba(255,255,255,.8); box-shadow: 0 4px 16px rgba(31,48,71,.05), inset 0 1px 0 rgba(255,255,255,.9); }
+.prompts { padding: 16px; }
+.prompts > button { position: relative; width: 100%; min-height: 44px; margin-bottom: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,.8); border-radius: 14px; color: #1e293b; background: rgba(255,255,255,.5); text-align: left; font-size: 12px; font-weight: 600; transition: transform var(--motion-normal) var(--ease-soft), background var(--motion-normal) ease, box-shadow var(--motion-normal) ease; box-shadow: 0 2px 8px rgba(31,48,71,.02), inset 0 1px 0 rgba(255,255,255,1); overflow: hidden; }
+.prompts > button::before { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent); transform: translateX(-100%); transition: transform 0.6s ease; pointer-events: none; }
+.prompts > button:hover { transform: translate3d(2px,-1px,0) scale(1.01); background: rgba(255,255,255,.9); box-shadow: 0 8px 24px rgba(31,48,71,.06), inset 0 1px 0 rgba(255,255,255,1); }
+.prompts > button:hover::before { transform: translateX(100%); }
+.prompts > button svg:first-child { width: 16px; height: 16px; color: #6366f1; }
+.prompts > button svg:last-child { width: 14px; margin-left: auto; opacity: 0; transition: opacity var(--motion-fast) ease; color: #6366f1; }
+.prompts > button:hover svg:last-child { opacity: 1; }
+.prompts label { position: relative; min-height: 48px; margin-top: 16px; padding: 6px 6px 6px 16px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.5); border-radius: 18px; background: rgba(255,255,255,.6); box-shadow: inset 0 2px 6px rgba(0,0,0,.04), 0 2px 8px rgba(31,48,71,.02); transition: background var(--motion-normal) ease, box-shadow var(--motion-normal) ease; }
+.prompts label:focus-within { background: rgba(255,255,255,.9); box-shadow: 0 4px 16px rgba(31,48,71,.05), inset 0 1px 0 rgba(255,255,255,.9); border-color: rgba(255,255,255,.9); }
 .prompts label input { flex: 1; font-size: 12px; font-weight: 500; }
 .prompts label input::placeholder { color: #64748b; font-weight: 500; }
-.prompts label > svg { width: 18px; color: #475569; }
-.prompts label button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.8); border-radius: 50%; color: #0f172a; background: rgba(255,255,255,.9); box-shadow: 0 2px 8px rgba(31,48,71,.06); transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease; }
-.prompts label button:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(31,48,71,.1); }
+.prompts label > svg { width: 18px; color: #8b5cf6; }
+.prompts label button { width: 34px; height: 34px; display: grid; place-items: center; border: none; border-radius: 50%; color: white; background: linear-gradient(135deg, #4f46e5, #9333ea); box-shadow: 0 4px 12px rgba(79,70,229,.3); transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease; }
+.prompts label button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(79,70,229,.4); }
 .prompts label button svg { width: 16px; }
 .attention { 
   border-color: rgba(239,68,68,.18);
@@ -600,11 +604,14 @@ html.dark .empty-metric p { color: #94a3b8; }
 
 
 /* Second pass contrast fixes */
-html.dark .prompts > button { background: rgba(30, 41, 59, 0.5); border-color: rgba(255, 255, 255, 0.1); }
-html.dark .prompts label { background: rgba(15, 23, 35, 0.5); border-color: rgba(255, 255, 255, 0.15); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+html.dark .prompts > button { background: rgba(30, 41, 59, 0.4); border-color: rgba(255, 255, 255, 0.08); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+html.dark .prompts > button:hover { background: rgba(51, 65, 85, 0.6); box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
+html.dark .prompts label { background: rgba(15, 23, 35, 0.6); border-color: rgba(255, 255, 255, 0.15); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+html.dark .prompts label:focus-within { background: rgba(15, 23, 35, 0.8); border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
 html.dark .prompts label input { color: #f8fafc; }
-html.dark .prompts label > svg { color: #94a3b8; }
-html.dark .prompts label button { color: #f8fafc; background: rgba(51, 65, 85, 0.9); border-color: rgba(255,255,255,0.2); }
+html.dark .prompts label > svg { color: #a78bfa; }
+html.dark .prompts label button { color: #ffffff; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
+html.dark .prompts label button:hover { box-shadow: 0 6px 16px rgba(139, 92, 246, 0.5); }
 html.dark .empty-metric p { color: #94a3b8; }
 html.dark .table-message { color: #94a3b8; }
 html.dark .row-action { color: #94a3b8; }
