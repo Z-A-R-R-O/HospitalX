@@ -80,7 +80,7 @@ export function AppointmentsView() {
                 </div>
                 <div className="action-buttons" style={{ display: 'flex', gap: '8px' }}>
                   <button className="row-action" style={{ background: 'var(--c-white)' }}>Check In</button>
-                  <button className="row-action" style={{ padding: '4px 6px' }}><MoreHorizontal size={16}/></button>
+                  <button className="row-action" style={{ padding: '6px 14px' }}><MoreHorizontal size={16}/></button>
                 </div>
               </div>
             ))}
@@ -119,7 +119,7 @@ export function OPDView() {
         <Activity size={14} color="var(--blue)" /> {apt.vitals}
       </div>
       <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-        <button className="row-action" style={{ flex: 1, padding: '6px', fontSize: '12px', background: 'var(--c-white)', borderRadius: '9999px', border: '1px solid var(--c-glass-80)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
+        <button className="row-action" style={{ flex: 1, padding: '6px 14px', fontSize: '12px', background: 'var(--c-white)', borderRadius: '9999px', border: '1px solid var(--c-glass-80)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
       </div>
     </div>
   );
@@ -812,7 +812,7 @@ export function PharmacyView() {
                       <span style={{ color: 'var(--muted)', fontWeight: 600 }}>Stock: <strong style={{ color: `var(--${item.tone})` }}>{item.current}</strong></span>
                       <span style={{ color: 'var(--muted)', fontWeight: 600 }}>Min: {item.threshold}</span>
                    </div>
-                   <button className="row-action" style={{ width: '100%', padding: '6px', background: 'var(--c-white)', fontSize: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}><ShoppingCart size={14}/> Reorder Now</button>
+                   <button className="row-action" style={{ width: '100%', padding: '6px 14px', background: 'var(--c-white)', fontSize: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}><ShoppingCart size={14}/> Reorder Now</button>
                 </div>
              ))}
           </div>
