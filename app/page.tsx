@@ -23,6 +23,7 @@ type NavItem = { label: string; icon: LucideIcon; href?: string };
 
 const nav: NavItem[] = [
   { label: "Home", icon: HomeIcon },
+  { label: "AI Co-pilot", icon: Bot },
   { label: "Patients", icon: Users, href: "/patients" },
   { label: "Appointments", icon: CalendarDays, href: "/appointments" },
   { label: "OPD", icon: Clock3 },
@@ -35,7 +36,6 @@ const nav: NavItem[] = [
   { label: "Billing", icon: ReceiptText, href: "/billing" },
   { label: "Inventory", icon: Boxes, href: "/inventory" },
   { label: "Reports", icon: FileText, href: "/reports" },
-  { label: "AI Assistant", icon: Sparkles },
 ];
 
 const formatPatient = (patient: any): PatientRow => [
@@ -149,10 +149,13 @@ export default function Home() {
   };
 
   const go = (item: NavItem) => {
-    setActive(item.label);
+    if (item.href) {
+      router.push(item.href);
+    } else {
+      setActive(item.label);
+      if (item.label === "AI Co-pilot") setIsChatOpen(false);
+    }
     setNavOpen(false);
-    if (item.href) { router.push(item.href); return; }
-    if (item.label !== "Home") showToast(`Opening ${item.label} workspace…`);
   };
 
   const hasRealData = overview?.metrics && (overview.metrics.patients > 10 || overview.metrics.appointmentsToday > 5);
@@ -199,11 +202,11 @@ export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const aiInputRef = useRef<HTMLInputElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
+  const fullChatScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (chatScrollRef.current) {
-      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
-    }
+    if (chatScrollRef.current) chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    if (fullChatScrollRef.current) fullChatScrollRef.current.scrollTop = fullChatScrollRef.current.scrollHeight;
   }, [chatHistory, isAiLoading]);
 
   const submitToAi = async (text: string) => {
@@ -213,7 +216,9 @@ export default function Home() {
     const newHistory = [...chatHistory, userMsg];
     setChatHistory(newHistory);
     setAiQuery("");
-    setIsChatOpen(true);
+    if (active !== "AI Co-pilot") {
+      setIsChatOpen(true);
+    }
     setIsAiLoading(true);
     
     try {
@@ -303,7 +308,7 @@ export default function Home() {
                 <strong>HospitalX AI <small>BETA</small></strong>
                 <span>Your operational co-pilot.</span>
               </div>
-              <button type="button" aria-label="Open AI Assistant" onClick={() => setIsChatOpen(true)}><ArrowUpRight /></button>
+              <button type="button" aria-label="Open AI Assistant" onClick={() => { setActive("AI Co-pilot"); setIsChatOpen(false); }}><ArrowUpRight /></button>
             </article>
           </section>
 
@@ -348,7 +353,44 @@ export default function Home() {
             </aside>
           </section>
           <p className="data-freshness" role="status">{freshness}</p>
-        </> : <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>}
+        </> : active === "AI Co-pilot" ? (
+          <section className="full-chat-page">
+            <div className="full-chat-messages" ref={fullChatScrollRef}>
+              {chatHistory.length === 0 && (
+                <div className="full-chat-empty">
+                  <div className="ai-orb large" aria-hidden="true" />
+                  <h2>How can I help you today?</h2>
+                  <div className="suggestion-grid">
+                    {["Summarize the ICU status for today", "Which patients have delayed discharges?", "Generate a shift handover briefing", "Analyze revenue trends this week"].map(p => (
+                      <button type="button" key={p} className="glass" onClick={() => submitToAi(p)}>{p}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {chatHistory.map((msg, i) => (
+                <div key={i} className={`full-msg ${msg.role}`}>
+                  <div className="msg-avatar">{msg.role === 'assistant' ? <Bot /> : 'AZ'}</div>
+                  <div className="msg-content">
+                    {msg.content.split('\n').map((line, j) => <p key={j}>{line}</p>)}
+                  </div>
+                </div>
+              ))}
+              {isAiLoading && (
+                <div className="full-msg assistant loading">
+                  <div className="msg-avatar"><Bot /></div>
+                  <div className="msg-content"><Activity className="pulse" /></div>
+                </div>
+              )}
+            </div>
+            <div className="full-chat-bottom">
+              <form className="full-chat-input glass" onSubmit={handleAiSubmit}>
+                <input value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} placeholder="Message HospitalX AI..." />
+                <button type="submit" disabled={isAiLoading || !aiQuery.trim()}><ArrowUpRight /></button>
+              </form>
+              <p>HospitalX AI can make mistakes. Verify important operational data.</p>
+            </div>
+          </section>
+        ) : <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>}
 
         <footer><span>HospitalX v1.0　│　 People × Technology × Better Care</span><span><i /> All Systems Operational　│　 Built for a Healthier India</span></footer>
       </main>
