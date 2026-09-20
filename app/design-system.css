@@ -859,3 +859,11 @@ html.dark .rad-view .rad-card { background: rgba(30,41,59,0.3) !important; borde
 html.dark .rad-view .rad-card h4 { color: #f8fafc !important; }
 html.dark .rad-view .modality-block { box-shadow: inset 0 2px 4px rgba(255,255,255,0.05); }
 
+
+/* Pharmacy View Specific CSS */
+.pharmacy-view .rx-card, .pharmacy-view .stock-alert-card { transition: transform 0.2s, box-shadow 0.2s; }
+.pharmacy-view .rx-card:hover, .pharmacy-view .stock-alert-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1); }
+
+html.dark .pharmacy-view .rx-card, html.dark .pharmacy-view .stock-alert-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .pharmacy-view .rx-card h4, html.dark .pharmacy-view .stock-alert-card h4, html.dark .pharmacy-view .rx-card strong { color: #f8fafc !important; }
+
