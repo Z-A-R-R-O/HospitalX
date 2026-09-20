@@ -6,6 +6,7 @@ import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { GenericModuleView, AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView, BillingView, InventoryView, ReportsView } from "./components";
 import type { LucideIcon } from "lucide-react";
 import {
+  MoreHorizontal, Settings, User,
   Activity, AlertTriangle, ArrowUpRight, BedDouble, Bell, Bot, Boxes,
   CalendarDays, CalendarPlus, ChevronRight, CircleDot, Clock3, Command,
   Expand, FileText, FlaskConical, HeartPulse, Home as HomeIcon, IndianRupee,
@@ -91,6 +92,19 @@ export default function Home() {
   const [isDark, setIsDark] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -269,8 +283,33 @@ export default function Home() {
             <span>Seamless<br />Tech.<br />Better<br />Healing.</span>
           </div>
         </div>
-        <div className="profile-card">
-          <span className="avatar">AZ</span><span><strong>Dr. Arunez Zarro</strong><small>Administrator</small></span><button type="button" aria-label="Profile options">•••</button>
+        <div className="profile-card" ref={profileMenuRef}>
+          <span className="avatar">AZ</span><span><strong>Dr. Arunez Zarro</strong><small>Administrator</small></span>
+          <button type="button" aria-label="Profile options" onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}>
+            <MoreHorizontal size={16} />
+          </button>
+          {isProfileMenuOpen && (
+            <div className="profile-menu glass">
+              <div className="profile-menu-header">
+                <strong>Dr. Arunez Zarro</strong>
+                <small>dr.zarro@hospitalx.com</small>
+              </div>
+              <div className="profile-menu-divider"></div>
+              <button onClick={() => { setIsProfileMenuOpen(false); alert("Navigating to Profile Settings"); }}>
+                <User size={14} /> My Profile
+              </button>
+              <button onClick={() => { setIsDark(!isDark); setIsProfileMenuOpen(false); }}>
+                {isDark ? <Sun size={14} /> : <Moon size={14} />} {isDark ? "Light Mode" : "Dark Mode"}
+              </button>
+              <button onClick={() => { setIsProfileMenuOpen(false); alert("Navigating to Preferences"); }}>
+                <Settings size={14} /> Preferences
+              </button>
+              <div className="profile-menu-divider"></div>
+              <button className="danger" onClick={() => { setIsProfileMenuOpen(false); alert("Logging out..."); }}>
+                <LogOut size={14} /> Sign Out
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 

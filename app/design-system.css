@@ -155,8 +155,8 @@ input { min-width: 0; border: 0; outline: 0; color: var(--ink); background: tran
 .profile-card strong, .profile-card small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .profile-card strong { font-size: 12px; font-weight: 700; color: #0f172a; }
 .profile-card small { color: var(--muted); font-size: 10px; font-weight: 600; }
-.profile-card button { border: 0; background: transparent; color: var(--muted); transition: transform var(--motion-fast) ease, color var(--motion-fast) ease; }
-.profile-card button:hover { transform: scale(1.1); color: #0f172a; }
+.profile-card > button { border: 0; background: transparent; color: var(--muted); transition: transform var(--motion-fast) ease, color var(--motion-fast) ease; }
+.profile-card > button:hover { transform: scale(1.1); color: #0f172a; }
 .mobile-menu { display: none; }
 
 main { height: 100dvh; padding: 22px clamp(18px, 2vw, 32px) 14px; overflow: auto; scrollbar-width: thin; }
@@ -663,7 +663,7 @@ html.dark .motto-card::after { background: linear-gradient(135deg, rgba(15,23,42
 
 html.dark .profile-card strong { color: #ffffff; }
 html.dark .profile-card small { color: #94a3b8; }
-html.dark .profile-card button:hover { color: #ffffff; }
+html.dark .profile-card > button:hover { color: #ffffff; }
 
 html.dark .hero h1, html.dark .empty h1 { color: #ffffff; }
 html.dark .hero span, html.dark .empty > span { color: #cbd5e1; }
@@ -1013,7 +1013,7 @@ html.dark .auth-button.primary:hover { background: #3b82f6; box-shadow: 0 8px 24
 
 /* --- Profile card --- */
 html.dark .profile-card { border-top-color: rgba(255,255,255,.08); }
-html.dark .profile-card button { color: #94a3b8; }
+html.dark .profile-card > button { color: #94a3b8; }
 
 /* --- Notification dot --- */
 html.dark .notification i { box-shadow: 0 0 0 2px rgba(15,23,35,.8); }
@@ -1097,3 +1097,107 @@ html.dark .primary:hover { background: #3b82f6; box-shadow: 0 8px 24px rgba(39,1
 html.dark .back { background: rgba(20,28,42,0.6); border-color: rgba(255,255,255,.1); color: #f8fafc; }
 html.dark .back:hover { background: rgba(30,41,59,0.85); }
 html.dark .form-status { color: #94a3b8; }
+
+/* --- Profile Menu --- */
+.profile-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  padding: 8px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 100;
+  animation: menuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 12px 32px rgba(31,48,71,.1);
+}
+html.dark .profile-menu {
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 12px 32px rgba(0,0,0,.5);
+}
+@keyframes menuIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.profile-menu-header {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.profile-menu-header strong {
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 600;
+}
+.profile-menu-header small {
+  font-size: 11px;
+  color: #64748b;
+}
+.profile-menu-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.06);
+  margin: 4px 0;
+}
+html.dark .profile-menu-divider {
+  background: rgba(255,255,255,0.06);
+}
+.profile-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.profile-menu button:hover {
+  background: rgba(0,0,0,0.04);
+}
+.profile-menu button svg {
+  color: #64748b;
+}
+.profile-menu button:hover svg {
+  color: #0f172a;
+}
+.profile-menu button.danger {
+  color: #ef4444;
+}
+.profile-menu button.danger svg {
+  color: #ef4444;
+}
+.profile-menu button.danger:hover {
+  background: rgba(239,68,68,0.1);
+}
+.profile-menu button.danger:hover svg {
+  color: #ef4444;
+}
+
+html.dark .profile-menu button {
+  color: #e2e8f0;
+}
+html.dark .profile-menu button svg {
+  color: #94a3b8;
+}
+html.dark .profile-menu button:hover {
+  background: rgba(255,255,255,0.05);
+}
+html.dark .profile-menu button:hover svg {
+  color: #e2e8f0;
+}
+html.dark .profile-menu-header strong {
+  color: #fff;
+}
+html.dark .profile-menu-header small {
+  color: #94a3b8;
+}
