@@ -1,4 +1,4 @@
-import { CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
+import { Activity, AlertCircle, ArrowRight, UserPlus, CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
 
 export function AppointmentsView() {
   const appointments = [
@@ -73,7 +73,7 @@ export function AppointmentsView() {
                     <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(15,23,42,0.05)', borderRadius: '4px', fontWeight: 600 }}>{apt.id}</span>
                     {apt.type === "Telehealth" && <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(139,92,246,0.1)', color: 'var(--purple)', borderRadius: '4px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Video size={10}/> Telehealth</span>}
                   </div>
-                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} • {apt.dept}</p>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} â€¢ {apt.dept}</p>
                 </div>
                 <div className="apt-status" style={{ width: '120px' }}>
                   <span className={`status ${apt.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {apt.status}</span>
@@ -91,17 +91,94 @@ export function AppointmentsView() {
   );
 }
 
+export function OPDView() {
+  const queue = [
+    { id: "A-102", patient: "Sunita Verma", age: "45y", doctor: "Dr. Iyer", vitals: "BP: 120/80 • HR: 72", status: "Triage", waitTime: "12m", priority: "normal" },
+    { id: "A-103", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", vitals: "BP: 155/95 • HR: 90", status: "Triage", waitTime: "4m", priority: "high" },
+    { id: "B-041", patient: "Neha Gupta", age: "29y", doctor: "Dr. Sharma", vitals: "BP: 118/76 • HR: 65", status: "Consultation", waitTime: "Room 4", priority: "normal" },
+    { id: "C-019", patient: "Rohan Das", age: "12y", doctor: "Dr. Patel", vitals: "BP: 110/70 • Temp: 101F", status: "Consultation", waitTime: "Room 2", priority: "high" },
+    { id: "A-100", patient: "Priya Singh", age: "34y", doctor: "Dr. Iyer", vitals: "BP: 125/82 • HR: 78", status: "Post-Consult", waitTime: "Pharmacy", priority: "normal" },
+  ];
+
+  const getCol = (status: string) => queue.filter(q => q.status === status);
+
+  const renderCard = (apt: any) => (
+    <div key={apt.id} className="opd-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.6)', border: apt.priority === 'high' ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(255,255,255,0.5)', position: 'relative', boxShadow: '0 4px 12px rgba(31,48,71,0.03)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+           <span style={{ fontSize: '18px', fontWeight: 700, color: 'var(--ink)' }}>{apt.id}</span>
+           {apt.priority === 'high' && <AlertCircle size={16} color="var(--red)" />}
+         </div>
+         <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock3 size={12}/> {apt.waitTime}</span>
+      </div>
+      <div style={{ marginBottom: '12px' }}>
+         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>• {apt.age}</span></h4>
+         <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor}</p>
+      </div>
+      <div style={{ padding: '8px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--ink)', fontWeight: 500 }}>
+        <Activity size={14} color="var(--blue)" /> {apt.vitals}
+      </div>
+      <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+        <button className="row-action" style={{ flex: 1, padding: '6px', fontSize: '12px', background: '#fff', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.8)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
+      </div>
+    </div>
+  );
+
+  return (
+    <section className="page-view opd-view glass" style={{ padding: 0 }}>
+      <header className="page-header" style={{ padding: "24px 24px 0" }}>
+        <div>
+          <h2><Clock3 /> Outpatient Queue (OPD)</h2>
+          <p>Live tracking of walk-in patients, triaging, and active consultations.</p>
+        </div>
+        <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
+          <button className="glass-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Dept</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> Issue Token</button>
+        </div>
+      </header>
+
+      <div className="opd-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+          {[
+            { label: "Walk-ins Today", value: "142", trend: "+12%" },
+            { label: "Avg Wait Time", value: "14m", trend: "-2m" },
+            { label: "Active Consults", value: "8", trend: "0%" },
+            { label: "Pharmacy Queue", value: "12", trend: "+4%" }
+          ].map(kpi => (
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.5)' }}>
+               <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
+               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
+                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
+                 <span style={{ fontSize: '12px', fontWeight: 600, color: kpi.trend.startsWith('+') && kpi.label !== 'Walk-ins Today' ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>
+               </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="opd-board" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', flex: 1, overflow: 'hidden' }}>
+          {[
+            { title: "Triage & Vitals", status: "Triage", color: "var(--blue)" },
+            { title: "In Consultation", status: "Consultation", color: "var(--orange)" },
+            { title: "Post-Consult / Pharmacy", status: "Post-Consult", color: "var(--green)" }
+          ].map(col => (
+            <div key={col.title} className="kanban-col glass" style={{ display: 'flex', flexDirection: 'column', padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)', overflowY: 'auto' }}>
+               <h4 style={{ margin: '0 0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '15px' }}>
+                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><i style={{ width: '8px', height: '8px', borderRadius: '50%', background: col.color }}/> {col.title}</span>
+                 <span className="badge" style={{ padding: '2px 8px', borderRadius: '12px', background: 'rgba(15,23,42,0.05)', fontSize: '12px' }}>{getCol(col.status).length}</span>
+               </h4>
+               <div className="kanban-cards" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {getCol(col.status).map(renderCard)}
+               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function GenericModuleView({ active }: { active: string }) {
   const config: Record<string, any> = {
-    "OPD": {
-      title: "Outpatient Department (OPD)", desc: "Live tracking of walk-in and scheduled OPD consultations.",
-      cols: ["Token", "Patient", "Vitals", "Assigned Doctor", "Status"],
-      rows: [
-        ["A-102", "Sunita Verma", "BP: 120/80, HR: 72", "Dr. Iyer", "Consulting"],
-        ["A-103", "Vikram Malhotra", "BP: 135/85, HR: 88", "Dr. Iyer", "Waiting"],
-        ["B-041", "Neha Gupta", "BP: 118/76, HR: 65", "Dr. Sharma", "Waiting"],
-      ]
-    },
     "IPD & Beds": {
       title: "Inpatient & Bed Management", desc: "Real-time occupancy, transfers, and bed turnover.",
       cols: ["Bed ID", "Ward", "Patient", "Admitted", "Status"],
@@ -159,8 +236,8 @@ export function GenericModuleView({ active }: { active: string }) {
       title: "Billing & Insurance", desc: "Invoices, claims, and revenue cycle management.",
       cols: ["Invoice #", "Patient", "Amount", "Insurance", "Status"],
       rows: [
-        ["INV-2041", "Ananya Rao", "₹ 1,500", "HDFC ERGO", "Paid"],
-        ["INV-2042", "Ramesh Das", "₹ 45,000", "Star Health", "Claim Pending"],
+        ["INV-2041", "Ananya Rao", "â‚¹ 1,500", "HDFC ERGO", "Paid"],
+        ["INV-2042", "Ramesh Das", "â‚¹ 45,000", "Star Health", "Claim Pending"],
       ]
     },
     "Inventory": {

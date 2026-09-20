@@ -781,3 +781,20 @@ html.dark .appointments-view .apt-card { background: rgba(30,41,59,0.3) !importa
 html.dark .appointments-view .apt-time strong { color: #fff; }
 html.dark .appointments-view h3, html.dark .appointments-view h4 { color: #f8fafc !important; }
 
+
+/* OPD View Specific CSS */
+.opd-view .opd-kpis .kpi-card { transition: transform 0.2s; cursor: default; }
+.opd-view .opd-kpis .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(31,48,71,0.06); }
+.opd-view .kanban-col { scrollbar-width: none; }
+.opd-view .kanban-col::-webkit-scrollbar { display: none; }
+.opd-view .opd-card { transition: transform 0.2s, box-shadow 0.2s; }
+.opd-view .opd-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1) !important; }
+
+html.dark .opd-view .kpi-card { background: rgba(30,41,59,0.4) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .opd-view .kpi-card h3 { color: #fff !important; }
+html.dark .opd-view .kanban-col { background: rgba(15,23,35,0.4) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .opd-view .opd-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .opd-view .opd-card span, html.dark .opd-view .opd-card h4 { color: #f8fafc !important; }
+html.dark .opd-view .opd-card .row-action { background: rgba(255,255,255,0.05) !important; color: #fff !important; border-color: rgba(255,255,255,0.1) !important; }
+html.dark .opd-view .opd-card .row-action:hover { background: rgba(255,255,255,0.1) !important; }
+
