@@ -262,7 +262,13 @@ export default function Home() {
             return <button type="button" key={item.label} className={active === item.label ? "on" : ""} aria-current={active === item.label ? "page" : undefined} onClick={() => go(item)}><Icon aria-hidden="true" /><span>{item.label}</span></button>;
           })}
         </nav>
-        <div className="motto-card"><span>Better<br />Systems.<br />Brighter<br />Lives.</span></div>
+        <div className="motto-card">
+          <div className="motto-rotator">
+            <span>Better<br />Systems.<br />Brighter<br />Lives.</span>
+            <span>Smarter<br />Care.<br />Healthier<br />Future.</span>
+            <span>Seamless<br />Tech.<br />Better<br />Healing.</span>
+          </div>
+        </div>
         <div className="profile-card">
           <span className="avatar">AZ</span><span><strong>Dr. Arunez Zarro</strong><small>Administrator</small></span><button type="button" aria-label="Profile options">•••</button>
         </div>

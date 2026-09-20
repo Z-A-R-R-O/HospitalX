@@ -137,6 +137,18 @@ input { min-width: 0; border: 0; outline: 0; color: var(--ink); background: tran
 .motto-card:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 12px 24px rgba(31,48,71,.08), inset 0 1px rgba(255,255,255,.8); }
 .motto-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(246,248,250,.72), rgba(232,236,240,.12)); }
 .motto-card span { position: relative; z-index: 1; line-height: 1.35; color: #1d2a3e; font-weight: 600; }
+.motto-rotator { display: grid; }
+.motto-rotator span { grid-area: 1 / 1; opacity: 0; transform: translateY(10px); animation: textFadeRotate 12s infinite; }
+.motto-rotator span:nth-child(1) { animation-delay: 0s; }
+.motto-rotator span:nth-child(2) { animation-delay: 4s; }
+.motto-rotator span:nth-child(3) { animation-delay: 8s; }
+@keyframes textFadeRotate {
+  0% { opacity: 0; transform: translateY(10px); }
+  5% { opacity: 1; transform: translateY(0); }
+  28% { opacity: 1; transform: translateY(0); }
+  33% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
 .profile-card { position: relative; z-index: 1; min-height: 58px; display: flex; align-items: center; gap: 10px; padding: 9px 6px; border-top: 1px solid rgba(255,255,255,.58); }
 .avatar { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border-radius: 50%; color: white; background: linear-gradient(145deg,#564439,#211b18); font-size: 11px; font-weight: 700; }
 .profile-card > span:nth-child(2) { min-width: 0; flex: 1; }
