@@ -867,3 +867,11 @@ html.dark .rad-view .modality-block { box-shadow: inset 0 2px 4px rgba(255,255,2
 html.dark .pharmacy-view .rx-card, html.dark .pharmacy-view .stock-alert-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
 html.dark .pharmacy-view .rx-card h4, html.dark .pharmacy-view .stock-alert-card h4, html.dark .pharmacy-view .rx-card strong { color: #f8fafc !important; }
 
+
+/* Billing View Specific CSS */
+.billing-view .invoice-card, .billing-view .claim-card { transition: transform 0.2s, box-shadow 0.2s; }
+.billing-view .invoice-card:hover, .billing-view .claim-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1); }
+
+html.dark .billing-view .invoice-card, html.dark .billing-view .claim-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .billing-view .invoice-card h4, html.dark .billing-view .claim-card h4, html.dark .billing-view .invoice-card strong, html.dark .billing-view .claim-card strong { color: #f8fafc !important; }
+

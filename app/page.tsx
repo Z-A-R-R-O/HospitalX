@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { GenericModuleView, AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView } from "./components";
+import { GenericModuleView, AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView, BillingView } from "./components";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity, AlertTriangle, ArrowUpRight, BedDouble, Bell, Bot, Boxes,
@@ -448,7 +448,9 @@ export default function Home() {
           <RadiologyView />
         ) : active === "Pharmacy" ? (
           <PharmacyView />
-        ) : ["Billing", "Inventory", "Reports"].includes(active) ? (
+        ) : active === "Billing" ? (
+          <BillingView />
+        ) : ["Inventory", "Reports"].includes(active) ? (
           <GenericModuleView active={active} />
         ) : <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>}
 
