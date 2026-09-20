@@ -289,7 +289,7 @@ function DepartmentLoad({ appointments }: { appointments?: number }) {
     { label: "Pharmacy", value: 61, color: "#277cf4" },
   ];
   return <article className="panel glass analytics-card department-card"><h2>Department Load</h2>
-    {loads.length ? <div className="load-bars">{loads.map((load) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%`, background: load.color }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}
+    {loads.length ? <div className="load-bars">{loads.map((load, index) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%`, background: load.color, animationDelay: `${index * 80 + 350}ms` }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}
     <button type="button">View Departments <ChevronRight /></button>
   </article>;
 }
@@ -300,7 +300,7 @@ function RevenueCard() {
       <strong>₹ 3,42,800 <span className="trend">↑ 18%</span></strong>
     </div>
     <div className="revenue-chart">
-      <span className="revenue-bars" aria-hidden="true">{[4, 7, 5, 9, 6, 11, 8, 12, 16, 10, 7, 13, 9, 15, 12].map((height, index) => <i key={index} style={{ height: `${height * 3}px` }} />)}</span>
+      <span className="revenue-bars" aria-hidden="true">{[4, 7, 5, 9, 6, 11, 8, 12, 16, 10, 7, 13, 9, 15, 12].map((height, index) => <i key={index} style={{ height: `${height * 3}px`, animationDelay: `${index * 40 + 200}ms` }} />)}</span>
       <div className="revenue-labels"><span>6am</span><span>10am</span><span>2pm</span><span>6pm</span><span>10pm</span></div>
     </div>
     <button type="button">View Reports <ChevronRight /></button>
