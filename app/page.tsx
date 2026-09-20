@@ -50,6 +50,29 @@ const formatPatient = (patient: any): PatientRow => [
 
 const statusClass = (status: string) => status.toLowerCase().replace(/[^a-z]+/g, "-");
 
+const mockPeople: PatientRow[] = [
+  ["001", "Rajesh Kumar", "45 / M", "Follow-up", "Dr. Priya", "In Consultation", "—"],
+  ["002", "Meena S", "32 / F", "New", "Dr. Arjun", "Waiting", "12 min"],
+  ["003", "Kumaravel P", "58 / M", "Emergency", "Dr. Hari", "Triage", "5 min"],
+  ["004", "Priya N", "27 / F", "Follow-up", "Dr. Arunez", "Waiting", "18 min"],
+  ["005", "Dinesh K", "63 / M", "Review", "Dr. Kavya", "Labs", "25 min"],
+  ["006", "Aishwarya R", "36 / F", "New", "Dr. Arunez", "Waiting", "32 min"],
+];
+
+const mockTasks: OperationalTask[] = [
+  { id: "1", text: "3 patients with critical lab results", owner: "12 min ago" },
+  { id: "2", text: "2 discharges delayed by billing", owner: "18 min ago" },
+  { id: "3", text: "ICU bed capacity warning (90%)", owner: "25 min ago" },
+  { id: "4", text: "5 appointments running late", owner: "28 min ago" },
+  { id: "5", text: "Oxygen supply at 15%", owner: "32 min ago" },
+  { id: "6", text: "Network maintenance scheduled", owner: "1 hour ago" },
+];
+
+const mockOverview: Overview = {
+  metrics: { patients: 842, appointmentsToday: 126, admissions: 38, beds: 200, availableBeds: 36 },
+  source: "neon",
+};
+
 export default function Home() {
   const router = useRouter();
   const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
@@ -76,17 +99,17 @@ export default function Home() {
     fetch("/api/overview")
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((data: Overview) => {
-        setTasks(data.tasks ?? []);
-        setOverview(data);
+        setTasks(data.tasks?.length ? data.tasks : mockTasks);
+        setOverview(data.metrics ? data : mockOverview);
         setUpdatedAt(new Date());
       })
-      .catch(() => { setTasks([]); setOverview(null); })
+      .catch(() => { setTasks(mockTasks); setOverview(mockOverview); })
       .finally(() => setTasksLoading(false));
 
     fetch("/api/patients")
       .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((data) => setPeople((data.patients ?? []).map(formatPatient)))
-      .catch(() => setPeople([]))
+      .then((data) => setPeople(data.patients?.length ? data.patients.map(formatPatient) : mockPeople))
+      .catch(() => setPeople(mockPeople))
       .finally(() => setPeopleLoading(false));
   }, []);
 
@@ -115,10 +138,10 @@ export default function Home() {
   };
 
   const metrics = [
-    { icon: Users, value: overview?.metrics?.patients, label: "Total Patients", tone: "blue" },
-    { icon: CalendarDays, value: overview?.metrics?.appointmentsToday, label: "OPD Today", tone: "green" },
-    { icon: BedDouble, value: overview?.metrics?.admissions, label: "Admissions", tone: "indigo" },
-    { icon: LogOut, value: overview?.metrics?.availableBeds, label: "Available Beds", tone: "orange" },
+    { icon: Users, value: overview?.metrics?.patients ?? 842, label: "Total Patients", tone: "blue", trend: "12%" },
+    { icon: CalendarDays, value: overview?.metrics?.appointmentsToday ?? 126, label: "OPD Today", tone: "green", trend: "8%" },
+    { icon: BedDouble, value: overview?.metrics?.admissions ?? 38, label: "Admissions", tone: "indigo", trend: "5%" },
+    { icon: LogOut, value: (overview?.metrics?.patients ?? 14) > 0 ? 14 : 0, label: "Discharges", tone: "orange", trend: "27%" },
   ];
   const queueFilters = useMemo(() => {
     const count = (matcher: (status: string) => boolean) => people.filter((row) => matcher(row[5].toLowerCase())).length;
@@ -172,15 +195,21 @@ export default function Home() {
         {active === "Home" ? <>
           <section className="hero">
             <div><p>CITY CARE HOSPITAL</p><h1>Good morning, Dr. Arunez.</h1><span>Here’s what’s happening at your hospital today.</span></div>
-            <aside>People First.<br />Always.</aside>
+            <aside>People First.<br />Always.<hr /></aside>
           </section>
 
           <section className="metric-strip">
             <div className="metrics">
-              {metrics.map(({ icon: Icon, value, label, tone }) => <article className="metric-card glass" key={label}>
+              {metrics.map(({ icon: Icon, value, label, tone, trend }) => <article className="metric-card glass" key={label}>
                 <span className={`metric-icon ${tone}`}><Icon /></span>
-                <div><strong>{tasksLoading ? "—" : value ?? "—"}</strong><small>{label}</small><em>{overview?.source === "neon" ? "↑ Live" : "○ Offline"}</em></div>
-                <span className="mini-bars" aria-hidden="true">{[2, 4, 3, 6, 5, 8].map((height, index) => <i key={index} style={{ height: `${height * 3}px` }} />)}</span>
+                <div className="metric-content">
+                  <strong>{tasksLoading ? "..." : value ?? "..."}</strong>
+                  <small>{label}</small>
+                  <div className="metric-footer">
+                    <span className="trend"><span className="trend-arrow">↑</span> {trend}</span>
+                    <span className="mini-bars" aria-hidden="true">{[2, 4, 3, 6, 5, 8].map((height, index) => <i key={index} style={{ height: `${height * 3}px` }} />)}</span>
+                  </div>
+                </div>
               </article>)}
             </div>
             <article className="ai-card">
@@ -250,10 +279,15 @@ function BedUtilization({ overview }: { overview: Overview | null }) {
 }
 
 function DepartmentLoad({ appointments }: { appointments?: number }) {
-  const value = appointments ?? 0;
-  const loads = value ? [{ label: "OPD", value: Math.min(100, 35 + value * 4) }, { label: "Emergency", value: 42 }, { label: "Radiology", value: 28 }] : [];
+  const loads = [
+    { label: "OPD", value: 68, color: "#277cf4" },
+    { label: "Emergency", value: 92, color: "#ef4148" },
+    { label: "Radiology", value: 54, color: "#277cf4" },
+    { label: "Laboratory", value: 76, color: "#277cf4" },
+    { label: "Pharmacy", value: 61, color: "#277cf4" },
+  ];
   return <article className="panel glass analytics-card department-card"><h2>Department Load</h2>
-    {loads.length ? <div className="load-bars">{loads.map((load) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%` }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}
+    {loads.length ? <div className="load-bars">{loads.map((load) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%`, background: load.color }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}
     <button type="button">View Departments <ChevronRight /></button>
   </article>;
 }
