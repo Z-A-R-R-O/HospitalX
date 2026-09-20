@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import type { LucideIcon } from "lucide-react";
@@ -88,6 +88,19 @@ export default function Home() {
   const [navOpen, setNavOpen] = useState(false);
   const [queueFilter, setQueueFilter] = useState("All");
   const [isDark, setIsDark] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
@@ -160,8 +173,35 @@ export default function Home() {
   }, [people]);
   const filteredPeople = useMemo(() => {
     const filter = queueFilters.find((item) => item.label === queueFilter);
-    return filter ? people.filter((row) => filter.match(row[5].toLowerCase())) : people;
-  }, [people, queueFilter, queueFilters]);
+    let result = filter ? people.filter((row) => filter.match(row[5].toLowerCase())) : people;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(row => 
+        row[1].toLowerCase().includes(q) || // Patient name
+        row[4].toLowerCase().includes(q) || // Doctor name
+        row[0].toLowerCase().includes(q)    // ID
+      );
+    }
+    return result;
+  }, [people, queueFilter, queueFilters, searchQuery]);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => showToast("Fullscreen not supported"));
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  const [aiQuery, setAiQuery] = useState("");
+  const aiInputRef = useRef<HTMLInputElement>(null);
+  const handleAiSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (aiQuery.trim()) {
+      showToast("HospitalX AI is analyzing your request...");
+      setAiQuery("");
+    }
+  };
 
   return (
     <div className="app-shell">
@@ -187,14 +227,14 @@ export default function Home() {
 
       <main>
         <header className="topbar">
-          <label className="search glass"><Search aria-hidden="true" /><input aria-label="Search HospitalX" placeholder="Search patients, staff, beds, or ask anything..." /><kbd><Command /> K</kbd></label>
+          <label className="search glass"><Search aria-hidden="true" /><input ref={searchInputRef} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search HospitalX" placeholder="Search patients, staff, beds, or ask anything..." /><kbd><Command /> K</kbd></label>
           <div className="date-time"><span>{dateLabel}</span><strong>{timeLabel}</strong></div>
           <button className="icon-button glass theme-toggle" type="button" aria-label="Toggle theme" onClick={() => setIsDark(!isDark)}>
             <Sun className="sun-icon" />
             <Moon className="moon-icon" />
           </button>
-          <button className="icon-button glass notification" type="button" aria-label="Notifications"><Bell /><i /></button>
-          <button className="icon-button glass desktop-only" type="button" aria-label="Enter fullscreen"><Expand /></button>
+          <button className="icon-button glass notification" type="button" aria-label="Notifications" onClick={() => showToast("You have 3 new notifications.")}><Bell /><i /></button>
+          <button className="icon-button glass desktop-only" type="button" aria-label="Toggle fullscreen" onClick={toggleFullscreen}><Expand /></button>
           <div className="auth-controls">
             {clerkEnabled ? <><Show when="signed-out"><SignInButton><button type="button" className="auth-button glass">Sign in</button></SignInButton><SignUpButton><button type="button" className="auth-button primary">Sign up</button></SignUpButton></Show><Show when="signed-in"><UserButton /></Show></> : <button type="button" className="auth-button glass" onClick={() => showToast("Authentication is not configured locally.")}>Profile</button>}
           </div>
@@ -251,8 +291,8 @@ export default function Home() {
 
             <aside className="right-rail">
               <section className="prompts glass">
-                {["Show today’s delayed discharges", "Which patients are waiting for lab results?", "Summarize ICU status", "Generate tomorrow’s briefing"].map((prompt) => <button type="button" key={prompt} onClick={() => showToast(`${prompt} is being prepared.`)}><Bot /><span>{prompt}</span><ChevronRight /></button>)}
-                <label><input aria-label="Ask HospitalX AI" placeholder="Ask anything..." /><Activity /><button type="button" aria-label="Send to HospitalX AI"><ChevronRight /></button></label>
+                {["Show today’s delayed discharges", "Which patients are waiting for lab results?", "Summarize ICU status", "Generate tomorrow’s briefing"].map((prompt) => <button type="button" key={prompt} onClick={() => { setAiQuery(prompt); aiInputRef.current?.focus(); showToast(`${prompt} is being prepared.`); }}><Bot /><span>{prompt}</span><ChevronRight /></button>)}
+                <form onSubmit={handleAiSubmit} style={{ display: 'block', margin: 0 }}><label><input ref={aiInputRef} value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} aria-label="Ask HospitalX AI" placeholder="Ask anything..." /><Activity /><button type="submit" aria-label="Send to HospitalX AI"><ChevronRight /></button></label></form>
               </section>
               <section className="attention glass">
                 <header><h2><AlertTriangle /> Needs Attention</h2><strong>{tasksLoading ? "…" : tasks.length}</strong></header>
