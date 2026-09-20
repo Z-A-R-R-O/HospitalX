@@ -1,4 +1,4 @@
-import { Syringe, ClipboardList, CheckSquare, AlertTriangle, MessageSquare, MapPin, Phone, Sparkles, CheckCircle2, Wrench, Activity, AlertCircle, ArrowRight, UserPlus, CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
+import { TestTube, Microscope, Printer, FileCheck, Syringe, ClipboardList, CheckSquare, AlertTriangle, MessageSquare, MapPin, Phone, Sparkles, CheckCircle2, Wrench, Activity, AlertCircle, ArrowRight, UserPlus, CalendarDays, Clock3, BedDouble, Stethoscope, HeartPulse, FlaskConical, ScanLine, Pill, ReceiptText, Boxes, FileText, Plus, Search, Filter, MoreHorizontal, Video } from "lucide-react";
 
 export function AppointmentsView() {
   const appointments = [
@@ -73,7 +73,7 @@ export function AppointmentsView() {
                     <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(15,23,42,0.05)', borderRadius: '4px', fontWeight: 600 }}>{apt.id}</span>
                     {apt.type === "Telehealth" && <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(139,92,246,0.1)', color: 'var(--purple)', borderRadius: '4px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Video size={10}/> Telehealth</span>}
                   </div>
-                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ {apt.dept}</p>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ {apt.dept}</p>
                 </div>
                 <div className="apt-status" style={{ width: '120px' }}>
                   <span className={`status ${apt.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {apt.status}</span>
@@ -93,11 +93,11 @@ export function AppointmentsView() {
 
 export function OPDView() {
   const queue = [
-    { id: "A-102", patient: "Sunita Verma", age: "45y", doctor: "Dr. Iyer", vitals: "BP: 120/80 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 72", status: "Triage", waitTime: "12m", priority: "normal" },
-    { id: "A-103", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", vitals: "BP: 155/95 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 90", status: "Triage", waitTime: "4m", priority: "high" },
-    { id: "B-041", patient: "Neha Gupta", age: "29y", doctor: "Dr. Sharma", vitals: "BP: 118/76 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 65", status: "Consultation", waitTime: "Room 4", priority: "normal" },
-    { id: "C-019", patient: "Rohan Das", age: "12y", doctor: "Dr. Patel", vitals: "BP: 110/70 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Temp: 101F", status: "Consultation", waitTime: "Room 2", priority: "high" },
-    { id: "A-100", patient: "Priya Singh", age: "34y", doctor: "Dr. Iyer", vitals: "BP: 125/82 ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ HR: 78", status: "Post-Consult", waitTime: "Pharmacy", priority: "normal" },
+    { id: "A-102", patient: "Sunita Verma", age: "45y", doctor: "Dr. Iyer", vitals: "BP: 120/80 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ HR: 72", status: "Triage", waitTime: "12m", priority: "normal" },
+    { id: "A-103", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", vitals: "BP: 155/95 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ HR: 90", status: "Triage", waitTime: "4m", priority: "high" },
+    { id: "B-041", patient: "Neha Gupta", age: "29y", doctor: "Dr. Sharma", vitals: "BP: 118/76 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ HR: 65", status: "Consultation", waitTime: "Room 4", priority: "normal" },
+    { id: "C-019", patient: "Rohan Das", age: "12y", doctor: "Dr. Patel", vitals: "BP: 110/70 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Temp: 101F", status: "Consultation", waitTime: "Room 2", priority: "high" },
+    { id: "A-100", patient: "Priya Singh", age: "34y", doctor: "Dr. Iyer", vitals: "BP: 125/82 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ HR: 78", status: "Post-Consult", waitTime: "Pharmacy", priority: "normal" },
   ];
 
   const getCol = (status: string) => queue.filter(q => q.status === status);
@@ -112,7 +112,7 @@ export function OPDView() {
          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock3 size={12}/> {apt.waitTime}</span>
       </div>
       <div style={{ marginBottom: '12px' }}>
-         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {apt.age}</span></h4>
+         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ {apt.age}</span></h4>
          <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor}</p>
       </div>
       <div style={{ padding: '8px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--ink)', fontWeight: 500 }}>
@@ -265,7 +265,7 @@ export function IPDView() {
 
                     {bed.status === 'Occupied' ? (
                       <div className="bed-details" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <p style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>{bed.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>Ã¢â‚¬Â¢ {bed.age}</span></p>
+                        <p style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>{bed.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {bed.age}</span></p>
                         <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {bed.doctor}</p>
                         <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={14}/> Admitted: {bed.admitted}</p>
                       </div>
@@ -303,7 +303,7 @@ export function DoctorsView() {
     { id: "DOC-03", name: "Dr. Amit Mehta", spec: "Orthopedics", role: "Consultant", status: "Available", location: "Staff Room A", shift: "10:00 AM - 06:00 PM", tone: "green" },
     { id: "DOC-04", name: "Dr. Kavita Nair", spec: "Pediatrics", role: "Attending", status: "Rounding", location: "General Ward A", shift: "07:00 AM - 03:00 PM", tone: "blue" },
     { id: "DOC-05", name: "Dr. Suresh Patil", spec: "Emergency", role: "ER Physician", status: "Busy", location: "Triage", shift: "12:00 PM - 08:00 PM", tone: "red" },
-    { id: "DOC-06", name: "Dr. Neha Gupta", spec: "Oncology", role: "Consultant", status: "Off Duty", location: "â€”", shift: "Off Today", tone: "gray" },
+    { id: "DOC-06", name: "Dr. Neha Gupta", spec: "Oncology", role: "Consultant", status: "Off Duty", location: "Ã¢â‚¬â€", shift: "Off Today", tone: "gray" },
     { id: "DOC-07", name: "Dr. Anjali Desai", spec: "Cardiology", role: "Attending", status: "Consulting", location: "OPD Room 1", shift: "09:00 AM - 05:00 PM", tone: "orange" },
     { id: "DOC-08", name: "Dr. Vikram Singh", spec: "Anesthesiology", role: "Consultant", status: "In Surgery", location: "OT 2", shift: "08:00 AM - 04:00 PM", tone: "red" },
   ];
@@ -352,7 +352,7 @@ export function DoctorsView() {
                  </div>
                  <div style={{ flex: 1, minWidth: 0 }}>
                    <h3 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 700, color: 'var(--ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.name}</h3>
-                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.spec} â€¢ {doc.role}</p>
+                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.spec} Ã¢â‚¬Â¢ {doc.role}</p>
                  </div>
               </div>
               
@@ -505,7 +505,7 @@ export function NursingView() {
                       <p style={{ margin: '0 0 6px', fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>{alert.msg}</p>
                       <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                          <span style={{ background: 'rgba(15,23,42,0.05)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{alert.loc}</span>
-                         <span>•</span>
+                         <span>â€¢</span>
                          <span style={{ fontWeight: 500 }}>{alert.time}</span>
                       </div>
                    </div>
@@ -519,17 +519,103 @@ export function NursingView() {
   );
 }
 
+export function LaboratoryView() {
+  const labTests = [
+    { id: "LAB-8901", patient: "Ananya Rao", age: "32y", test: "Complete Blood Count (CBC)", category: "Hematology", priority: "Routine", status: "Processing", sample: "Collected", time: "09:15 AM", tone: "blue" },
+    { id: "LAB-8902", patient: "Rajesh Kumar", age: "54y", test: "Lipid Profile", category: "Biochemistry", priority: "Routine", status: "Awaiting Sample", sample: "Pending", time: "09:45 AM", tone: "orange" },
+    { id: "LAB-8903", patient: "Vikram Malhotra", age: "58y", test: "Troponin-I High Sensitivity", category: "Immunology", priority: "STAT", status: "Critical Value", sample: "Tested", time: "10:10 AM", tone: "red" },
+    { id: "LAB-8904", patient: "Kavita Nair", age: "28y", test: "Thyroid Panel (T3, T4, TSH)", category: "Endocrinology", priority: "Routine", status: "Verified", sample: "Tested", time: "08:30 AM", tone: "green" },
+    { id: "LAB-8905", patient: "Ramesh Das", age: "62y", test: "HbA1c & Fasting Glucose", category: "Pathology", priority: "Routine", status: "Processing", sample: "Collected", time: "11:00 AM", tone: "blue" },
+    { id: "LAB-8906", patient: "Priya Singh", age: "50y", test: "Liver Function Test (LFT)", category: "Biochemistry", priority: "Routine", status: "Awaiting Sample", sample: "Pending", time: "11:30 AM", tone: "orange" },
+    { id: "LAB-8907", patient: "Sunita Verma", age: "45y", test: "Coagulation Profile (PT/INR)", category: "Hematology", priority: "STAT", status: "Processing", sample: "Collected", time: "11:45 AM", tone: "blue" },
+  ];
+
+  return (
+    <section className="page-view lab-view glass" style={{ padding: 0 }}>
+      <header className="page-header" style={{ padding: "24px 24px 0" }}>
+        <div>
+          <h2><FlaskConical /> Laboratory & Diagnostics</h2>
+          <p>Process pathology requests, manage samples, and verify results.</p>
+        </div>
+        <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
+          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.5)' }}>
+            <Search size={16} /><input placeholder="Search barcode or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+          </label>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', cursor: 'pointer' }}><Plus size={18} /> New Request</button>
+        </div>
+      </header>
+
+      <div className="lab-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
+        
+        <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
+          {[
+            { label: "Pending Samples", value: "24", trend: "" },
+            { label: "In Processing", value: "86", trend: "" },
+            { label: "Results Ready", value: "112", trend: "" },
+            { label: "Critical Values", value: "3", trend: "URGENT", isRed: true }
+          ].map(kpi => (
+            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.4)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(255,255,255,0.5)' }}>
+               <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
+               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
+                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
+                 {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>}
+               </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="lab-queue" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', padding: '0 24px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            <div style={{ width: '100px' }}>Request</div>
+            <div style={{ width: '220px' }}>Patient Details</div>
+            <div style={{ flex: 1 }}>Test Description</div>
+            <div style={{ width: '140px' }}>Status</div>
+            <div style={{ width: '120px', textAlign: 'right' }}>Actions</div>
+          </div>
+          
+          {labTests.map(test => (
+             <div key={test.id} className="lab-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: test.priority === 'STAT' ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(255,255,255,0.6)', background: test.priority === 'STAT' ? 'rgba(239,68,68,0.05)' : 'rgba(255,255,255,0.5)' }}>
+                
+                <div style={{ width: '100px', flexShrink: 0 }}>
+                  <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{test.id}</strong>
+                  <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{test.time}</span>
+                </div>
+                
+                <div style={{ width: '2px', height: '40px', background: 'rgba(15,23,42,0.1)', borderRadius: '2px' }} />
+                
+                <div style={{ width: '200px', flexShrink: 0 }}>
+                  <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{test.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>• {test.age}</span></h4>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><TestTube size={14}/> {test.category}</p>
+                </div>
+                
+                <div style={{ flex: 1 }}>
+                   <strong style={{ display: 'block', fontSize: '14px', marginBottom: '6px', color: 'var(--ink)' }}>{test.test}</strong>
+                   {test.priority === 'STAT' 
+                      ? <span style={{ fontSize: '10px', padding: '2px 8px', background: 'rgba(239,68,68,0.1)', color: 'var(--red)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>STAT / URGENT</span>
+                      : <span style={{ fontSize: '10px', padding: '2px 8px', background: 'rgba(15,23,42,0.05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>ROUTINE</span>
+                   }
+                </div>
+                
+                <div style={{ width: '140px', flexShrink: 0 }}>
+                  <span className={`status ${test.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {test.status}</span>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
+                  {test.status === 'Awaiting Sample' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Printer size={14}/> Label</button>}
+                  {test.status === 'Processing' && <button className="row-action" style={{ background: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}><Microscope size={14}/> Results</button>}
+                  {test.status === 'Verified' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileCheck size={14}/> Report</button>}
+                  {test.status === 'Critical Value' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14}/> Alert Dr.</button>}
+                </div>
+             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function GenericModuleView({ active }: { active: string }) {
   const config: Record<string, any> = {
-    "Laboratory": {
-      title: "Laboratory & Diagnostics", desc: "Process pathology, hematology, and biochemistry requests.",
-      cols: ["Req ID", "Patient", "Test Type", "Sample", "Status"],
-      rows: [
-        ["LAB-8901", "Ananya Rao", "Complete Blood Count", "Collected", "Processing"],
-        ["LAB-8902", "Rajesh Kumar", "Lipid Profile", "Pending", "Awaiting Sample"],
-        ["LAB-8903", "Vikram Malhotra", "HbA1c", "Collected", "Completed"],
-      ]
-    },
     "Radiology": {
       title: "Radiology & Imaging", desc: "Manage X-Ray, MRI, CT Scans, and Ultrasound queues.",
       cols: ["Scan ID", "Patient", "Modality", "Referring Dr", "Status"],
@@ -550,8 +636,8 @@ export function GenericModuleView({ active }: { active: string }) {
       title: "Billing & Insurance", desc: "Invoices, claims, and revenue cycle management.",
       cols: ["Invoice #", "Patient", "Amount", "Insurance", "Status"],
       rows: [
-        ["INV-2041", "Ananya Rao", "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹ 1,500", "HDFC ERGO", "Paid"],
-        ["INV-2042", "Ramesh Das", "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹ 45,000", "Star Health", "Claim Pending"],
+        ["INV-2041", "Ananya Rao", "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¹ 1,500", "HDFC ERGO", "Paid"],
+        ["INV-2042", "Ramesh Das", "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¹ 45,000", "Star Health", "Claim Pending"],
       ]
     },
     "Inventory": {

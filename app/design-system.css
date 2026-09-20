@@ -841,3 +841,11 @@ html.dark .nursing-view .nurse-card { background: rgba(30,41,59,0.3) !important;
 html.dark .nursing-view .nurse-card h3 { color: #f8fafc !important; }
 html.dark .nursing-view .alert-card { background: rgba(239,68,68,0.15) !important; border-color: rgba(239,68,68,0.3) !important; }
 
+
+/* Lab View Specific CSS */
+.lab-view .lab-card { transition: transform 0.2s, box-shadow 0.2s; }
+.lab-view .lab-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1); }
+
+html.dark .lab-view .lab-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .lab-view .lab-card h4, html.dark .lab-view .lab-card strong { color: #f8fafc !important; }
+
