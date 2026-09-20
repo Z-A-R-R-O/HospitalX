@@ -883,3 +883,11 @@ html.dark .billing-view .invoice-card h4, html.dark .billing-view .claim-card h4
 html.dark .inventory-view .inventory-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
 html.dark .inventory-view .inventory-card h4, html.dark .inventory-view .inventory-card strong { color: #f8fafc !important; }
 
+
+/* Reports View Specific CSS */
+.reports-view .report-card, .reports-view .template-card { transition: transform 0.2s, box-shadow 0.2s; }
+.reports-view .report-card:hover, .reports-view .template-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(31,48,71,0.08), inset 0 1px 0 rgba(255,255,255,1); }
+
+html.dark .reports-view .report-card, html.dark .reports-view .template-card { background: rgba(30,41,59,0.3) !important; border-color: rgba(255,255,255,0.05) !important; }
+html.dark .reports-view .report-card h4, html.dark .reports-view .template-card h4 { color: #f8fafc !important; }
+
