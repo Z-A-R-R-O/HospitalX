@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { prompt } = await req.json();
+    const { messages } = await req.json();
     
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) {
@@ -21,14 +21,13 @@ export async function POST(req: Request) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        // Defaulting to a high-quality free model on OpenRouter! You can change this to claude-3.5-sonnet, gpt-4o, etc.
         model: "meta-llama/llama-3.1-8b-instruct:free",
         messages: [
           { 
             role: "system", 
             content: "You are HospitalX AI, an advanced, highly professional operational co-pilot for hospital administrators. You provide concise, insightful, and actionable answers to queries based on hospital management, patient care, and staff efficiency." 
           },
-          { role: "user", content: prompt }
+          ...(messages || [])
         ]
       })
     });

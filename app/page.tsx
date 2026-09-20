@@ -195,34 +195,49 @@ export default function Home() {
 
   const [aiQuery, setAiQuery] = useState("");
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [aiResponse, setAiResponse] = useState("");
+  const [chatHistory, setChatHistory] = useState<{role: string, content: string}[]>([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const aiInputRef = useRef<HTMLInputElement>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
 
-  const handleAiSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!aiQuery.trim() || isAiLoading) return;
+  useEffect(() => {
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
+  }, [chatHistory, isAiLoading]);
+
+  const submitToAi = async (text: string) => {
+    if (!text.trim() || isAiLoading) return;
     
+    const userMsg = { role: "user", content: text };
+    const newHistory = [...chatHistory, userMsg];
+    setChatHistory(newHistory);
+    setAiQuery("");
+    setIsChatOpen(true);
     setIsAiLoading(true);
-    showToast("HospitalX AI is analyzing your request...");
     
     try {
       const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: aiQuery })
+        body: JSON.stringify({ messages: newHistory })
       });
       const data = await res.json();
       if (data.error) {
         showToast(data.error);
       } else {
-        setAiResponse(data.text);
+        setChatHistory([...newHistory, { role: "assistant", content: data.text }]);
       }
     } catch (err) {
       showToast("Failed to connect to AI.");
     } finally {
       setIsAiLoading(false);
-      setAiQuery("");
     }
+  };
+
+  const handleAiSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    submitToAi(aiQuery);
   };
 
   return (
@@ -283,8 +298,12 @@ export default function Home() {
               </article>)}
             </div>
             <article className="ai-card">
-              <div className="ai-orb" aria-hidden="true"><i /></div><div><strong>HospitalX AI <small>BETA</small></strong><span>Your operational co-pilot.</span></div>
-              <button type="button" aria-label="Open HospitalX AI" onClick={() => showToast("HospitalX AI is ready.")}><ChevronRight /></button>
+              <div className="ai-orb" aria-hidden="true" />
+              <div>
+                <strong>HospitalX AI <small>BETA</small></strong>
+                <span>Your operational co-pilot.</span>
+              </div>
+              <button type="button" aria-label="Open AI Assistant" onClick={() => setIsChatOpen(true)}><ArrowUpRight /></button>
             </article>
           </section>
 
@@ -313,7 +332,7 @@ export default function Home() {
 
             <aside className="right-rail">
               <section className="prompts glass">
-                {["Show today’s delayed discharges", "Which patients are waiting for lab results?", "Summarize ICU status", "Generate tomorrow’s briefing"].map((prompt) => <button type="button" key={prompt} onClick={() => { setAiQuery(prompt); aiInputRef.current?.focus(); showToast(`${prompt} is being prepared.`); }}><Bot /><span>{prompt}</span><ChevronRight /></button>)}
+                {["Show today’s delayed discharges", "Which patients are waiting for lab results?", "Summarize ICU status", "Generate tomorrow’s briefing"].map((prompt) => <button type="button" key={prompt} onClick={() => submitToAi(prompt)}><Bot /><span>{prompt}</span><ChevronRight /></button>)}
                 <form onSubmit={handleAiSubmit} style={{ display: 'block', margin: 0 }}><label><input ref={aiInputRef} value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} aria-label="Ask HospitalX AI" placeholder="Ask anything..." /><Activity /><button type="submit" aria-label="Send to HospitalX AI"><ChevronRight /></button></label></form>
               </section>
               <section className="attention glass">
@@ -334,21 +353,33 @@ export default function Home() {
         <footer><span>HospitalX v1.0　│　 People × Technology × Better Care</span><span><i /> All Systems Operational　│　 Built for a Healthier India</span></footer>
       </main>
 
-      {aiResponse && (
-        <div className="ai-modal-backdrop" onClick={() => setAiResponse("")}>
-          <div className="ai-modal glass" onClick={(e) => e.stopPropagation()}>
-            <header>
-              <h3><Bot /> HospitalX AI</h3>
-              <button type="button" onClick={() => setAiResponse("")}><X /></button>
-            </header>
-            <div className="ai-modal-content">
-              {aiResponse.split('\n').map((line, i) => (
-                <p key={i}>{line}</p>
-              ))}
+      <aside className={`chat-drawer glass ${isChatOpen ? "open" : ""}`}>
+        <header>
+          <h3><Bot /> HospitalX AI</h3>
+          <button type="button" onClick={() => setIsChatOpen(false)}><X /></button>
+        </header>
+        <div className="chat-history" ref={chatScrollRef}>
+          {chatHistory.length === 0 && <p className="chat-empty">How can I help you today?</p>}
+          {chatHistory.map((msg, i) => (
+            <div key={i} className={`chat-message ${msg.role}`}>
+              <div className="msg-bubble">
+                {msg.content.split('\n').map((line, j) => <p key={j}>{line}</p>)}
+              </div>
             </div>
-          </div>
+          ))}
+          {isAiLoading && (
+            <div className="chat-message assistant loading">
+              <div className="msg-bubble"><Activity className="pulse" /> Thinking...</div>
+            </div>
+          )}
         </div>
-      )}
+        <form className="chat-input-area" onSubmit={handleAiSubmit}>
+          <label>
+            <input ref={aiInputRef} value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} placeholder="Reply to HospitalX AI..." />
+            <button type="submit" disabled={isAiLoading}><ChevronRight /></button>
+          </label>
+        </form>
+      </aside>
 
       <div className={`toast ${toast ? "show" : ""}`} role="status">{toast}</div>
     </div>

@@ -625,21 +625,43 @@ html.dark .attention > button { background: transparent; }
 html.dark .attention > button:hover { background: rgba(239, 68, 68, 0.15); }
 
 
-/* AI Modal */
-.ai-modal-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(15,23,42,.3); backdrop-filter: blur(8px); animation: fadeIn var(--motion-fast) ease; padding: 20px; }
-.ai-modal { width: 100%; max-width: 640px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; border-radius: 20px; box-shadow: 0 24px 64px rgba(0,0,0,0.15); animation: cardIn var(--motion-normal) var(--ease-soft) both; }
-.ai-modal header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(15,23,42,.08); }
-.ai-modal header h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 18px; color: var(--ink); }
-.ai-modal header h3 svg { width: 22px; color: var(--blue); }
-.ai-modal header button { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; border: 0; background: transparent; color: var(--muted); transition: background 0.2s; }
-.ai-modal header button:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
-.ai-modal-content { padding: 24px 24px 32px; overflow-y: auto; font-size: 15px; line-height: 1.6; color: var(--ink); }
-.ai-modal-content p { margin: 0 0 1em; }
-.ai-modal-content p:last-child { margin: 0; }
+/* Chat Drawer */
+.chat-drawer { position: fixed; top: 12px; bottom: 12px; right: 12px; width: 420px; z-index: 100; display: flex; flex-direction: column; border-radius: 24px; background: rgba(255,255,255,.6); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border: 1px solid rgba(255,255,255,.8); box-shadow: -12px 0 64px rgba(31,48,71,0.1), inset 0 1px 0 rgba(255,255,255,1); transform: translateX(calc(100% + 24px)); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.chat-drawer.open { transform: translateX(0); }
+.chat-drawer header { padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(15,23,42,.08); }
+.chat-drawer header h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 16px; color: var(--ink); }
+.chat-drawer header h3 svg { width: 20px; color: #6366f1; }
+.chat-drawer header button { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; border: 0; background: transparent; color: var(--muted); transition: background 0.2s; }
+.chat-drawer header button:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+.chat-history { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+.chat-empty { margin: auto; color: var(--muted); font-size: 14px; font-weight: 500; text-align: center; }
+.chat-message { display: flex; flex-direction: column; }
+.chat-message.user { align-items: flex-end; }
+.chat-message.assistant { align-items: flex-start; }
+.msg-bubble { max-width: 85%; padding: 12px 16px; font-size: 14px; line-height: 1.5; border-radius: 18px; word-wrap: break-word; }
+.msg-bubble p { margin: 0 0 0.5em; }
+.msg-bubble p:last-child { margin: 0; }
+.chat-message.user .msg-bubble { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border-bottom-right-radius: 4px; box-shadow: 0 4px 12px rgba(99,102,241,0.2); }
+.chat-message.assistant .msg-bubble { background: rgba(255,255,255,0.8); color: #1e293b; border: 1px solid rgba(255,255,255,1); border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(31,48,71,0.04); }
+.chat-message.loading .msg-bubble { display: flex; align-items: center; gap: 8px; color: #64748b; font-weight: 500; }
+.pulse { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+.chat-input-area { padding: 16px 24px 24px; border-top: 1px solid rgba(15,23,42,.05); background: rgba(255,255,255,0.3); }
+.chat-input-area label { display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; background: rgba(255,255,255,0.7); border-radius: 20px; border: 1px solid rgba(255,255,255,0.8); box-shadow: inset 0 2px 6px rgba(0,0,0,0.02); transition: background 0.3s; }
+.chat-input-area label:focus-within { background: #fff; box-shadow: 0 4px 16px rgba(31,48,71,0.06); }
+.chat-input-area input { flex: 1; border: none; background: transparent; font-size: 13px; font-family: inherit; font-weight: 500; outline: none; color: #0f172a; }
+.chat-input-area button { width: 34px; height: 34px; border-radius: 50%; border: none; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(99,102,241,0.3); transition: transform 0.2s; }
+.chat-input-area button:hover:not(:disabled) { transform: scale(1.05); }
+.chat-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-html.dark .ai-modal-backdrop { background: rgba(0,0,0,0.5); }
-html.dark .ai-modal header { border-bottom-color: rgba(255,255,255,0.08); }
-html.dark .ai-modal header h3 { color: #ffffff; }
-html.dark .ai-modal header button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+html.dark .chat-drawer { background: rgba(15,23,35,0.7); border-color: rgba(255,255,255,0.1); box-shadow: -12px 0 64px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05); }
+html.dark .chat-drawer header { border-bottom-color: rgba(255,255,255,0.08); }
+html.dark .chat-drawer header h3 { color: #fff; }
+html.dark .chat-drawer header button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+html.dark .chat-message.assistant .msg-bubble { background: rgba(30,41,59,0.7); color: #f8fafc; border-color: rgba(255,255,255,0.1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+html.dark .chat-input-area { border-top-color: rgba(255,255,255,0.05); background: transparent; }
+html.dark .chat-input-area label { background: rgba(15,23,35,0.6); border-color: rgba(255,255,255,0.15); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+html.dark .chat-input-area label:focus-within { background: rgba(15,23,35,0.9); }
+html.dark .chat-input-area input { color: #f8fafc; }
 html.dark .ai-modal-content { color: #cbd5e1; }
 
