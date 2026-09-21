@@ -49,15 +49,16 @@ export function HeroScrollVideo() {
   }, []);
 
   return (
-    <div className="hero-bg">
+    <div className="hero-bg" style={{ background: '#000' }}>
       <video
         ref={videoRef}
         src="/Hero-scroll.mp4"
+        poster="/hero_bg.jpg"
         className="bg-img"
-        preload="auto"
+        preload="metadata"
         muted
         playsInline
-        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+        style={{ objectFit: 'cover', width: '100%', height: '100%', opacity: 1 }}
       />
     </div>
   );
