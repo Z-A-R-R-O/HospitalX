@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import { Search, Play, ArrowRight, Download, CheckCircle2 } from "lucide-react";
 import { Show, UserButton } from "@clerk/nextjs";
+import { LandingHeader } from "./landing-header";
 import "./landing.css";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "600"] });
@@ -12,38 +13,7 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page">
-      <header className="landing-header">
-        <div className="brand">
-          <span className="veyminore-logo">Veyminore</span>
-        </div>
-        <nav className="main-nav">
-          <Link href="#">Product</Link>
-          <Link href="#">Solutions</Link>
-          <Link href="#">Resources</Link>
-          <Link href="#">Pricing</Link>
-          <Link href="#">Company</Link>
-        </nav>
-        <div className="header-actions">
-          <button className="icon-btn"><Search size={18} /></button>
-          {clerkEnabled ? (
-            <>
-              <Show when="signed-out">
-                <Link href="/sign-in" className="sign-in-link">Sign in</Link>
-                <Link href="/dashboard" className="btn btn-black">Get HospitalX <ArrowRight size={16} /></Link>
-              </Show>
-              <Show when="signed-in">
-                <Link href="/dashboard" className="btn btn-black">Dashboard <ArrowRight size={16} /></Link>
-                <UserButton />
-              </Show>
-            </>
-          ) : (
-            <>
-              <Link href="/sign-in" className="sign-in-link">Sign in</Link>
-              <Link href="/dashboard" className="btn btn-black">Get HospitalX <ArrowRight size={16} /></Link>
-            </>
-          )}
-        </div>
-      </header>
+      <LandingHeader clerkEnabled={clerkEnabled} />
 
       <section className="hero-section">
         <div className="hero-bg">
