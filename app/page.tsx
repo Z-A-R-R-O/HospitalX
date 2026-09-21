@@ -4,6 +4,7 @@ import { Playfair_Display } from "next/font/google";
 import { Search, Play, ArrowRight, Download, CheckCircle2 } from "lucide-react";
 import { Show, UserButton } from "@clerk/nextjs";
 import { LandingHeader } from "./landing-header";
+import { HeroScrollVideo } from "./hero-scroll-video";
 import "./landing.css";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "600"] });
@@ -15,10 +16,9 @@ export default function LandingPage() {
     <div className="landing-page">
       <LandingHeader clerkEnabled={clerkEnabled} />
 
-      <section className="hero-section">
-        <div className="hero-bg">
-          <Image src="/hero_bg.jpg" alt="HospitalX Cinematic Background" fill className="bg-img" priority />
-        </div>
+      <div className="hero-wrapper">
+        <section className="hero-section">
+          <HeroScrollVideo />
         
         <div className="hero-content">
           <div className="hero-left">
@@ -103,6 +103,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+      </div>
 
       <section className="value-section">
         <div className="value-header">

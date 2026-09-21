@@ -228,12 +228,18 @@
 }
 
 /* HERO SECTION */
-.hero-section {
+.hero-wrapper {
+  height: 250vh; /* gives room for the ultra smooth scroll animation */
   position: relative;
-  min-height: 100vh;
+}
+
+.hero-section {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
+  align-items: center;
   padding: 0 4rem;
-  padding-top: 120px;
   overflow: hidden;
 }
 .hero-bg, .dark-bg {
