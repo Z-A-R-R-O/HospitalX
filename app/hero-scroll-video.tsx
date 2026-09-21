@@ -12,10 +12,10 @@ export function HeroScrollVideo() {
     let rafId: number;
     let targetTime = 0;
     
-    // We want the video to be fully scrubbed by the time we scroll 1.5x viewport height
+    // We want the video to be fully scrubbed by the time we scroll 3x viewport height
     const handleScroll = () => {
       if (video.duration) {
-        const scrollMax = window.innerHeight * 1.5;
+        const scrollMax = window.innerHeight * 3.0;
         const scrollFraction = Math.min(window.scrollY / scrollMax, 1);
         targetTime = scrollFraction * video.duration;
       }

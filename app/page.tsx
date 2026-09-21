@@ -54,10 +54,6 @@ export default function LandingPage() {
           <div className="hero-right">
             <div className="dashboard-mockup glass-panel">
               {/* Glass UI Mockup */}
-              <div className="mockup-header">
-                <div className="mockup-logo"><span>H</span> HospitalX</div>
-                <div className="mockup-search">Search patients, records, or anything...</div>
-              </div>
               <div className="mockup-body">
                 <div className="mockup-sidebar">
                   <ul>

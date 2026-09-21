@@ -229,7 +229,7 @@
 
 /* HERO SECTION */
 .hero-wrapper {
-  height: 250vh; /* gives room for the ultra smooth scroll animation */
+  height: 400vh; /* gives more room for the ultra smooth scroll animation, locking scroll longer */
   position: relative;
 }
 
