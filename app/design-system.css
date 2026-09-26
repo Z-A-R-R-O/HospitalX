@@ -1729,3 +1729,20 @@ html.dark .demo-badge {
     align-items: center !important;
   }
 }
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 38px !important;
+    height: 38px !important;
+    top: 11px !important;
+    left: 12px !important;
+    border-radius: 12px !important;
+  }
+}
+.mobile-menu:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.mobile-menu {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
