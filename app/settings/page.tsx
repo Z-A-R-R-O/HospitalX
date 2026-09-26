@@ -39,15 +39,19 @@ export default function SettingsPage() {
     setMascotVisibleState(localStorage.getItem("mascotVisible") !== "false");
     setTheme(localStorage.getItem("theme") || "system");
     
-    if (localStorage.getItem("firstName")) setFirstName(localStorage.getItem("firstName"));
-    if (localStorage.getItem("lastName")) setLastName(localStorage.getItem("lastName"));
+    const storedFirstName = localStorage.getItem("firstName");
+    const storedLastName = localStorage.getItem("lastName");
+    if (storedFirstName) setFirstName(storedFirstName);
+    if (storedLastName) setLastName(storedLastName);
     
     if (localStorage.getItem("notifEmail") !== null) setNotifEmail(localStorage.getItem("notifEmail") === "true");
     if (localStorage.getItem("notifPush") !== null) setNotifPush(localStorage.getItem("notifPush") === "true");
     if (localStorage.getItem("notifSms") !== null) setNotifSms(localStorage.getItem("notifSms") === "true");
     
-    if (localStorage.getItem("orgName")) setOrgName(localStorage.getItem("orgName"));
-    if (localStorage.getItem("orgAddress")) setOrgAddress(localStorage.getItem("orgAddress"));
+    const storedOrgName = localStorage.getItem("orgName");
+    const storedOrgAddress = localStorage.getItem("orgAddress");
+    if (storedOrgName) setOrgName(storedOrgName);
+    if (storedOrgAddress) setOrgAddress(storedOrgAddress);
     if (localStorage.getItem("twoFactor") !== null) setTwoFactor(localStorage.getItem("twoFactor") === "true");
 
     const checkClerk = () => {

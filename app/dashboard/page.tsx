@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Show, SignInButton, SignUpButton, UserButton, SignOutButton } from "@clerk/nextjs";
-import { GenericModuleView, AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView, BillingView, InventoryView, ReportsView } from "../components";
+import { AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView, BillingView, InventoryView, ReportsView } from "../components";
 import { Mascot } from "page-mascot";
 import { HospitalXOnboarding, useSetupStatus } from "../onboarding";
 import "../onboarding.css";
@@ -24,6 +24,7 @@ type Overview = {
   source?: string;
 };
 type NavItem = { label: string; icon: LucideIcon; href?: string };
+type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const nav: NavItem[] = [
   { label: "Home", icon: HomeIcon },
@@ -46,7 +47,7 @@ const formatPatient = (patient: any): PatientRow => [
   patient.external_identifier ?? patient.id?.slice(0, 8) ?? "-",
   patient.full_name,
   patient.age ? `${patient.age} / ${patient.sex ?? "-"}` : `- / ${patient.sex ?? "-"}`,
-  patient.blood_group ? `🩸 ${patient.blood_group}` : "-",
+  patient.blood_group ?? "-",
   patient.primary_complaint ? (patient.primary_complaint.length > 25 ? patient.primary_complaint.substring(0, 25) + "..." : patient.primary_complaint) : "-",
   patient.status ?? "Triage",
   patient.starts_at ? new Date(patient.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Waiting",
@@ -158,7 +159,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!isDragging) return;
-    const onMove = (e: PointerEvent) => {
+    const onMove = (e: MouseEvent) => {
       const nx = e.clientX - dragOffset.x;
       const ny = e.clientY - dragOffset.y;
       setMascotPos({ x: Math.max(0, Math.min(nx, window.innerWidth - 114)), y: Math.max(0, Math.min(ny, window.innerHeight - 114)) });
@@ -167,9 +168,9 @@ export default function Home() {
       setIsDragging(false);
       localStorage.setItem("mascotPos", JSON.stringify(mascotPos));
     };
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    return () => { window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
   }, [isDragging, dragOffset, mascotPos]);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -302,8 +303,8 @@ export default function Home() {
   const [aiQuery, setAiQuery] = useState("");
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [isSlowConnection, setIsSlowConnection] = useState(false);
-  const [chatHistory, setChatHistory] = useState<{role: string, content: string}[]>([]);
-  const [savedChats, setSavedChats] = useState<Record<string, { role: 'user' | 'assistant', content: string }[]>>(demoChats);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [savedChats, setSavedChats] = useState<Record<string, ChatMessage[]>>(demoChats);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -319,7 +320,7 @@ export default function Home() {
   const submitToAi = async (text: string) => {
     if (!text.trim() || isAiLoading) return;
     
-    const userMsg = { role: "user", content: text };
+    const userMsg: ChatMessage = { role: "user", content: text };
     const newHistory = [...chatHistory, userMsg];
     setChatHistory(newHistory);
     setAiQuery("");
@@ -349,7 +350,7 @@ export default function Home() {
       if (data.error) {
         showToast(data.error);
       } else {
-        const finalHistory = [...newHistory, { role: "assistant", content: data.text }];
+        const finalHistory: ChatMessage[] = [...newHistory, { role: "assistant", content: data.text }];
         setChatHistory(finalHistory);
         setSavedChats(prev => ({ ...prev, [chatId]: finalHistory }));
       }
@@ -368,11 +369,11 @@ export default function Home() {
   };
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell${showOnboarding ? " is-onboarding" : ""}`}>
       {showOnboarding && (
         <HospitalXOnboarding
           setActive={(label: string) => setActive(label)}
-          onComplete={() => { setShowOnboarding(false); setSetupStatus("completed"); }}
+          onComplete={(status) => { setShowOnboarding(false); setSetupStatus(status); }}
         />
       )}
       <div className="ambient" aria-hidden="true"><span /><span /><span /></div>
@@ -639,8 +640,8 @@ export default function Home() {
         )}
         </div>
       {mascotVisible && active !== "AI Co-pilot" && (
-      <div ref={mascotRef} style={{ position: 'fixed', left: mascotPos.x, top: mascotPos.y, zIndex: 9999, userSelect: 'none', touchAction: 'none' }}
-        onPointerDown={(e) => { if (e.button === 0) { e.currentTarget.setPointerCapture?.(e.pointerId); setIsDragging(true); setDragOffset({ x: e.clientX - mascotPos.x, y: e.clientY - mascotPos.y }); } }}
+      <div ref={mascotRef} style={{ position: 'fixed', left: mascotPos.x, top: mascotPos.y, zIndex: 9999, userSelect: 'none' }}
+        onMouseDown={(e) => { if (e.button === 0) { setIsDragging(true); setDragOffset({ x: e.clientX - mascotPos.x, y: e.clientY - mascotPos.y }); } }}
         onContextMenu={(e) => { e.preventDefault(); setShowMascotMenu(!showMascotMenu); }}
       >
         
@@ -652,7 +653,7 @@ export default function Home() {
         )}
 
 <div style={{ cursor: isDragging ? 'grabbing' : 'grab' }} onClick={(e) => { if (!isDragging) { setIsChatOpen(!isChatOpen); setShowMascotMenu(false); } }}>
-          <Mascot directions="/mascots/nurse-directions.webp" reactions="/mascots/nurse-reactions.webp" size={104} label="Madhu - AI Nurse" />
+          <Mascot directions="/mascots/nurse-directions.webp" reactions="/mascots/nurse-reactions.webp" size={120} label="Madhu - AI Nurse" />
         </div>
 
         {showMascotMenu && (
@@ -774,4 +775,3 @@ function RevenueCard({ appointments, setActive }: { appointments?: number, setAc
 function QuickAction({ icon: Icon, label, tone, onClick }: { icon: LucideIcon; label: string; tone: string; onClick: () => void }) {
   return <button type="button" onClick={onClick}><span className={`quick-icon ${tone}`}><Icon /></span><small>{label}</small></button>;
 }
-

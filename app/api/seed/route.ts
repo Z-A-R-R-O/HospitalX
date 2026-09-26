@@ -4,6 +4,8 @@ import { ensurePatientSchedulingSchema } from "@/lib/patient-scheduling";
 
 export const runtime = "nodejs";
 
+type SeedPatient = { id: string; full_name: string };
+
 export async function POST(request: Request) {
   const context = await getOrganizationContext();
   if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -35,7 +37,7 @@ export async function POST(request: Request) {
       (${orgId}, 'Priya Singh', '1990-03-10', 'female', '9876543212', 'active', 'normal', 34, 'B+', 'Joint pain and swelling in knees'),
       (${orgId}, 'Ramesh Das', '1962-08-05', 'male', '9876543213', 'active', 'high', 62, 'AB+', 'Uncontrolled diabetes and fatigue'),
       (${orgId}, 'Sunita Verma', '1979-12-01', 'female', '9876543214', 'active', 'normal', 45, 'O-', 'Routine cardiac follow-up')
-      RETURNING id, full_name;`;
+      RETURNING id, full_name;` as SeedPatient[];
 
     // 4. Seed Appointments
     if (patients && patients.length >= 5) {

@@ -126,7 +126,7 @@ export function OPDView() {
            if (apt.status === "completed") boardStatus = "Post-Consult";
            
            return {
-             id: apt.id.substring(0,6).toUpperCase(),
+             id: apt.id,
              patient: apt.full_name,
              age: "?",
              doctor: apt.provider_name,
