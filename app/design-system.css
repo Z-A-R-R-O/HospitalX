@@ -1545,7 +1545,7 @@ html.dark .demo-badge {
   }
   .sidebar { z-index: 40 !important; }
   .mobile-menu { z-index: 45 !important; }
-  .sidebar .brand { padding-left: 56px; padding-top: 10px; }
+
 
   /* KPI grids — 2 cols */
   .ward-kpis, .opd-kpis, .lab-kpis, .rad-kpis, .pharma-kpis, .billing-kpis, .inv-kpis, .inventory-kpis {
@@ -1696,7 +1696,7 @@ html.dark .demo-badge {
    360px — Very Small Phone
    ============================================================ */
 @media (max-width: 360px) {
-  .sidebar .brand { padding-left: 48px; }
+
   .brand strong { font-size: 16px !important; }
   .hero h1 { font-size: 24px !important; }
   .metric-card { padding: 12px !important; }
@@ -1746,16 +1746,35 @@ html.dark .demo-badge {
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
+
+
+.sidebar-close-btn {
+  display: none;
+}
 @media (max-width: 1024px) {
-  .mobile-menu {
-    transition: transform 0.3s var(--ease), background 0.3s, color 0.3s;
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.04);
+    color: var(--ink);
+    z-index: 50;
+    cursor: pointer;
+    transition: background 0.2s;
   }
-  .mobile-menu.is-open {
-    transform: translateX(12px);
-    background: rgba(0,0,0,0.05); /* slightly different background for the X */
-    border-color: transparent;
+  .sidebar-close-btn:active {
+    background: rgba(0,0,0,0.08);
   }
-  html.dark .mobile-menu.is-open {
-    background: rgba(255,255,255,0.1);
+  html.dark .sidebar-close-btn {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
   }
+  .mobile-menu:focus-visible { outline: none !important; }
 }

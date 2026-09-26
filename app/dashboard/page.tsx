@@ -362,10 +362,11 @@ export default function Home() {
   return (
     <div className="app-shell">
       <div className="ambient" aria-hidden="true"><span /><span /><span /></div>
-      <button className={`mobile-menu ${navOpen ? "is-open" : ""}`} type="button" aria-label={navOpen ? "Close navigation" : "Open navigation"} onClick={() => setNavOpen((open) => !open)}>{navOpen ? <X /> : <Menu />}</button>
+      <button className="mobile-menu" style={{ opacity: navOpen ? 0 : 1, pointerEvents: navOpen ? "none" : "auto", transition: "opacity 0.2s" }} type="button" aria-label="Open navigation" onClick={() => setNavOpen(true)}><Menu /></button>
 
       {navOpen && <div className="sidebar-overlay" onClick={() => setNavOpen(false)} />}
       <aside className={`sidebar glass ${navOpen ? "is-open" : ""}`}>
+        <button type="button" className="sidebar-close-btn desktop-only-hide" onClick={() => setNavOpen(false)} aria-label="Close sidebar"><X size={20} /></button>
         <button className="brand" type="button" onClick={() => go(nav[0])}>
           <span className="brand-mark" aria-hidden="true"><i /><i /></span>
           <span><strong>HospitalX</strong><small>Care. Connected.</small></span>
