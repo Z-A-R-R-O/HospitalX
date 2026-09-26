@@ -388,7 +388,7 @@ export default function Home() {
         <nav aria-label="Hospital workspaces">
           {nav.map((item) => {
             const Icon = item.icon;
-            return <button type="button" key={item.label} className={active === item.label ? "on" : ""} aria-current={active === item.label ? "page" : undefined} onClick={() => go(item)}><Icon aria-hidden="true" /><span>{item.label}</span></button>;
+            return <button type="button" key={item.label} data-tour={item.label} className={active === item.label ? "on" : ""} aria-current={active === item.label ? "page" : undefined} onClick={() => go(item)}><Icon aria-hidden="true" /><span>{item.label}</span></button>;
           })}
         </nav>
         <div className="motto-card">
