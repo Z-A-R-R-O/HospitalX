@@ -362,7 +362,7 @@ export default function Home() {
   return (
     <div className="app-shell">
       <div className="ambient" aria-hidden="true"><span /><span /><span /></div>
-      <button className="mobile-menu" type="button" aria-label={navOpen ? "Close navigation" : "Open navigation"} onClick={() => setNavOpen((open) => !open)}>{navOpen ? <X /> : <Menu />}</button>
+      <button className={`mobile-menu ${navOpen ? "is-open" : ""}`} type="button" aria-label={navOpen ? "Close navigation" : "Open navigation"} onClick={() => setNavOpen((open) => !open)}>{navOpen ? <X /> : <Menu />}</button>
 
       {navOpen && <div className="sidebar-overlay" onClick={() => setNavOpen(false)} />}
       <aside className={`sidebar glass ${navOpen ? "is-open" : ""}`}>

@@ -1746,3 +1746,16 @@ html.dark .demo-badge {
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
+@media (max-width: 1024px) {
+  .mobile-menu {
+    transition: transform 0.3s var(--ease), background 0.3s, color 0.3s;
+  }
+  .mobile-menu.is-open {
+    transform: translateX(12px);
+    background: rgba(0,0,0,0.05); /* slightly different background for the X */
+    border-color: transparent;
+  }
+  html.dark .mobile-menu.is-open {
+    background: rgba(255,255,255,0.1);
+  }
+}
