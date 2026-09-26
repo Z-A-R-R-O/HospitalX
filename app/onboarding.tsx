@@ -239,15 +239,26 @@ export function HospitalXOnboarding({ setActive, onComplete }: OnboardingProps) 
     els.forEach(el => {
       el.classList.add("setup-highlight");
       
-      // Walk up the tree to fix stacking contexts unconditionally
+      // Walk up the tree to fix only ACTUAL stacking contexts
       const parents: HTMLElement[] = [];
       let parent = el.parentElement;
       while (parent && parent !== document.body) {
-        parents.push(parent);
-        parent.classList.add("setup-parent-highlight");
-        if (window.getComputedStyle(parent).position === 'static') {
-          parent.style.position = 'relative';
-          parent.dataset.setupPos = 'true';
+        const style = window.getComputedStyle(parent);
+        const zIndex = style.getPropertyValue('z-index');
+        const transform = style.getPropertyValue('transform');
+        const opacity = style.getPropertyValue('opacity');
+        const position = style.getPropertyValue('position');
+        
+        const isStackingContext = 
+          zIndex !== 'auto' || 
+          (transform && transform !== 'none') || 
+          (opacity && opacity !== '1') || 
+          position === 'fixed' || 
+          position === 'sticky';
+          
+        if (isStackingContext) {
+          parents.push(parent);
+          parent.classList.add("setup-parent-highlight");
         }
         parent = parent.parentElement;
       }
