@@ -96,7 +96,7 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    if (setupStatus === "not_started") setShowOnboarding(true);
+    setShowOnboarding(setupStatus === "not_started");
   }, [setupStatus]);
 
   const [queueFilter, setQueueFilter] = useState("All");
@@ -106,8 +106,23 @@ export default function Home() {
     if (saved === "dark") setIsDark(true);
     else if (saved === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) setIsDark(true);
   }, []);
-  const [isDemoMode, setIsDemoMode] = useState(false);
-  useEffect(() => { setIsDemoMode(localStorage.getItem("demoMode") === "true"); }, []);
+  const [isDemoMode, setIsDemoMode] = useState<boolean | null>(null);
+  const [isDemoReminder, setIsDemoReminder] = useState(false);
+  useEffect(() => {
+    const saved = localStorage.getItem("demoMode");
+    const enabled = saved === null || saved === "true";
+    if (saved === null) localStorage.setItem("demoMode", "true");
+    setIsDemoMode(enabled);
+  }, []);
+  useEffect(() => {
+    if (isDemoMode !== true || localStorage.getItem("demoModeReminderShown") === "true") return;
+    const timer = window.setTimeout(() => {
+      localStorage.setItem("demoModeReminderShown", "true");
+      setIsDemoReminder(true);
+      setIsExitDemoAlertOpen(true);
+    }, 5 * 60 * 1000);
+    return () => window.clearTimeout(timer);
+  }, [isDemoMode]);
   const toggleDemoMode = () => { const next = !isDemoMode; setIsDemoMode(next); localStorage.setItem("demoMode", next.toString()); window.location.reload(); };
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -434,7 +449,7 @@ export default function Home() {
           <button className="icon-button glass desktop-only" type="button" aria-label="Toggle fullscreen" onClick={toggleFullscreen}><Expand /></button>
           <div className="auth-controls">
                         {isDemoMode ? (
-              <button type="button" className="auth-button glass" style={{ color: '#64748b', borderColor: 'rgba(100, 116, 139, 0.25)' }} onClick={() => setIsExitDemoAlertOpen(true)}>
+              <button type="button" className="auth-button glass" style={{ color: '#64748b', borderColor: 'rgba(100, 116, 139, 0.25)' }} onClick={() => { setIsDemoReminder(false); setIsExitDemoAlertOpen(true); }}>
                 <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.06em' }}>DEMO</span>
               </button>
             ) : clerkEnabled ? (
@@ -709,12 +724,12 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.15)', backdropFilter: 'blur(4px)' }}>
           <div style={{ width: '270px', borderRadius: '16px', background: 'var(--c-glass-80)', backdropFilter: 'blur(32px) saturate(200%)', border: '1px solid var(--c-glass-60)', boxShadow: '0 16px 40px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div style={{ padding: '20px 16px 16px', textAlign: 'center' }}>
-              <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 600, color: 'var(--ink)' }}>Exit Demo Mode?</h3>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.3 }}>This will reconnect you to the live production database.</p>
+              <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 600, color: 'var(--ink)' }}>{isDemoReminder ? 'Demo mode is still on' : 'Exit Demo Mode?'}</h3>
+              <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.3 }}>{isDemoReminder ? 'You have been exploring the demo for five minutes. You can turn it off whenever you are ready.' : 'This will reconnect you to the live production database.'}</p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid var(--c-dark-10)' }}>
-              <button onClick={() => { setIsExitDemoAlertOpen(false); toggleDemoMode(); }} style={{ padding: '12px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--c-dark-10)', color: 'var(--red)', fontSize: '16px', fontWeight: 400, cursor: 'pointer' }}>Exit Demo</button>
-              <button onClick={() => setIsExitDemoAlertOpen(false)} style={{ padding: '12px', background: 'transparent', border: 'none', color: 'var(--blue)', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+              <button onClick={() => { setIsExitDemoAlertOpen(false); setIsDemoReminder(false); toggleDemoMode(); }} style={{ padding: '12px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--c-dark-10)', color: 'var(--red)', fontSize: '16px', fontWeight: 400, cursor: 'pointer' }}>Turn off demo</button>
+              <button onClick={() => { setIsExitDemoAlertOpen(false); setIsDemoReminder(false); }} style={{ padding: '12px', background: 'transparent', border: 'none', color: 'var(--blue)', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>{isDemoReminder ? 'Keep demo mode' : 'Cancel'}</button>
             </div>
           </div>
         </div>

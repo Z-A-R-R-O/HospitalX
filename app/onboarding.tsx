@@ -34,8 +34,11 @@ const STEPS: SetupStep[] = [
 const ICONS = { command: Layers3, search: Search, metrics: Activity, patients: Users, calendar: CalendarDays, beds: BedDouble, team: ShieldCheck, ai: Bot, offline: Wifi };
 
 export function useSetupStatus() {
-  const [status, setStatus] = useState<SetupStatus>("not_started");
-  useEffect(() => { const saved = localStorage.getItem("hospitalx_setup_status") as SetupStatus | null; if (saved) setStatus(saved); }, []);
+  const [status, setStatus] = useState<SetupStatus | null>(null);
+  useEffect(() => {
+    const saved = localStorage.getItem("hospitalx_setup_status") as SetupStatus | null;
+    setStatus(saved ?? "not_started");
+  }, []);
   return { status, setStatus };
 }
 
