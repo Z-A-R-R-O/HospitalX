@@ -79,7 +79,7 @@ const STEPS: SetupStep[] = [
     description: "Every patient has one place for their identity, history, complaints, and care information. No more scattered records.",
     route: "Patients",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
   },
   {
@@ -88,7 +88,7 @@ const STEPS: SetupStep[] = [
     description: "Manage scheduled visits and follow each appointment from scheduled to completed. Calendar views and timeline tracking built in.",
     route: "Appointments",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
   },
   {
@@ -97,7 +97,7 @@ const STEPS: SetupStep[] = [
     description: "A visual Kanban board that tracks each patient from arrival to discharge. Drag, update, and monitor in real time.",
     route: "OPD",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
     demo: ["Waiting", "Triage", "Consultation", "Pharmacy", "Completed"],
   },
@@ -107,7 +107,7 @@ const STEPS: SetupStep[] = [
     description: "Know which beds are available, occupied, cleaning, or assigned. ICU, General, Emergency — every ward at a glance.",
     route: "IPD & Beds",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
   },
   {
@@ -116,7 +116,7 @@ const STEPS: SetupStep[] = [
     description: "See who's on duty, where they're assigned, and how your teams are distributed. Doctors and nursing staff, unified.",
     route: "Doctors",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
   },
   {
@@ -125,7 +125,7 @@ const STEPS: SetupStep[] = [
     description: "Track investigations from the moment they're ordered to when results are ready. Lab work, imaging, pathology — all connected.",
     route: "Laboratory",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
   },
   {
@@ -134,7 +134,7 @@ const STEPS: SetupStep[] = [
     description: "Hospital operations don't stop at consultation. Pharmacy dispensing, billing, and inventory — HospitalX keeps the operational chain connected.",
     route: "Pharmacy",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
   },
   {
@@ -155,7 +155,7 @@ const STEPS: SetupStep[] = [
     description: "Use the full AI workspace for operational analysis, summaries, handover reports, and complex tasks.",
     route: "AI Co-pilot",
     action: "navigate",
-    position: "bottom-left",
+    position: "bottom-right",
     target: "main",
     demo: [
       "Summarize today's OPD.",
@@ -239,20 +239,28 @@ export function HospitalXOnboarding({ setActive, onComplete }: OnboardingProps) 
     els.forEach(el => {
       el.classList.add("setup-highlight");
       
-      // Walk up the tree to fix stacking contexts
+      // Walk up the tree to fix stacking contexts unconditionally
       const parents: HTMLElement[] = [];
       let parent = el.parentElement;
       while (parent && parent !== document.body) {
-        if (window.getComputedStyle(parent).position !== 'static') {
-          parents.push(parent);
-          parent.classList.add("setup-parent-highlight");
+        parents.push(parent);
+        parent.classList.add("setup-parent-highlight");
+        if (window.getComputedStyle(parent).position === 'static') {
+          parent.style.position = 'relative';
+          parent.dataset.setupPos = 'true';
         }
         parent = parent.parentElement;
       }
       
       cleanupFns.push(() => {
         el.classList.remove("setup-highlight");
-        parents.forEach(p => p.classList.remove("setup-parent-highlight"));
+        parents.forEach(p => {
+          p.classList.remove("setup-parent-highlight");
+          if (p.dataset.setupPos === 'true') {
+            p.style.position = '';
+            delete p.dataset.setupPos;
+          }
+        });
       });
     });
     
