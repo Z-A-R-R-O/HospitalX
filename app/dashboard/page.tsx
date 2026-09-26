@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Show, SignInButton, SignUpButton, UserButton, SignOutButton } from "@clerk/nextjs";
 import { GenericModuleView, AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView, BillingView, InventoryView, ReportsView } from "../components";
 import { Mascot } from "page-mascot";
+import { HospitalXOnboarding, useSetupStatus } from "../onboarding";
+import "../onboarding.css";
 import type { LucideIcon } from "lucide-react";
 import {
   MoreHorizontal, Settings, User,
@@ -89,6 +91,12 @@ export default function Home() {
   const [clock, setClock] = useState<Date | null>(null);
   const [toast, setToast] = useState("");
   const [navOpen, setNavOpen] = useState(false);
+  const { status: setupStatus, setStatus: setSetupStatus } = useSetupStatus();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (setupStatus === "not_started") setShowOnboarding(true);
+  }, [setupStatus]);
 
   const [queueFilter, setQueueFilter] = useState("All");
   const [isDark, setIsDark] = useState(false);
@@ -150,18 +158,18 @@ export default function Home() {
 
   useEffect(() => {
     if (!isDragging) return;
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
       const nx = e.clientX - dragOffset.x;
       const ny = e.clientY - dragOffset.y;
-      setMascotPos({ x: Math.max(0, Math.min(nx, window.innerWidth - 130)), y: Math.max(0, Math.min(ny, window.innerHeight - 130)) });
+      setMascotPos({ x: Math.max(0, Math.min(nx, window.innerWidth - 114)), y: Math.max(0, Math.min(ny, window.innerHeight - 114)) });
     };
     const onUp = () => {
       setIsDragging(false);
       localStorage.setItem("mascotPos", JSON.stringify(mascotPos));
     };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    return () => { window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); };
   }, [isDragging, dragOffset, mascotPos]);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -361,6 +369,12 @@ export default function Home() {
 
   return (
     <div className="app-shell">
+      {showOnboarding && (
+        <HospitalXOnboarding
+          setActive={(label: string) => setActive(label)}
+          onComplete={() => { setShowOnboarding(false); setSetupStatus("completed"); }}
+        />
+      )}
       <div className="ambient" aria-hidden="true"><span /><span /><span /></div>
       <button className="mobile-menu" style={{ opacity: navOpen ? 0 : 1, pointerEvents: navOpen ? "none" : "auto", transition: "opacity 0.2s" }} type="button" aria-label="Open navigation" onClick={() => setNavOpen(true)}><Menu /></button>
 
@@ -625,8 +639,8 @@ export default function Home() {
         )}
         </div>
       {mascotVisible && active !== "AI Co-pilot" && (
-      <div ref={mascotRef} style={{ position: 'fixed', left: mascotPos.x, top: mascotPos.y, zIndex: 9999, userSelect: 'none' }}
-        onMouseDown={(e) => { if (e.button === 0) { setIsDragging(true); setDragOffset({ x: e.clientX - mascotPos.x, y: e.clientY - mascotPos.y }); } }}
+      <div ref={mascotRef} style={{ position: 'fixed', left: mascotPos.x, top: mascotPos.y, zIndex: 9999, userSelect: 'none', touchAction: 'none' }}
+        onPointerDown={(e) => { if (e.button === 0) { e.currentTarget.setPointerCapture?.(e.pointerId); setIsDragging(true); setDragOffset({ x: e.clientX - mascotPos.x, y: e.clientY - mascotPos.y }); } }}
         onContextMenu={(e) => { e.preventDefault(); setShowMascotMenu(!showMascotMenu); }}
       >
         
@@ -638,7 +652,7 @@ export default function Home() {
         )}
 
 <div style={{ cursor: isDragging ? 'grabbing' : 'grab' }} onClick={(e) => { if (!isDragging) { setIsChatOpen(!isChatOpen); setShowMascotMenu(false); } }}>
-          <Mascot directions="/mascots/nurse-directions.webp" reactions="/mascots/nurse-reactions.webp" size={120} label="Madhu - AI Nurse" />
+          <Mascot directions="/mascots/nurse-directions.webp" reactions="/mascots/nurse-reactions.webp" size={104} label="Madhu - AI Nurse" />
         </div>
 
         {showMascotMenu && (
@@ -760,5 +774,4 @@ function RevenueCard({ appointments, setActive }: { appointments?: number, setAc
 function QuickAction({ icon: Icon, label, tone, onClick }: { icon: LucideIcon; label: string; tone: string; onClick: () => void }) {
   return <button type="button" onClick={onClick}><span className={`quick-icon ${tone}`}><Icon /></span><small>{label}</small></button>;
 }
-
 
