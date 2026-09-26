@@ -46,7 +46,7 @@ export function AppointmentsView() {
       </header>
 
       <div className="appointments-layout" style={{ display: 'flex', gap: '20px', padding: '24px', height: 'calc(100% - 70px)' }}>
-        <aside className="calendar-sidebar glass" style={{ width: '280px', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
+        <aside className="calendar-sidebar glass" style={{ width: '280px', minWidth: '240px', flexShrink: 0, borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
            <div className="mini-calendar">
              <h3 style={{ margin: '0 0 16px', fontSize: '15px' }}>September 2026</h3>
              <div className="cal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', fontSize: '12px', fontWeight: 600 }}>

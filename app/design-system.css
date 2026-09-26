@@ -1485,7 +1485,12 @@ html.dark .demo-badge {
   display: inline-block;
 }
 
-/* Responsive AI Floating Widget */
+
+/* ============================================================
+   COMPREHENSIVE MOBILE & COMPRESSED VIEW OVERRIDES
+   ============================================================ */
+
+/* --- AI Floating Widget --- */
 .ai-floating-widget {
   position: absolute;
   bottom: 100%;
@@ -1506,9 +1511,150 @@ html.dark .demo-badge {
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (max-width: 480px) {
-  .ai-floating-widget {
+/* --- Slow Connection Glow --- */
+@keyframes shimmer-text {
+  0% { background-position: -100% center; }
+  100% { background-position: 200% center; }
+}
+.slow-connection-warning {
+  background: linear-gradient(90deg, rgba(168,85,247,0.6) 0%, rgba(216,180,254,1) 30%, rgba(168,85,247,1) 50%, rgba(216,180,254,1) 70%, rgba(168,85,247,0.6) 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: fadeIn 0.4s ease, shimmer-text 2s infinite linear;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* --- Mobile Sidebar Overlay --- */
+.sidebar-overlay { display: none; }
+
+/* ============================================================
+   1024px — Tablet / Compressed
+   ============================================================ */
+@media (max-width: 1024px) {
+  .sidebar-overlay {
+    display: block;
     position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    z-index: 35;
+    animation: fadeIn 0.25s ease;
+  }
+  .sidebar { z-index: 40 !important; }
+  .mobile-menu { z-index: 45 !important; }
+  .sidebar .brand { padding-left: 56px; padding-top: 10px; }
+
+  /* KPI grids — 2 cols */
+  .ward-kpis, .opd-kpis, .lab-kpis, .rad-kpis, .pharma-kpis, .billing-kpis, .inv-kpis, .inventory-kpis {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Data grids — 2 cols */
+  .doctors-grid, .roster-grid, .beds-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  }
+
+  /* OPD Kanban — horizontal scroll */
+  .opd-board { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  .opd-column { min-width: 280px !important; width: 280px !important; }
+
+  /* Appointments — stack sidebar below calendar */
+  .appointments-view { flex-direction: column !important; }
+  .appointments-view .calendar-sidebar { width: 100% !important; }
+  .appointments-view .timeline-main { width: 100% !important; }
+
+  /* Nursing — stack sidebar */
+  .nursing-layout { flex-direction: column !important; }
+  .nursing-layout .ward-sidebar { width: 100% !important; flex-direction: row !important; overflow-x: auto; gap: 8px !important; padding: 12px !important; }
+  .nursing-layout .ward-sidebar button { white-space: nowrap; }
+
+  /* Full Chat — stack */
+  .full-chat-layout { flex-direction: column !important; }
+  .full-chat-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 140px;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 12px !important;
+  }
+  .full-chat-sidebar h2, .full-chat-sidebar p { display: none; }
+  .full-chat-history {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    overflow-x: auto;
+    width: max-content;
+  }
+  .full-chat-history button {
+    white-space: nowrap;
+    background: rgba(168,85,247,0.1) !important;
+    border-radius: 20px !important;
+    padding: 6px 14px !important;
+  }
+}
+
+/* ============================================================
+   768px — Small Tablet / Large Phone
+   ============================================================ */
+@media (max-width: 768px) {
+  /* KPI grids — 2 cols still */
+  .ward-kpis, .opd-kpis, .lab-kpis, .rad-kpis, .pharma-kpis, .billing-kpis, .inv-kpis {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* Data grids — single col */
+  .doctors-grid, .roster-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Beds — 1 col */
+  .beds-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* OPD columns — narrower */
+  .opd-column { min-width: 260px !important; width: 260px !important; }
+
+  /* Appointment cards */
+  .apt-card { flex-direction: column !important; align-items: flex-start !important; }
+  .apt-time { width: auto !important; }
+
+  /* Table overflows */
+  .queue table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .queue table thead { white-space: nowrap; }
+
+  /* Settings — stack */
+  .settings-layout { flex-direction: column !important; }
+  .settings-layout nav { width: 100% !important; flex-direction: row !important; overflow-x: auto; gap: 6px !important; }
+  .settings-layout nav button { white-space: nowrap; font-size: 13px !important; padding: 10px 14px !important; }
+}
+
+/* ============================================================
+   480px — Phone
+   ============================================================ */
+@media (max-width: 480px) {
+  main { padding-inline: 8px !important; padding-top: 66px !important; }
+
+  /* KPIs — single col */
+  .ward-kpis, .opd-kpis, .lab-kpis, .rad-kpis, .pharma-kpis, .billing-kpis, .inv-kpis {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  /* Hero — compact */
+  .hero { padding: 18px 16px !important; min-height: 140px !important; border-radius: 16px !important; }
+  .hero h1 { font-size: 28px !important; }
+  .hero span { font-size: 13px !important; }
+
+  /* AI floating widget — full bottom sheet */
+  .ai-floating-widget {
+    position: fixed !important;
     bottom: 0 !important;
     right: 0 !important;
     left: 0 !important;
@@ -1520,89 +1666,39 @@ html.dark .demo-badge {
     transform-origin: bottom center;
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
   @keyframes slideUp {
     0% { transform: translateY(100%); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
 
-  .ai-mascot-container {
-    bottom: 16px !important;
-    right: 16px !important;
-  }
-  
-  /* Make the main layout push down so the widget doesn't block content */
-  .full-chat-page {
-    padding-bottom: 80px; 
-  }
+  /* Mascot container */
+  .ai-mascot-container { bottom: 12px !important; right: 12px !important; }
+
+  /* OPD — single scrollable col */
+  .opd-column { min-width: calc(100vw - 48px) !important; width: calc(100vw - 48px) !important; }
+
+  /* Topbar fine-tune */
+  .topbar { height: 60px !important; padding: 10px 12px 10px 60px !important; }
+  .search { height: 38px !important; }
+  .search:focus-within { width: 100% !important; }
+
+  /* Module headers */
+  .module-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .module-header h2 { font-size: 20px !important; }
+
+  /* Profile card in sidebar */
+  .profile-card strong { font-size: 11px; }
+  .profile-card small { font-size: 9px; }
+  .motto-card { min-height: 100px; }
 }
 
-/* Fix Full Chat View for Mobile */
-@media (max-width: 768px) {
-  .full-chat-layout {
-    flex-direction: column !important;
-  }
-  .full-chat-sidebar {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    border-right: none !important;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding: 12px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto;
-  }
-  .full-chat-sidebar h2, .full-chat-sidebar p { display: none; }
-  .full-chat-history {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 8px !important;
-    width: max-content;
-  }
-  .full-chat-history button {
-    background: rgba(168,85,247,0.1) !important;
-    border-radius: 20px !important;
-    padding: 6px 12px !important;
-  }
-  .full-chat-bottom form {
-    flex-direction: row;
-    width: 100%;
-    padding: 8px;
-    border-radius: 24px;
-  }
-}
-
-/* Mobile Sidebar Overlay */
-.sidebar-overlay {
-  display: none;
-}
-
-@media (max-width: 1024px) {
-  .sidebar-overlay {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(4px);
-    z-index: 35; /* below mobile menu button and sidebar */
-    animation: fadeIn 0.3s ease;
-  }
-  .sidebar {
-    z-index: 40 !important;
-  }
-  .mobile-menu {
-    z-index: 45 !important;
-  }
-}
-
-/* Shift logo to the right of the mobile menu */
-@media (max-width: 1024px) {
-  .sidebar .brand {
-    padding-left: 64px;
-    padding-top: 12px;
-  }
+/* ============================================================
+   360px — Very Small Phone
+   ============================================================ */
+@media (max-width: 360px) {
+  .sidebar .brand { padding-left: 48px; }
+  .brand strong { font-size: 16px !important; }
+  .hero h1 { font-size: 24px !important; }
+  .metric-card { padding: 12px !important; }
+  .metric-card h3 { font-size: 24px !important; }
 }

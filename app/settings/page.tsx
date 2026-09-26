@@ -179,7 +179,7 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-start' }}>
+        <div className="settings-layout" style={{ display: 'flex', gap: '40px', alignItems: 'flex-start' }}>
           
           <nav style={{ width: '240px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
              {tabs.map(tab => (
