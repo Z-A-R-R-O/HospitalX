@@ -244,6 +244,7 @@ export default function Home() {
   };
 
   const go = (item: NavItem) => {
+    setNavOpen(false);
     if (item.href) {
       router.push(item.href);
     } else {
@@ -363,6 +364,7 @@ export default function Home() {
       <div className="ambient" aria-hidden="true"><span /><span /><span /></div>
       <button className="mobile-menu" type="button" aria-label={navOpen ? "Close navigation" : "Open navigation"} onClick={() => setNavOpen((open) => !open)}>{navOpen ? <X /> : <Menu />}</button>
 
+      {navOpen && <div className="sidebar-overlay" onClick={() => setNavOpen(false)} />}
       <aside className={`sidebar glass ${navOpen ? "is-open" : ""}`}>
         <button className="brand" type="button" onClick={() => go(nav[0])}>
           <span className="brand-mark" aria-hidden="true"><i /><i /></span>

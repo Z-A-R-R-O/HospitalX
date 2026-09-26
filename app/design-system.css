@@ -1572,3 +1572,29 @@ html.dark .demo-badge {
     border-radius: 24px;
   }
 }
+
+/* Mobile Sidebar Overlay */
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    z-index: 35; /* below mobile menu button and sidebar */
+    animation: fadeIn 0.3s ease;
+  }
+  .sidebar {
+    z-index: 40 !important;
+  }
+  .mobile-menu {
+    z-index: 45 !important;
+  }
+}
