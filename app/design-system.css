@@ -1598,3 +1598,11 @@ html.dark .demo-badge {
     z-index: 45 !important;
   }
 }
+
+/* Shift logo to the right of the mobile menu */
+@media (max-width: 1024px) {
+  .sidebar .brand {
+    padding-left: 64px;
+    padding-top: 12px;
+  }
+}
