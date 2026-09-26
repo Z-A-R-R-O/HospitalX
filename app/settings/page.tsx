@@ -141,11 +141,11 @@ export default function SettingsPage() {
 
   const handleSignOut = () => {
     const clerk = (window as any).Clerk;
-    if (clerk) {
-      clerk.signOut(() => router.push("/sign-in"));
+    if (clerk && clerk.user) {
+      clerk.signOut(() => router.push("/"));
     } else {
-      showToast("Signed out (Demo Mode)");
-      setTimeout(() => router.push("/dashboard"), 1000);
+      showToast("Signed out successfully.");
+      setTimeout(() => router.push("/"), 800);
     }
   };
 
