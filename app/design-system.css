@@ -1702,3 +1702,30 @@ html.dark .demo-badge {
   .metric-card { padding: 12px !important; }
   .metric-card h3 { font-size: 24px !important; }
 }
+@media (max-width: 1024px) {
+  .full-chat-sidebar h3 { display: none !important; }
+  .full-chat-sidebar { 
+    flex-direction: row !important; 
+    align-items: center !important; 
+    overflow-x: auto !important;
+    max-height: 70px !important;
+    gap: 8px !important;
+  }
+  .full-chat-sidebar > button.primary {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    padding-inline: 16px !important;
+  }
+  .full-chat-sidebar .panel.glass {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  .full-chat-history {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+}

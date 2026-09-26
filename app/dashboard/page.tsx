@@ -498,12 +498,12 @@ export default function Home() {
           </section>
           <p className="data-freshness" role="status">{freshness}</p>
         </> : active === "AI Co-pilot" ? (
-          <div style={{ display: 'flex', height: 'calc(100vh - 110px)', gap: '20px', width: '100%', overflow: 'hidden', paddingBottom: '20px' }}>
-            <aside style={{ width: '280px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
+          <div className="full-chat-layout" style={{ display: 'flex', height: 'calc(100vh - 110px)', gap: '20px', width: '100%', overflow: 'hidden', paddingBottom: '20px' }}>
+            <aside className="full-chat-sidebar" style={{ width: '280px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
                <button className="primary" style={{ width: '100%', justifyContent: 'center', height: '44px' }} onClick={() => { setChatHistory([]); setAiQuery(""); setCurrentChatId(null); }}><Plus size={18} /> New Chat</button>
                <div className="panel glass" style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
                  <h3 style={{ fontSize: '12px', fontWeight: 700, color: '#4c1d95', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', opacity: 0.8 }}>Recent Chats</h3>
-                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                 <div className="full-chat-history" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                    {Object.keys(savedChats).map(chat => (
                      <button key={chat} type="button" onClick={() => { setChatHistory(savedChats[chat]); setCurrentChatId(chat); setIsChatOpen(true); }} style={{ padding: '10px 12px', background: 'transparent', border: 'none', textAlign: 'left', fontSize: '14px', color: 'var(--ink)', borderRadius: '10px', cursor: 'pointer', transition: 'background 0.2s', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: '10px' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(168,85,247,0.1)'} onMouseOut={e => e.currentTarget.style.background = 'transparent'}><MessageSquare size={16} color="#7c3aed" /> {chat}</button>
                    ))}
