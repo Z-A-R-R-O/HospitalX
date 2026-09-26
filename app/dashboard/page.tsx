@@ -292,6 +292,7 @@ export default function Home() {
 
   const [aiQuery, setAiQuery] = useState("");
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isSlowConnection, setIsSlowConnection] = useState(false);
   const [chatHistory, setChatHistory] = useState<{role: string, content: string}[]>([]);
   const [savedChats, setSavedChats] = useState<Record<string, { role: 'user' | 'assistant', content: string }[]>>(demoChats);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
@@ -317,6 +318,10 @@ export default function Home() {
       setIsChatOpen(true);
     }
     setIsAiLoading(true);
+    setIsSlowConnection(false);
+    const slowTimer = setTimeout(() => {
+      setIsSlowConnection(true);
+    }, 5000);
 
     let chatId = currentChatId;
     if (!chatId) {
@@ -343,6 +348,8 @@ export default function Home() {
       showToast("Failed to connect to AI.");
     } finally {
       setIsAiLoading(false);
+      clearTimeout(slowTimer);
+      setIsSlowConnection(false);
     }
   };
 
@@ -524,9 +531,12 @@ export default function Home() {
                 </div>
               ))}
               {isAiLoading && (
-                <div className="full-msg assistant loading">
-                  <div className="msg-avatar"><Sparkles /></div>
-                  <div className="msg-content"><Activity className="pulse" /></div>
+                <div className="full-msg assistant loading" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <div className="msg-avatar"><Sparkles /></div>
+                    <div className="msg-content" style={{ display: 'flex', alignItems: 'center', minHeight: '40px' }}><Activity className="pulse" /></div>
+                  </div>
+                  {isSlowConnection && <span className="slow-connection-warning" style={{ fontSize: '12px', marginLeft: '48px' }}>Improve your connection to get faster reply</span>}
                 </div>
               )}
             </div>
@@ -661,8 +671,9 @@ export default function Home() {
                 </div>
               ))}
               {isAiLoading && (
-                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
                   <div style={{ padding: '12px 16px', borderRadius: '18px 18px 18px 4px', background: 'white', color: '#7c3aed', fontSize: '14px', border: '1px solid rgba(216,180,254,0.4)', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(168,85,247,0.06)', fontWeight: 500 }}><Activity className="pulse" size={16} color="#7c3aed"/> Thinking...</div>
+                  {isSlowConnection && <span className="slow-connection-warning" style={{ fontSize: '11px', paddingLeft: '8px' }}>Improve your connection to get faster reply</span>}
                 </div>
               )}
             </div>

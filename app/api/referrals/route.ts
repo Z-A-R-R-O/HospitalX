@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const idempotencyKey = crypto.randomUUID();
+    const idempotencyKey = body.idempotency_key || body.idempotencyKey || crypto.randomUUID();
 
     let appointmentId = null;
     if (urgency === 'urgent') {

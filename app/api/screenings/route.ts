@@ -47,7 +47,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const idempotencyKey = crypto.randomUUID();
+    const idempotencyKey = body.idempotency_key || body.idempotencyKey || crypto.randomUUID();
 
     const res = (await db`
       INSERT INTO screenings (
@@ -62,6 +62,10 @@ export async function POST(req: Request) {
         ${observations ? JSON.stringify(observations) : '[]'}::jsonb,
         ${duration_seconds || null}, ${completed_at || null}
       )
+      ON CONFLICT (idempotency_key) DO UPDATE SET 
+        status = EXCLUDED.status, 
+        total_score = EXCLUDED.total_score,
+        risk_level = EXCLUDED.risk_level
       RETURNING *
     `) as any[];
 

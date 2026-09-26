@@ -1,0 +1,17 @@
+{
+  "name": "HospitalX Offline Worker",
+  "short_name": "HospitalX",
+  "description": "Hospital operations and offline screening",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "/mascots/madhu.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

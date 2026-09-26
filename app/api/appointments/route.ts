@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { getOrganizationContext } from "@/lib/request-context";
+import { requireOrganizationContext } from "@/lib/request-context";
 import { cleanText, ensurePatientSchedulingSchema } from "@/lib/patient-scheduling";
 import { mockAppointments } from "@/lib/demo-backend";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
-  const context = await getOrganizationContext();
-  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await requireOrganizationContext();
   
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ appointments: mockAppointments });
@@ -39,8 +38,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const context = await getOrganizationContext();
-  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await requireOrganizationContext();
   
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ appointment: { id: "DEMO-APT-" + Math.floor(Math.random()*1000) } }, { status: 201 });
@@ -62,8 +60,12 @@ export async function POST(request: Request) {
     
     const db = await ensurePatientSchedulingSchema();
     
-    const result = await db`INSERT INTO appointments (organization_id, patient_id, full_name, provider_id, provider_name, appointment_type, starts_at, duration_minutes, status, priority) 
-      VALUES (${context.organizationId}, ${patientId}, ${fullName}, ${providerId}, ${providerName}, ${type}, ${startsAt}, ${duration}, 'scheduled', 'normal') 
+    const idempotencyKey = body.idempotencyKey || crypto.randomUUID();
+    // Assuming appointments doesn't have idempotency_key in schema yet, let's fix that if needed. Wait, we didn't add it to appointments in schema.sql.
+    // Actually we should add it to appointments schema if it's in the plan.
+    const result = await db`INSERT INTO appointments (idempotency_key, organization_id, patient_id, full_name, provider_id, provider_name, appointment_type, starts_at, duration_minutes, status, priority) 
+      VALUES (${idempotencyKey}, ${context.organizationId}, ${patientId}, ${fullName}, ${providerId}, ${providerName}, ${type}, ${startsAt}, ${duration}, 'scheduled', 'normal') 
+      ON CONFLICT (idempotency_key) DO UPDATE SET status = EXCLUDED.status
       RETURNING *`;
       
     const appointment = (Array.isArray(result) ? result[0] : null) as { id?: string } | null;

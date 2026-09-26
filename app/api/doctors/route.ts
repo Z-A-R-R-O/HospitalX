@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { getOrganizationContext } from "@/lib/request-context";
+import { requireOrganizationContext } from "@/lib/request-context";
 import { cleanText, ensurePatientSchedulingSchema } from "@/lib/patient-scheduling";
 import { mockDoctors } from "@/lib/demo-backend";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  const context = await getOrganizationContext();
-  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await requireOrganizationContext();
   
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ doctors: mockDoctors });
@@ -29,8 +28,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const context = await getOrganizationContext();
-  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await requireOrganizationContext();
   
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ doctor: { id: "DEMO-DOC-" + Math.floor(Math.random()*1000) } }, { status: 201 });

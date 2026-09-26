@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { getOrganizationContext } from "@/lib/request-context";
+import { requireOrganizationContext } from "@/lib/request-context";
 import { cleanText, ensurePatientSchedulingSchema } from "@/lib/patient-scheduling";
 import { mockPatients } from "@/lib/demo-backend";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  const context = await getOrganizationContext();
-  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await requireOrganizationContext();
   
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ patients: mockPatients });
@@ -26,8 +25,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const context = await getOrganizationContext();
-  if (!context.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await requireOrganizationContext();
   
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ patient: { id: "DEMO-" + Math.floor(Math.random()*1000) } }, { status: 201 });
@@ -51,10 +49,19 @@ export async function POST(request: Request) {
     if (!fullName || !dob) return NextResponse.json({ error: "Name and DOB required" }, { status: 400 });
     
     const db = await ensurePatientSchedulingSchema();
+    const idempotencyKey = body.idempotencyKey || null;
     
-    const result = await db`INSERT INTO patients (organization_id, full_name, date_of_birth, gender, contact_number, status, priority, age, blood_group, primary_complaint, email, address, emergency_contact, medical_history) 
-      VALUES (${context.organizationId}, ${fullName}, ${dob}, ${gender}, ${contact}, 'active', ${priority}, ${age}, ${bloodGroup}, ${primaryComplaint}, ${email}, ${address}, ${emergencyContact}, ${medicalHistory}) 
-      RETURNING *`;
+    let result;
+    if (idempotencyKey) {
+       result = await db`INSERT INTO patients (idempotency_key, organization_id, full_name, date_of_birth, gender, contact_number, status, priority, age, blood_group, primary_complaint, email, address, emergency_contact, medical_history) 
+        VALUES (${idempotencyKey}, ${context.organizationId}, ${fullName}, ${dob}, ${gender}, ${contact}, 'active', ${priority}, ${age}, ${bloodGroup}, ${primaryComplaint}, ${email}, ${address}, ${emergencyContact}, ${medicalHistory}) 
+        ON CONFLICT (idempotency_key) DO UPDATE SET full_name = EXCLUDED.full_name
+        RETURNING *`;
+    } else {
+       result = await db`INSERT INTO patients (organization_id, full_name, date_of_birth, gender, contact_number, status, priority, age, blood_group, primary_complaint, email, address, emergency_contact, medical_history) 
+        VALUES (${context.organizationId}, ${fullName}, ${dob}, ${gender}, ${contact}, 'active', ${priority}, ${age}, ${bloodGroup}, ${primaryComplaint}, ${email}, ${address}, ${emergencyContact}, ${medicalHistory}) 
+        RETURNING *`;
+    }
       
     const patient = (Array.isArray(result) ? result[0] : null) as { id?: string } | null;
     

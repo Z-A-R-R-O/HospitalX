@@ -6,6 +6,7 @@ import "./design-system.css";
 import { ConnectivityProvider } from "@/lib/offline/connectivity";
 
 export const metadata: Metadata = {
+  manifest: "/manifest.json",
   title: "HospitalX SwasthyaSetu Edition",
   description: "The Ultimate Offline-First Smart HMS.",
   icons: { icon: "/favicon.svg" },

@@ -1,4 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
+const fs = require('fs');
+
+const contextFile = `import { auth } from "@clerk/nextjs/server";
 
 export type OrganizationContext = {
   userId: string;
@@ -39,3 +41,7 @@ export async function getOrganizationContext(): Promise<Partial<OrganizationCont
     return {};
   }
 }
+`;
+
+fs.writeFileSync('e:/Arunez Zarro/HospitalX/lib/request-context.ts', contextFile, 'utf8');
+console.log('DONE');
