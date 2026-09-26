@@ -647,7 +647,7 @@ export default function Home() {
         )}
 
         {isChatOpen && (
-          <div style={{ position: 'absolute', bottom: '100%', right: 0, marginBottom: '16px', width: '340px', maxHeight: '460px', borderRadius: '24px', background: 'rgba(250, 245, 255, 0.85)', backdropFilter: 'blur(32px) saturate(200%)', border: '1px solid rgba(216, 180, 254, 0.5)', boxShadow: '0 24px 48px rgba(168,85,247,0.15), inset 0 1px 2px rgba(255,255,255,0.9)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 10000, transformOrigin: 'bottom right', animation: 'scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+          <div className="ai-floating-widget"
             onMouseDown={(e) => e.stopPropagation()}
           >
             <div style={{ position: 'absolute', top: '12px', right: '12px', display: 'flex', gap: '4px', zIndex: 2 }}>
