@@ -15,13 +15,13 @@
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px) saturate(120%);
+  backdrop-filter: blur(3px) saturate(120%);
   animation: setupVeilIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes setupVeilIn {
   from { opacity: 0; backdrop-filter: blur(0px); }
-  to { opacity: 1; backdrop-filter: blur(8px) saturate(120%); }
+  to { opacity: 1; backdrop-filter: blur(3px) saturate(120%); }
 }
 
 html.dark .setup-veil {
@@ -569,11 +569,12 @@ html.dark .setup-secondary-btn:hover { color: #94a3b8; }
 
 /* ── Highlight Effect ── */
 .setup-highlight {
-  position: relative;
+  position: relative !important;
   z-index: 100001 !important;
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2), 0 0 40px rgba(124, 58, 237, 0.1) !important;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.4), 0 0 40px rgba(124, 58, 237, 0.2) !important;
   border-radius: 16px;
   transition: box-shadow 0.4s ease;
+  pointer-events: none !important; /* prevent clicking highlighted elements during tour */
 }
 
 /* ── Mobile ── */
@@ -614,4 +615,9 @@ html.dark .setup-secondary-btn:hover { color: #94a3b8; }
   .setup-card-finish .setup-title { font-size: 28px !important; }
   .setup-counter { top: 14px; right: 16px; }
   .setup-command-grid { grid-template-columns: 1fr; }
+}
+
+
+.setup-primary-btn:focus-visible, .setup-secondary-btn:focus-visible, .setup-skip-btn:focus-visible { outline: 2px solid rgba(124, 58, 237, 0.5); outline-offset: 2px; }.setup-parent-highlight {
+  z-index: 100001 !important;
 }

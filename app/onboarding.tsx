@@ -212,13 +212,28 @@ export function HospitalXOnboarding({ setActive, onComplete }: OnboardingProps) 
     }
   }, [step, current, setActive]);
 
-  /* Highlight target element */
+  /* Highlight target element and handle stacking contexts */
   useEffect(() => {
     if (!current.target) return;
-    const el = document.querySelector(current.target);
+    const el = document.querySelector(current.target) as HTMLElement;
     if (el) {
-      (el as HTMLElement).classList.add("setup-highlight");
-      return () => (el as HTMLElement).classList.remove("setup-highlight");
+      el.classList.add("setup-highlight");
+      
+      // Walk up the tree to fix stacking contexts
+      const parents: HTMLElement[] = [];
+      let parent = el.parentElement;
+      while (parent && parent !== document.body) {
+        if (window.getComputedStyle(parent).position !== 'static') {
+          parents.push(parent);
+          parent.classList.add("setup-parent-highlight");
+        }
+        parent = parent.parentElement;
+      }
+      
+      return () => {
+        el.classList.remove("setup-highlight");
+        parents.forEach(p => p.classList.remove("setup-parent-highlight"));
+      };
     }
   }, [step, current.target]);
 
