@@ -31,6 +31,30 @@ export async function ensurePatientSchedulingSchema() {
     starts_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )`;
+    await db`CREATE TABLE IF NOT EXISTS doctors (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    specialty TEXT NOT NULL,
+    role TEXT NOT NULL,
+    shift_start TIME NOT NULL,
+    shift_end TIME NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Available',
+    location TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  )`;
+    await db`CREATE TABLE IF NOT EXISTS nurses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    role TEXT NOT NULL,
+    ward TEXT NOT NULL,
+    shift_start TIME NOT NULL,
+    shift_end TIME NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Active',
+    patient_load INT DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  )`;
   await db`CREATE TABLE IF NOT EXISTS audit_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     event_type TEXT NOT NULL,

@@ -22,10 +22,10 @@ export default function LandingPage() {
         
         <div className="hero-content">
           <div className="hero-left">
-            <span className="eyebrow">HOSPITALX</span>
+            <span className="eyebrow">HOSPITALX SWASTHYASETU EDITION</span>
             <h1 className={playfair.className}>Care<br/>Flows<br/>Further.</h1>
             <p className="hero-desc">
-              HospitalX, a Veyminore product, is the next-generation<br/>
+              HospitalX SwasthyaSetu Edition is the ultimate offline-first smart<br/>
               hospital management software — unifying people,<br/>
               processes, and patient care for a healthier tomorrow.
             </p>

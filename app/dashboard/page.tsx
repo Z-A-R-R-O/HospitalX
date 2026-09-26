@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Show, SignInButton, SignUpButton, UserButton, SignOutButton } from "@clerk/nextjs";
 import { GenericModuleView, AppointmentsView, OPDView, IPDView, DoctorsView, NursingView, LaboratoryView, RadiologyView, PharmacyView, BillingView, InventoryView, ReportsView } from "../components";
+import { Mascot } from "page-mascot";
 import type { LucideIcon } from "lucide-react";
 import {
   MoreHorizontal, Settings, User,
@@ -11,8 +12,7 @@ import {
   CalendarDays, CalendarPlus, ChevronRight, CircleDot, Clock3, Command,
   Expand, FileText, FlaskConical, HeartPulse, Home as HomeIcon, IndianRupee,
   LogOut, Menu, Moon, Pill, ReceiptText, ScanLine, Search, Sparkles,
-  Stethoscope, Sun, UserPlus, Users, X,
-} from "lucide-react";
+  Stethoscope, Sun, UserPlus, Users, X, CreditCard, Plus, MessageSquare} from "lucide-react";
 
 type PatientRow = string[];
 type OperationalTask = { id?: string; text: string; owner?: string; severity?: string; due_at?: string; created_at?: string };
@@ -41,38 +41,39 @@ const nav: NavItem[] = [
 ];
 
 const formatPatient = (patient: any): PatientRow => [
-  patient.external_identifier ?? patient.id?.slice(0, 8) ?? "—",
+  patient.external_identifier ?? patient.id?.slice(0, 8) ?? "-",
   patient.full_name,
-  patient.age ? `${patient.age} / ${patient.sex ?? "—"}` : `— / ${patient.sex ?? "—"}`,
-  patient.appointment_type ?? "—",
-  patient.provider_name ?? "—",
-  patient.status ?? "—",
-  patient.starts_at ? new Date(patient.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—",
+  patient.age ? `${patient.age} / ${patient.sex ?? "-"}` : `- / ${patient.sex ?? "-"}`,
+  patient.blood_group ? `🩸 ${patient.blood_group}` : "-",
+  patient.primary_complaint ? (patient.primary_complaint.length > 25 ? patient.primary_complaint.substring(0, 25) + "..." : patient.primary_complaint) : "-",
+  patient.status ?? "Triage",
+  patient.starts_at ? new Date(patient.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Waiting",
 ];
 
 const statusClass = (status: string) => status.toLowerCase().replace(/[^a-z]+/g, "-");
 
-const mockPeople: PatientRow[] = [
-  ["001", "Rajesh Kumar", "45 / M", "Follow-up", "Dr. Priya", "In Consultation", "—"],
-  ["002", "Meena S", "32 / F", "New", "Dr. Arjun", "Waiting", "12 min"],
-  ["003", "Kumaravel P", "58 / M", "Emergency", "Dr. Hari", "Triage", "5 min"],
-  ["004", "Priya N", "27 / F", "Follow-up", "Dr. Arunez", "Waiting", "18 min"],
-  ["005", "Dinesh K", "63 / M", "Review", "Dr. Kavya", "Labs", "25 min"],
-  ["006", "Aishwarya R", "36 / F", "New", "Dr. Arunez", "Waiting", "32 min"],
-];
+import { demoPatients as mockPeople, demoTasks as mockTasks, demoOverview as mockOverview } from "../lib/demo-data";
 
-const mockTasks: OperationalTask[] = [
-  { id: "1", text: "3 patients with critical lab results", owner: "12 min ago" },
-  { id: "2", text: "2 discharges delayed by billing", owner: "18 min ago" },
-  { id: "3", text: "ICU bed capacity warning (90%)", owner: "25 min ago" },
-  { id: "4", text: "5 appointments running late", owner: "28 min ago" },
-  { id: "5", text: "Oxygen supply at 15%", owner: "32 min ago" },
-  { id: "6", text: "Network maintenance scheduled", owner: "1 hour ago" },
-];
 
-const mockOverview: Overview = {
-  metrics: { patients: 842, appointmentsToday: 126, admissions: 38, beds: 200, availableBeds: 36 },
-  source: "neon",
+const demoChats: Record<string, { role: 'user' | 'assistant', content: string }[]> = {
+  "Q3 Revenue Analysis": [
+    { role: "user", content: "Can you summarize our Q3 revenue trends?" },
+    { role: "assistant", content: "Certainly! In Q3, overall revenue increased by 12% compared to Q2. The primary driver was a 25% increase in elective surgeries in the Orthopedics department. However, outpatient pharmacy revenue saw a slight 4% dip due to supply chain delays with our primary vendor." },
+    { role: "user", content: "What's the projection for Q4?" },
+    { role: "assistant", content: "Based on current bookings and seasonal trends, Q4 is projected to grow an additional 8%. I recommend optimizing staffing in the General Ward to handle the anticipated winter influx." }
+  ],
+  "Patient #8492 Status": [
+    { role: "user", content: "What is the status of patient Rajesh Kumar (MRN-8492)?" },
+    { role: "assistant", content: "Rajesh Kumar (45/M) is currently in Consultation with Dr. Priya (Cardiology). His latest vitals show a slightly elevated BP of 145/92. His recent ECG results are uploaded and pending Dr. Priya's review." },
+    { role: "user", content: "Remind the lab to expedite his lipid panel." },
+    { role: "assistant", content: "I've flagged Rajesh Kumar's lipid panel as 'Urgent' in the Laboratory Information System. The lab technicians have been notified and the results should be available within 30 minutes." }
+  ],
+  "ICU Capacity Planning": [
+    { role: "user", content: "How are our ICU beds looking today?" },
+    { role: "assistant", content: "We are currently operating at 92% ICU capacity (23 out of 25 beds occupied). 2 patients are scheduled for transfer to the General Ward this afternoon, which will free up capacity." },
+    { role: "user", content: "Are there any incoming critical patients?" },
+    { role: "assistant", content: "Yes, there is 1 critical patient currently in Emergency Triage awaiting an ICU bed. With the 2 afternoon transfers, we will have sufficient capacity, but I will monitor the situation closely." }
+  ]
 };
 
 export default function Home() {
@@ -88,11 +89,80 @@ export default function Home() {
   const [clock, setClock] = useState<Date | null>(null);
   const [toast, setToast] = useState("");
   const [navOpen, setNavOpen] = useState(false);
+
   const [queueFilter, setQueueFilter] = useState("All");
   const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark") setIsDark(true);
+    else if (saved === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) setIsDark(true);
+  }, []);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  useEffect(() => { setIsDemoMode(localStorage.getItem("demoMode") === "true"); }, []);
+  const toggleDemoMode = () => { const next = !isDemoMode; setIsDemoMode(next); localStorage.setItem("demoMode", next.toString()); window.location.reload(); };
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isExitDemoAlertOpen, setIsExitDemoAlertOpen] = useState(false);
+  const [mascotVisible, setMascotVisible] = useState(true);
+
+  const [mascotSpeech, setMascotSpeech] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!mascotVisible) return;
+    
+    const messages: Record<string, string> = {
+      "Home": "Welcome back! Let's check today's operations.",
+      "Patients": "Accessing patient records and histories.",
+      "Appointments": "Let's review the upcoming schedules.",
+      "OPD": "Outpatient department is active.",
+      "IPD & Beds": "Checking ward capacity and bed availability.",
+      "Doctors": "Here is the doctor directory and duty roster.",
+      "Nursing": "Nursing station overview.",
+      "Laboratory": "Viewing pending tests and lab results.",
+      "Radiology": "Accessing imaging and scans.",
+      "Pharmacy": "Checking inventory and prescriptions.",
+      "Billing": "Reviewing invoices and revenue.",
+      "Inventory": "Checking hospital supplies and stock.",
+      "Reports": "Generating analytical insights."
+    };
+
+    const msg = messages[active];
+    if (msg) {
+      setMascotSpeech(msg);
+      const timer = setTimeout(() => setMascotSpeech(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [active, mascotVisible]);
+
+  const [mascotPos, setMascotPos] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [showMascotMenu, setShowMascotMenu] = useState(false);
+  const mascotRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMascotVisible(localStorage.getItem("mascotVisible") !== "false");
+    const savedPos = localStorage.getItem("mascotPos");
+    if (savedPos) setMascotPos(JSON.parse(savedPos));
+    else setMascotPos({ x: window.innerWidth - 160, y: window.innerHeight - 160 });
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (e: MouseEvent) => {
+      const nx = e.clientX - dragOffset.x;
+      const ny = e.clientY - dragOffset.y;
+      setMascotPos({ x: Math.max(0, Math.min(nx, window.innerWidth - 130)), y: Math.max(0, Math.min(ny, window.innerHeight - 130)) });
+    };
+    const onUp = () => {
+      setIsDragging(false);
+      localStorage.setItem("mascotPos", JSON.stringify(mascotPos));
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+  }, [isDragging, dragOffset, mascotPos]);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -129,20 +199,30 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+        const isDemo = localStorage.getItem("demoMode") === "true";
+    if (isDemo) {
+      setTasks(mockTasks);
+      setOverview(mockOverview);
+      setPeople(mockPeople);
+      setUpdatedAt(new Date());
+      setTasksLoading(false);
+      setPeopleLoading(false);
+      return;
+    }
     fetch("/api/overview")
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((data: Overview) => {
-        setTasks(data.tasks?.length ? data.tasks : mockTasks);
-        setOverview(data.metrics ? data : mockOverview);
+        setTasks(data.tasks?.length ? data.tasks : []);
+        setOverview(data.metrics ? data : null);
         setUpdatedAt(new Date());
       })
-      .catch(() => { setTasks(mockTasks); setOverview(mockOverview); })
+      .catch(() => { setTasks([]); setOverview(null); })
       .finally(() => setTasksLoading(false));
 
     fetch("/api/patients")
       .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((data) => setPeople(data.patients?.length ? data.patients.map(formatPatient) : mockPeople))
-      .catch(() => setPeople(mockPeople))
+      .then((data) => setPeople(data.patients?.length ? data.patients.map(formatPatient) : []))
+      .catch(() => setPeople([]))
       .finally(() => setPeopleLoading(false));
   }, []);
 
@@ -155,7 +235,7 @@ export default function Home() {
     [clock],
   );
   const freshness = updatedAt
-    ? `${overview?.source === "neon" ? "Live Neon data" : "Operational data"} · updated ${new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(updatedAt)}`
+    ? `${overview?.source === "neon" ? "Live Neon data" : "Operational data"} — updated ${new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(updatedAt)}`
     : "Operational data unavailable";
 
   const showToast = (message: string) => {
@@ -173,12 +253,11 @@ export default function Home() {
     setNavOpen(false);
   };
 
-  const hasRealData = overview?.metrics && (overview.metrics.patients > 10 || overview.metrics.appointmentsToday > 5);
   const metrics = [
-    { icon: Users, value: hasRealData ? overview!.metrics!.patients : 842, label: "Total Patients", tone: "blue", trend: "12%" },
-    { icon: CalendarDays, value: hasRealData ? overview!.metrics!.appointmentsToday : 126, label: "OPD Today", tone: "green", trend: "8%" },
-    { icon: BedDouble, value: hasRealData ? overview!.metrics!.admissions : 38, label: "Admissions", tone: "indigo", trend: "5%" },
-    { icon: LogOut, value: 14, label: "Discharges", tone: "orange", trend: "27%" },
+    { icon: Users, value: overview?.metrics?.patients ?? 0, label: "Total Patients", tone: "blue", trend: overview ? "12%" : "—" },
+    { icon: CalendarDays, value: overview?.metrics?.appointmentsToday ?? 0, label: "OPD Today", tone: "green", trend: overview ? "8%" : "—" },
+    { icon: BedDouble, value: overview?.metrics?.admissions ?? 0, label: "Admissions", tone: "indigo", trend: overview ? "5%" : "—" },
+    { icon: LogOut, value: 0, label: "Discharges", tone: "orange", trend: overview ? "27%" : "—" },
   ];
   const queueFilters = useMemo(() => {
     const count = (matcher: (status: string) => boolean) => people.filter((row) => matcher(row[5].toLowerCase())).length;
@@ -214,7 +293,10 @@ export default function Home() {
   const [aiQuery, setAiQuery] = useState("");
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<{role: string, content: string}[]>([]);
+  const [savedChats, setSavedChats] = useState<Record<string, { role: 'user' | 'assistant', content: string }[]>>(demoChats);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
   const aiInputRef = useRef<HTMLInputElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const fullChatScrollRef = useRef<HTMLDivElement>(null);
@@ -235,6 +317,13 @@ export default function Home() {
       setIsChatOpen(true);
     }
     setIsAiLoading(true);
+
+    let chatId = currentChatId;
+    if (!chatId) {
+      chatId = text.substring(0, 22) + (text.length > 22 ? "..." : "");
+      setCurrentChatId(chatId);
+    }
+    setSavedChats(prev => ({ ...prev, [chatId]: newHistory }));
     
     try {
       const res = await fetch("/api/ai", {
@@ -246,7 +335,9 @@ export default function Home() {
       if (data.error) {
         showToast(data.error);
       } else {
-        setChatHistory([...newHistory, { role: "assistant", content: data.text }]);
+        const finalHistory = [...newHistory, { role: "assistant", content: data.text }];
+        setChatHistory(finalHistory);
+        setSavedChats(prev => ({ ...prev, [chatId]: finalHistory }));
       }
     } catch (err) {
       showToast("Failed to connect to AI.");
@@ -285,39 +376,9 @@ export default function Home() {
         </div>
         <div className="profile-card" ref={profileMenuRef}>
           <span className="avatar">AZ</span><span><strong>Dr. Arunez Zarro</strong><small>Administrator</small></span>
-          <button type="button" aria-label="Profile options" onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}>
+          <button type="button" aria-label="Profile options" onClick={() => router.push("/settings")}>
             <MoreHorizontal size={16} />
           </button>
-          {isProfileMenuOpen && (
-            <div className="profile-menu glass">
-              <div className="profile-menu-header">
-                <strong>Dr. Arunez Zarro</strong>
-                <small>dr.zarro@hospitalx.com</small>
-              </div>
-              <div className="profile-menu-divider"></div>
-              <button onClick={() => { setIsProfileMenuOpen(false); (window as any).Clerk ? (window as any).Clerk.openUserProfile() : router.push("/profile"); }}>
-                <User size={14} /> My Profile
-              </button>
-              <button onClick={() => { setIsDark(!isDark); setIsProfileMenuOpen(false); }}>
-                {isDark ? <Sun size={14} /> : <Moon size={14} />} {isDark ? "Light Mode" : "Dark Mode"}
-              </button>
-              <button onClick={() => { setIsProfileMenuOpen(false); router.push("/dashboard?modal=preferences"); }}>
-                <Settings size={14} /> Preferences
-              </button>
-              <div className="profile-menu-divider"></div>
-              {clerkEnabled ? (
-                <SignOutButton redirectUrl="/sign-in">
-                  <button className="danger" onClick={() => setIsProfileMenuOpen(false)}>
-                    <LogOut size={14} /> Sign Out
-                  </button>
-                </SignOutButton>
-              ) : (
-                <button className="danger" onClick={() => { setIsProfileMenuOpen(false); router.push("/sign-in"); }}>
-                  <LogOut size={14} /> Sign Out
-                </button>
-              )}
-            </div>
-          )}
         </div>
       </aside>
 
@@ -325,20 +386,46 @@ export default function Home() {
         <header className="topbar">
           <label className="search glass"><Search aria-hidden="true" /><input ref={searchInputRef} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search HospitalX" placeholder="Search patients, staff, beds, or ask anything..." /><kbd><Command /> K</kbd></label>
           <div className="date-time"><span>{dateLabel}</span><strong>{timeLabel}</strong></div>
-          <button className="icon-button glass theme-toggle" type="button" aria-label="Toggle theme" onClick={() => setIsDark(!isDark)}>
+          <button className="icon-button glass theme-toggle" type="button" aria-label="Toggle theme" onClick={() => { const next = !isDark; setIsDark(next); localStorage.setItem("theme", next ? "dark" : "light"); }}>
             <Sun className="sun-icon" />
             <Moon className="moon-icon" />
           </button>
-          <button className="icon-button glass notification" type="button" aria-label="Notifications" onClick={() => showToast("You have 3 new notifications.")}><Bell /><i /></button>
+          <div style={{ position: 'relative', display: 'flex' }}>
+            <button className="icon-button glass notification" type="button" aria-label="Notifications" onClick={() => setIsNotifOpen(!isNotifOpen)}><Bell /><i /></button>
+            {isNotifOpen && (
+              <div className="notification-menu">
+                <header style={{ padding: '12px 16px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <strong style={{ fontSize: '14px' }}>Notifications</strong>
+                  <button type="button" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b' }} onClick={() => setIsNotifOpen(false)}><X size={14} /></button>
+                </header>
+                <div className="notif-list">
+                  <button onClick={() => setIsNotifOpen(false)}><div className="notif-dot bg-red" /><div className="notif-text"><strong>Critical lab result</strong><small>Patient Rajesh Kumar</small></div></button>
+                  <button onClick={() => setIsNotifOpen(false)}><div className="notif-dot bg-blue" /><div className="notif-text"><strong>New Admission Request</strong><small>ER Dept: Trauma</small></div></button>
+                  <button onClick={() => setIsNotifOpen(false)}><div className="notif-dot bg-green" /><div className="notif-text"><strong>Discharge cleared</strong><small>Bed 402 - Ready for cleaning</small></div></button>
+                </div>
+              </div>
+            )}
+          </div>
           <button className="icon-button glass desktop-only" type="button" aria-label="Toggle fullscreen" onClick={toggleFullscreen}><Expand /></button>
           <div className="auth-controls">
-            {clerkEnabled ? <><Show when="signed-out"><SignInButton><button type="button" className="auth-button glass">Sign in</button></SignInButton><SignUpButton><button type="button" className="auth-button primary">Sign up</button></SignUpButton></Show><Show when="signed-in"><UserButton /></Show></> : <button type="button" className="auth-button glass" onClick={() => showToast("Authentication is not configured locally.")}>Profile</button>}
+                        {isDemoMode ? (
+              <button type="button" className="auth-button glass" style={{ color: '#64748b', borderColor: 'rgba(100, 116, 139, 0.25)' }} onClick={() => setIsExitDemoAlertOpen(true)}>
+                <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.06em' }}>DEMO</span>
+              </button>
+            ) : clerkEnabled ? (
+              <><Show when="signed-out"><SignInButton><button type="button" className="auth-button glass">Sign in</button></SignInButton><SignUpButton><button type="button" className="auth-button primary">Sign up</button></SignUpButton></Show><Show when="signed-in"><UserButton /></Show></>
+            ) : (
+              <button type="button" className="auth-button glass" aria-label="Settings" onClick={() => router.push("/settings")}>
+                <Settings size={16} />
+              </button>
+            )}
           </div>
         </header>
 
+        <div key={active} className="tab-transition">
         {active === "Home" ? <>
           <section className="hero">
-            <div><p>CITY CARE HOSPITAL</p><h1>Good morning, Dr. Arunez.</h1><span>Here’s what’s happening at your hospital today.</span></div>
+            <div><p>CITY CARE HOSPITAL</p><h1>Good morning, Dr. Arunez.</h1><span>Here's what's happening at your hospital today.</span></div>
             <aside>People First.<br />Always.<hr /></aside>
           </section>
 
@@ -359,10 +446,13 @@ export default function Home() {
             <article className="ai-card">
               <div className="ai-orb" aria-hidden="true" />
               <div>
-                <strong>HospitalX AI <small>BETA</small></strong>
-                <span>Your operational co-pilot.</span>
+                <strong style={{ fontSize: '24px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '2px' }}>
+                  Madhu
+                  <span style={{ fontSize: '13px', fontWeight: 500, opacity: 0.4, letterSpacing: '0.05em', textTransform: 'uppercase' }}>AI</span>
+                </strong>
+                <span>Your operational assistant.</span>
               </div>
-              <button type="button" aria-label="Open AI Assistant" onClick={() => { setActive("AI Co-pilot"); setIsChatOpen(false); }}><ArrowUpRight /></button>
+              <button type="button" aria-label="Open Madhu AI" onClick={() => { setActive("AI Co-pilot"); setIsChatOpen(false); }}><ArrowUpRight strokeWidth={2.5} /></button>
             </article>
           </section>
 
@@ -370,7 +460,7 @@ export default function Home() {
             <div className="primary-column">
               <section className="panel glass queue">
                 <header>
-                  <h2>Today’s Patient Queue <small><CircleDot /> Live</small></h2>
+                  <h2>Today's Patient Queue <small><CircleDot /> Live</small></h2>
                   <div className="queue-tools">
                     <div className="queue-tabs" role="tablist" aria-label="Patient queue status">
                       {queueFilters.map((filter) => <button type="button" role="tab" aria-selected={queueFilter === filter.label} className={queueFilter === filter.label ? "active" : ""} key={filter.label} onClick={() => setQueueFilter(filter.label)}>{filter.label} <span>({filter.count})</span></button>)}
@@ -379,41 +469,45 @@ export default function Home() {
                   </div>
                 </header>
                 <div className="table-wrap"><table>
-                  <thead><tr><th>#</th><th>Patient</th><th>Age / Gender</th><th>Type</th><th>Doctor</th><th>Status</th><th>ETA</th><th><span className="sr-only">Actions</span></th></tr></thead>
-                  <tbody>{peopleLoading ? <tr><td colSpan={8} className="table-message">Loading live patients…</td></tr> : filteredPeople.length ? filteredPeople.map((row) => <tr key={row[0]}>
+                  <thead><tr><th>#</th><th>Patient</th><th>Age / Gender</th><th>Blood Group</th><th>Complaint</th><th>Status</th><th>ETA</th><th><span className="sr-only">Actions</span></th></tr></thead>
+                  <tbody>{peopleLoading ? <tr><td colSpan={8} className="table-message">Loading live patients...</td></tr> : filteredPeople.length ? filteredPeople.map((row) => <tr key={row[0]}>
                     {row.map((cell, index) => <td key={`${row[0]}-${index}`} className={cell === "Emergency" ? "red" : ""}>{index === 1 ? <strong>{cell}</strong> : index === 5 ? <span className={`status ${statusClass(cell)}`}><i />{cell}</span> : cell}</td>)}
                     <td><button className="row-action" type="button" aria-label={`More actions for ${row[1]}`}>•••</button></td>
                   </tr>) : <tr><td colSpan={8} className="table-message">{people.length ? `No ${queueFilter.toLowerCase()} patients in the queue.` : "No patients registered yet. Use New Patient to create the first record."}</td></tr>}</tbody>
                 </table></div>
               </section>
-              <section className="analytics-grid"><BedUtilization overview={overview} /><DepartmentLoad appointments={overview?.metrics?.appointmentsToday} /><RevenueCard /></section>
+              <section className="analytics-grid"><BedUtilization overview={overview} setActive={setActive} /><DepartmentLoad appointments={overview?.metrics?.appointmentsToday} setActive={setActive} /><RevenueCard appointments={overview?.metrics?.appointmentsToday} setActive={setActive} /></section>
             </div>
 
             <aside className="right-rail">
-              <section className="prompts glass">
-                {["Show today’s delayed discharges", "Which patients are waiting for lab results?", "Summarize ICU status", "Generate tomorrow’s briefing"].map((prompt) => <button type="button" key={prompt} onClick={() => submitToAi(prompt)}><Bot /><span>{prompt}</span><ChevronRight /></button>)}
-                <form onSubmit={handleAiSubmit} style={{ display: 'block', margin: 0 }}><label><input ref={aiInputRef} value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} aria-label="Ask HospitalX AI" placeholder="Ask anything..." /><Activity /><button type="submit" aria-label="Send to HospitalX AI"><ChevronRight /></button></label></form>
+              <section className="attention glass" style={{ position: 'sticky', top: '24px', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+                <header><h2><AlertTriangle /> Needs Attention</h2><strong>{tasksLoading ? "—" : tasks.length}</strong></header>
+                {tasksLoading ? <p className="attention-empty">Loading live tasks...</p> : tasks.length ? tasks.map((task, index) => <button type="button" key={task.id ?? task.text} onClick={() => setTasks((current) => current.filter((_, taskIndex) => taskIndex !== index))}><i /><span>{task.text}</span><em>{task.owner ?? "Unassigned"}</em></button>) : <p className="attention-empty">No live operational tasks.</p>}
               </section>
-              <section className="attention glass">
-                <header><h2><AlertTriangle /> Needs Attention</h2><strong>{tasksLoading ? "…" : tasks.length}</strong></header>
-                {tasksLoading ? <p className="attention-empty">Loading live tasks…</p> : tasks.length ? tasks.map((task, index) => <button type="button" key={task.id ?? task.text} onClick={() => setTasks((current) => current.filter((_, taskIndex) => taskIndex !== index))}><i /><span>{task.text}</span><em>{task.owner ?? "Unassigned"}</em></button>) : <p className="attention-empty">No live operational tasks.</p>}
-              </section>
-              <section className="quick glass"><h2>Quick Actions</h2><div>
-                <QuickAction icon={UserPlus} label="New Patient" tone="green" onClick={() => router.push("/patients/new")} />
-                <QuickAction icon={CalendarPlus} label="Book Appointment" tone="blue" onClick={() => router.push("/appointments/new")} />
-                <QuickAction icon={BedDouble} label="Admit Patient" tone="purple" onClick={() => showToast("Admit Patient flow opened.")} />
-                <QuickAction icon={IndianRupee} label="Generate Bill" tone="orange" onClick={() => router.push("/billing/new")} />
-              </div></section>
+              
             </aside>
           </section>
           <p className="data-freshness" role="status">{freshness}</p>
         </> : active === "AI Co-pilot" ? (
-          <section className="full-chat-page">
+          <div style={{ display: 'flex', height: 'calc(100vh - 110px)', gap: '20px', width: '100%', overflow: 'hidden', paddingBottom: '20px' }}>
+            <aside style={{ width: '280px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
+               <button className="primary" style={{ width: '100%', justifyContent: 'center', height: '44px' }} onClick={() => { setChatHistory([]); setAiQuery(""); setCurrentChatId(null); }}><Plus size={18} /> New Chat</button>
+               <div className="panel glass" style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+                 <h3 style={{ fontSize: '12px', fontWeight: 700, color: '#4c1d95', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', opacity: 0.8 }}>Recent Chats</h3>
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                   {Object.keys(savedChats).map(chat => (
+                     <button key={chat} type="button" onClick={() => { setChatHistory(savedChats[chat]); setCurrentChatId(chat); setIsChatOpen(true); }} style={{ padding: '10px 12px', background: 'transparent', border: 'none', textAlign: 'left', fontSize: '14px', color: 'var(--ink)', borderRadius: '10px', cursor: 'pointer', transition: 'background 0.2s', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: '10px' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(168,85,247,0.1)'} onMouseOut={e => e.currentTarget.style.background = 'transparent'}><MessageSquare size={16} color="#7c3aed" /> {chat}</button>
+                   ))}
+                 </div>
+               </div>
+            </aside>
+            <section className="full-chat-page" style={{ flex: 1, margin: 0, height: '100%' }}>
+              
             <div className="full-chat-messages" ref={fullChatScrollRef}>
               {chatHistory.length === 0 && (
                 <div className="full-chat-empty">
-                  <div className="ai-orb large" aria-hidden="true" />
-                  <h2>How can I help you today?</h2>
+                  <div style={{ margin: "0 auto 24px", display: "flex", justifyContent: "center" }}><Mascot directions="/mascots/nurse-directions.webp" reactions="/mascots/nurse-reactions.webp" size={160} label="Madhu" /></div>
+                  <h2>Hi! I’m Madhu, your AI nurse. How can I help?</h2>
                   <div className="suggestion-grid">
                     {["Summarize the ICU status for today", "Which patients have delayed discharges?", "Generate a shift handover briefing", "Analyze revenue trends this week"].map(p => (
                       <button type="button" key={p} className="glass" onClick={() => submitToAi(p)}>{p}</button>
@@ -423,7 +517,7 @@ export default function Home() {
               )}
               {chatHistory.map((msg, i) => (
                 <div key={i} className={`full-msg ${msg.role}`}>
-                  <div className="msg-avatar">{msg.role === 'assistant' ? <Bot /> : 'AZ'}</div>
+                  <div className="msg-avatar">{msg.role === 'assistant' ? <Sparkles /> : 'AZ'}</div>
                   <div className="msg-content">
                     {msg.content.split('\n').map((line, j) => <p key={j}>{line}</p>)}
                   </div>
@@ -431,7 +525,7 @@ export default function Home() {
               ))}
               {isAiLoading && (
                 <div className="full-msg assistant loading">
-                  <div className="msg-avatar"><Bot /></div>
+                  <div className="msg-avatar"><Sparkles /></div>
                   <div className="msg-content"><Activity className="pulse" /></div>
                 </div>
               )}
@@ -443,7 +537,9 @@ export default function Home() {
               </form>
               <p>HospitalX AI can make mistakes. Verify important operational data.</p>
             </div>
-          </section>
+          
+            </section>
+          </div>
         ) : active === "Patients" ? (
           <section className="page-view glass">
             <header className="page-header">
@@ -460,10 +556,10 @@ export default function Home() {
                     <th>ID</th>
                     <th>Full Name</th>
                     <th>Age / Gender</th>
-                    <th>Patient Type</th>
-                    <th>Assigned Doctor</th>
+                    <th>Blood Group</th>
+                    <th>Complaint / Reason</th>
                     <th>Status</th>
-                    <th>ETA / Priority</th>
+                    <th>ETA / Time</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -511,80 +607,144 @@ export default function Home() {
           <section className="empty glass"><p>CITY CARE HOSPITAL</p><h1>{active}</h1><span>This HospitalX workspace is ready to connect to its live module.</span></section>
         )}
 
-        <footer><span>HospitalX v1.0　│　 People × Technology × Better Care</span><span><i /> All Systems Operational　│　 Built for a Healthier India</span></footer>
+        {active !== "AI Co-pilot" && (
+          <footer><span>HospitalX v1.0 — People × Technology × Better Care</span><span><i /> All Systems Operational — Built for a Healthier India</span></footer>
+        )}
+        </div>
+      {mascotVisible && active !== "AI Co-pilot" && (
+      <div ref={mascotRef} style={{ position: 'fixed', left: mascotPos.x, top: mascotPos.y, zIndex: 9999, userSelect: 'none' }}
+        onMouseDown={(e) => { if (e.button === 0) { setIsDragging(true); setDragOffset({ x: e.clientX - mascotPos.x, y: e.clientY - mascotPos.y }); } }}
+        onContextMenu={(e) => { e.preventDefault(); setShowMascotMenu(!showMascotMenu); }}
+      >
+        
+        {mascotSpeech && !isChatOpen && !showMascotMenu && (
+          <div style={{ position: 'absolute', bottom: '90%', right: '50%', transform: 'translateX(20%)', marginBottom: '8px', padding: '10px 14px', background: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)', borderRadius: '16px 16px 0 16px', border: '1px solid rgba(168,85,247,0.3)', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', color: '#4c1d95', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', pointerEvents: 'none', animation: 'scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)', zIndex: 10001 }}>
+            {mascotSpeech}
+            <div style={{ position: 'absolute', bottom: '-5px', right: '4px', width: '10px', height: '10px', background: 'rgba(255, 255, 255, 0.95)', borderRight: '1px solid rgba(168,85,247,0.3)', borderBottom: '1px solid rgba(168,85,247,0.3)', transform: 'rotate(45deg)' }} />
+          </div>
+        )}
+
+<div style={{ cursor: isDragging ? 'grabbing' : 'grab' }} onClick={(e) => { if (!isDragging) { setIsChatOpen(!isChatOpen); setShowMascotMenu(false); } }}>
+          <Mascot directions="/mascots/nurse-directions.webp" reactions="/mascots/nurse-reactions.webp" size={120} label="Madhu - AI Nurse" />
+        </div>
+
+        {showMascotMenu && (
+          <div style={{ position: 'absolute', bottom: '100%', right: 0, marginBottom: '12px', width: '180px', borderRadius: '14px', background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(40px) saturate(200%)', border: '1px solid rgba(0, 0, 0, 0.08)', boxShadow: '0 16px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.02) inset', overflow: 'hidden', zIndex: 10000, padding: '6px' }}>
+            <button type="button" onClick={() => { setIsChatOpen(!isChatOpen); setShowMascotMenu(false); }} style={{ width: '100%', padding: '10px 12px', background: 'transparent', border: 'none', color: '#1d1d1f', fontSize: '14px', fontWeight: 500, letterSpacing: '-0.01em', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', borderRadius: '8px', transition: 'background 0.1s' }} onMouseOver={(e) => {e.currentTarget.style.background = '#007AFF'; e.currentTarget.style.color = '#fff'}} onMouseOut={(e) => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#1d1d1f'}}><Sparkles size={16}/> Chat with Madhu</button>
+            <div style={{ height: '1px', background: 'rgba(0,0,0,0.06)', margin: '4px 0' }} />
+            <button type="button" onClick={() => { setMascotVisible(false); localStorage.setItem("mascotVisible", "false"); setShowMascotMenu(false); setIsChatOpen(false); }} style={{ width: '100%', padding: '10px 12px', background: 'transparent', border: 'none', color: '#ff3b30', fontSize: '14px', fontWeight: 500, letterSpacing: '-0.01em', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', borderRadius: '8px', transition: 'background 0.1s' }} onMouseOver={(e) => {e.currentTarget.style.background = '#ff3b30'; e.currentTarget.style.color = '#fff'}} onMouseOut={(e) => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#ff3b30'}}><X size={16}/> Hide Madhu</button>
+          </div>
+        )}
+
+        {isChatOpen && (
+          <div style={{ position: 'absolute', bottom: '100%', right: 0, marginBottom: '16px', width: '340px', maxHeight: '460px', borderRadius: '24px', background: 'rgba(250, 245, 255, 0.85)', backdropFilter: 'blur(32px) saturate(200%)', border: '1px solid rgba(216, 180, 254, 0.5)', boxShadow: '0 24px 48px rgba(168,85,247,0.15), inset 0 1px 2px rgba(255,255,255,0.9)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 10000, transformOrigin: 'bottom right', animation: 'scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div style={{ position: 'absolute', top: '12px', right: '12px', display: 'flex', gap: '4px', zIndex: 2 }}>
+              <button type="button" onClick={() => { setChatHistory([]); setAiQuery(""); setCurrentChatId(null); }} title="New Chat" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#4c1d95', opacity: 0.4, width: '26px', height: '26px', borderRadius: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', outline: 'none' }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.06)'; e.currentTarget.style.opacity = '1'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.opacity = '0.4'; }}><Plus size={15} strokeWidth={2.5} /></button>
+              <button type="button" onClick={() => { setIsChatOpen(false); setActive("AI Co-pilot"); }} title="Open Full Window" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#4c1d95', opacity: 0.4, width: '26px', height: '26px', borderRadius: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', outline: 'none' }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.06)'; e.currentTarget.style.opacity = '1'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.opacity = '0.4'; }}><Expand size={14} strokeWidth={2.5} /></button>
+              <button type="button" onClick={() => setIsChatOpen(false)} title="Close" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#4c1d95', opacity: 0.4, width: '26px', height: '26px', borderRadius: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', outline: 'none' }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.06)'; e.currentTarget.style.opacity = '1'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.opacity = '0.4'; }}><X size={15} strokeWidth={2.5} /></button>
+            </div>
+            
+            <div ref={chatScrollRef} style={{ flex: 1, overflowY: 'auto', padding: '24px 16px 20px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(255, 255, 255, 0.3)', minHeight: '240px' }}>
+              {chatHistory.length === 0 && (
+                <div style={{ margin: 'auto 0', textAlign: 'center', padding: '0 16px' }}>
+                  <h3 style={{ color: '#4c1d95', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 8px', lineHeight: 1.1 }}>Hii! I'm Madhu.</h3>
+                  <p style={{ color: '#7c3aed', fontSize: '14px', fontWeight: 500, margin: 0, opacity: 0.9 }}>How can I help you today?</p>
+                </div>
+              )}
+              {chatHistory.map((msg, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start', marginTop: i === 0 ? '16px' : '0' }}>
+                  <div style={{ maxWidth: '85%', padding: '12px 16px', borderRadius: msg.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px', background: msg.role === 'user' ? 'linear-gradient(135deg, #a855f7, #7c3aed)' : 'white', color: msg.role === 'user' ? 'white' : '#4c1d95', fontSize: '14px', letterSpacing: '-0.01em', lineHeight: 1.4, border: msg.role === 'user' ? 'none' : '1px solid rgba(216,180,254,0.4)', boxShadow: msg.role === 'user' ? '0 6px 16px rgba(124, 58, 237, 0.25)' : '0 4px 12px rgba(168,85,247,0.06)' }}>
+                    {msg.content.split('\n').map((line, j) => <p key={j} style={{ margin: 0, minHeight: line === '' ? '14px' : 'auto' }}>{line}</p>)}
+                  </div>
+                </div>
+              ))}
+              {isAiLoading && (
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <div style={{ padding: '12px 16px', borderRadius: '18px 18px 18px 4px', background: 'white', color: '#7c3aed', fontSize: '14px', border: '1px solid rgba(216,180,254,0.4)', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(168,85,247,0.06)', fontWeight: 500 }}><Activity className="pulse" size={16} color="#7c3aed"/> Thinking...</div>
+                </div>
+              )}
+            </div>
+            
+            <form onSubmit={handleAiSubmit} style={{ padding: '14px', background: 'rgba(255, 255, 255, 0.7)', borderTop: '1px solid rgba(216, 180, 254, 0.3)', display: 'flex', gap: '10px', flexShrink: 0 }}>
+              <input ref={aiInputRef} value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} placeholder="Message Madhu..." style={{ flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid rgba(216, 180, 254, 0.6)', background: '#ffffff', color: '#4c1d95', fontSize: '14px', letterSpacing: '-0.01em', outline: 'none', transition: 'border-color 0.2s', boxShadow: 'inset 0 2px 4px rgba(168,85,247,0.02)' }} onFocus={(e) => e.target.style.borderColor = '#7c3aed'} onBlur={(e) => e.target.style.borderColor = 'rgba(216, 180, 254, 0.6)'} />
+              <button type="submit" disabled={isAiLoading || !aiQuery.trim()} style={{ width: '44px', height: '44px', borderRadius: '22px', background: (isAiLoading || !aiQuery.trim()) ? 'rgba(168,85,247,0.2)' : 'linear-gradient(135deg, #a855f7, #7c3aed)', border: 'none', color: (isAiLoading || !aiQuery.trim()) ? 'rgba(124,58,237,0.5)' : 'white', cursor: (isAiLoading || !aiQuery.trim()) ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s', boxShadow: (isAiLoading || !aiQuery.trim()) ? 'none' : '0 6px 16px rgba(124, 58, 237, 0.3)' }}><ArrowUpRight size={20} strokeWidth={2.5}/></button>
+            </form>
+          </div>
+        )}
+      </div>
+      )}
+      
+      {isExitDemoAlertOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.15)', backdropFilter: 'blur(4px)' }}>
+          <div style={{ width: '270px', borderRadius: '16px', background: 'var(--c-glass-80)', backdropFilter: 'blur(32px) saturate(200%)', border: '1px solid var(--c-glass-60)', boxShadow: '0 16px 40px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div style={{ padding: '20px 16px 16px', textAlign: 'center' }}>
+              <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 600, color: 'var(--ink)' }}>Exit Demo Mode?</h3>
+              <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.3 }}>This will reconnect you to the live production database.</p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid var(--c-dark-10)' }}>
+              <button onClick={() => { setIsExitDemoAlertOpen(false); toggleDemoMode(); }} style={{ padding: '12px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--c-dark-10)', color: 'var(--red)', fontSize: '16px', fontWeight: 400, cursor: 'pointer' }}>Exit Demo</button>
+              <button onClick={() => setIsExitDemoAlertOpen(false)} style={{ padding: '12px', background: 'transparent', border: 'none', color: 'var(--blue)', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
       </main>
 
-      <aside className={`chat-drawer glass ${isChatOpen ? "open" : ""}`}>
-        <header>
-          <h3><Bot /> HospitalX AI</h3>
-          <button type="button" onClick={() => setIsChatOpen(false)}><X /></button>
-        </header>
-        <div className="chat-history" ref={chatScrollRef}>
-          {chatHistory.length === 0 && <p className="chat-empty">How can I help you today?</p>}
-          {chatHistory.map((msg, i) => (
-            <div key={i} className={`chat-message ${msg.role}`}>
-              <div className="msg-bubble">
-                {msg.content.split('\n').map((line, j) => <p key={j}>{line}</p>)}
-              </div>
-            </div>
-          ))}
-          {isAiLoading && (
-            <div className="chat-message assistant loading">
-              <div className="msg-bubble"><Activity className="pulse" /> Thinking...</div>
-            </div>
-          )}
-        </div>
-        <form className="chat-input-area" onSubmit={handleAiSubmit}>
-          <label>
-            <input ref={aiInputRef} value={aiQuery} onChange={(e) => setAiQuery(e.target.value)} placeholder="Reply to HospitalX AI..." />
-            <button type="submit" disabled={isAiLoading}><ChevronRight /></button>
-          </label>
-        </form>
-      </aside>
+      
 
       <div className={`toast ${toast ? "show" : ""}`} role="status">{toast}</div>
     </div>
   );
 }
 
-function BedUtilization({ overview }: { overview: Overview | null }) {
-  const total = overview?.metrics?.beds || 200;
-  const available = overview?.metrics?.availableBeds ?? 36;
+function BedUtilization({ overview, setActive }: { overview: Overview | null, setActive?: (t: string) => void }) {
+  const total = overview?.metrics?.beds ?? 200;
+  const available = overview?.metrics?.availableBeds ?? total;
   const occupied = total - available;
-  const percentage = Math.round((occupied / total) * 100);
+  const percentage = total === 0 ? 0 : Math.round((occupied / total) * 100);
   return <article className="panel glass analytics-card bed-card"><h2>Bed Utilization</h2>
-    <div className="bed-visual"><div className="donut" style={{ "--progress": `${percentage * 3.6}deg` } as React.CSSProperties}><span><strong>{percentage}%</strong><small>{occupied} / {total}</small></span></div><div className="bed-legend"><p><b><i style={{ background: 'var(--c-legend-icu)' }} /> ICU</b><span>16 / 20</span></p><p><b><i style={{ background: 'var(--c-legend-gen)' }} /> General</b><span>120 / 150</span></p><p><b><i style={{ background: 'var(--c-legend-em)' }} /> Emergency</b><span>18 / 20</span></p><p><b><i style={{ background: 'var(--c-legend-iso)' }} /> Isolation</b><span>10 / 10</span></p></div></div>
-    <button type="button">View Beds <ChevronRight /></button>
+    <div className="bed-visual"><div className="donut" style={{ "--progress": `${percentage * 3.6}deg` } as React.CSSProperties}><span><strong>{percentage}%</strong><small>{occupied} / {total}</small></span></div><div className="bed-legend"><p><b><i style={{ background: 'var(--c-legend-icu)' }} /> ICU</b><span>{Math.round(occupied * 0.1)} / {Math.round(total * 0.1)}</span></p><p><b><i style={{ background: 'var(--c-legend-gen)' }} /> General</b><span>{Math.round(occupied * 0.7)} / {Math.round(total * 0.7)}</span></p><p><b><i style={{ background: 'var(--c-legend-em)' }} /> Emergency</b><span>{Math.round(occupied * 0.15)} / {Math.round(total * 0.15)}</span></p><p><b><i style={{ background: 'var(--c-legend-iso)' }} /> Isolation</b><span>{Math.round(occupied * 0.05)} / {Math.round(total * 0.05)}</span></p></div></div>
+    <button type="button" onClick={() => setActive && setActive("IPD & Beds")}>View Beds <ChevronRight /></button>
   </article>;
 }
 
-function DepartmentLoad({ appointments }: { appointments?: number }) {
+function DepartmentLoad({ appointments, setActive }: { appointments?: number, setActive?: (t: string) => void }) {
+  const opdVal = appointments ? Math.min(100, Math.round((appointments * 0.4 / 150) * 100)) : 0;
+  const erVal = appointments ? Math.min(100, Math.round((appointments * 0.2 / 50) * 100)) : 0;
+  const radVal = appointments ? Math.min(100, Math.round((appointments * 0.15 / 80) * 100)) : 0;
+  const labVal = appointments ? Math.min(100, Math.round((appointments * 0.15 / 100) * 100)) : 0;
+  const pharmVal = appointments ? Math.min(100, Math.round((appointments * 0.1 / 120) * 100)) : 0;
+
   const loads = [
-    { label: "OPD", value: 68, color: "var(--c-legend-gen)" },
-    { label: "Emergency", value: 92, color: "var(--c-legend-em)" },
-    { label: "Radiology", value: 54, color: "var(--c-legend-gen)" },
-    { label: "Laboratory", value: 76, color: "var(--c-legend-gen)" },
-    { label: "Pharmacy", value: 61, color: "var(--c-legend-gen)" },
+    { label: "OPD", value: opdVal, color: "var(--c-legend-gen)" },
+    { label: "Emergency", value: erVal, color: "var(--c-legend-em)" },
+    { label: "Radiology", value: radVal, color: "var(--c-legend-gen)" },
+    { label: "Laboratory", value: labVal, color: "var(--c-legend-gen)" },
+    { label: "Pharmacy", value: pharmVal, color: "var(--c-legend-gen)" },
   ];
   return <article className="panel glass analytics-card department-card"><h2>Department Load</h2>
-    {loads.length ? <div className="load-bars">{loads.map((load, index) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%`, background: load.color, animationDelay: `${index * 80 + 350}ms` }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}
-    <button type="button">View Departments <ChevronRight /></button>
+    {appointments ? <div className="load-bars">{loads.map((load, index) => <div key={load.label}><span>{load.label}</span><i><b style={{ width: `${load.value}%` , background: load.color, animationDelay: `${index * 80 + 350}ms`  }} /></i><em>{load.value}%</em></div>)}</div> : <div className="empty-metric"><strong>0 <small>appointments today</small></strong><p>Department load is sourced from live appointments.</p></div>}
+    <button type="button" onClick={() => setActive && setActive("OPD")}>View Departments <ChevronRight /></button>
   </article>;
 }
 
-function RevenueCard() {
+function RevenueCard({ appointments, setActive }: { appointments?: number, setActive?: (t: string) => void }) {
+  const rev = appointments ? appointments * 500 : 0;
   return <article className="panel glass analytics-card revenue-card"><h2>Today's Revenue</h2>
     <div className="revenue-content">
-      <strong>₹ 3,42,800 <span className="trend">↑ 18%</span></strong>
+      <strong>₹ {rev.toLocaleString('en-IN')} <span className="trend" style={{ opacity: rev ? 1 : 0.3 }}>↑ {rev ? "18%" : "0%"}</span></strong>
     </div>
     <div className="revenue-chart">
-      <span className="revenue-bars" aria-hidden="true">{[4, 7, 5, 9, 6, 11, 8, 12, 16, 10, 7, 13, 9, 15, 12].map((height, index) => <i key={index} style={{ height: `${height * 3}px`, animationDelay: `${index * 40 + 200}ms` }} />)}</span>
+      <span className="revenue-bars" aria-hidden="true">{[4, 7, 5, 9, 6, 11, 8, 12, 16, 10, 7, 13, 9, 15, 12].map((height, index) => <i key={index} style={{ height: rev ? `${height * 3}px` : '4px', opacity: rev ? 1 : 0.2, animationDelay: `${index * 40 + 200}ms` }} />)}</span>
       <div className="revenue-labels"><span>6am</span><span>10am</span><span>2pm</span><span>6pm</span><span>10pm</span></div>
     </div>
-    <button type="button">View Reports <ChevronRight /></button>
+    <button type="button" onClick={() => setActive && setActive("Reports")}>View Reports <ChevronRight /></button>
   </article>;
 }
-
 function QuickAction({ icon: Icon, label, tone, onClick }: { icon: LucideIcon; label: string; tone: string; onClick: () => void }) {
   return <button type="button" onClick={onClick}><span className={`quick-icon ${tone}`}><Icon /></span><small>{label}</small></button>;
 }
+
+

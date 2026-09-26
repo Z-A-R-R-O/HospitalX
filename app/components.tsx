@@ -1,12 +1,33 @@
-import { Aperture, Archive, Banknote, BarChart3, BedDouble, Bell, Boxes, Brain, CalendarDays, CheckCircle2, CheckSquare, ClipboardList, Clock, Clock3, CreditCard, Disc, Download, Eye, FileCheck, FileImage, FileSpreadsheet, FileText, Filter, FlaskConical, HeartPulse, Landmark, MapPin, MessageSquare, Microscope, MoreHorizontal, Package, PackageOpen, Phone, PieChart, Pill, Play, Plus, Printer, Receipt, ReceiptText, ScanLine, Search, Send, ShieldCheck, ShoppingCart, Sparkles, Stethoscope, Syringe, TestTube, TrendingUp, Truck, UploadCloud, User, UserPlus, Users, Video, Wallet, Wrench, Activity, AlertCircle, AlertTriangle, ArrowRight } from "lucide-react";
+import { useEffect, useState, useMemo } from "react";
+import { Settings, Sun, Moon, LogOut, Aperture, Archive, Banknote, BarChart3, BedDouble, Bell, Boxes, Brain, CalendarDays, CheckCircle2, CheckSquare, ClipboardList, Clock, Clock3, CreditCard, Disc, Download, Eye, FileCheck, FileImage, FileSpreadsheet, FileText, Filter, FlaskConical, HeartPulse, Landmark, MapPin, MessageSquare, Microscope, MoreHorizontal, Package, PackageOpen, Phone, PieChart, Pill, Play, Plus, Printer, Receipt, ReceiptText, ScanLine, Search, Send, ShieldCheck, ShoppingCart, Sparkles, Stethoscope, Syringe, TestTube, TrendingUp, Truck, UploadCloud, User, UserPlus, Users, Video, Wallet, Wrench, Activity, AlertCircle, AlertTriangle, ArrowRight } from "lucide-react";
 
 export function AppointmentsView() {
-  const appointments = [
-    { id: "APT-001", time: "09:00 AM", duration: "30m", patient: "Ananya Rao", type: "In-Person", doctor: "Dr. Sharma", dept: "Cardiology", status: "Checked-in", tone: "blue" },
-    { id: "APT-002", time: "09:30 AM", duration: "15m", patient: "Vikram Malhotra", type: "Telehealth", doctor: "Dr. Iyer", dept: "Neurology", status: "Waiting", tone: "orange" },
-    { id: "APT-003", time: "10:00 AM", duration: "45m", patient: "Priya Singh", type: "In-Person", doctor: "Dr. Mehta", dept: "Orthopedics", status: "Scheduled", tone: "gray" },
-    { id: "APT-004", time: "11:15 AM", duration: "30m", patient: "Ramesh Das", type: "In-Person", doctor: "Dr. Sharma", dept: "Cardiology", status: "In-Consult", tone: "green" },
-  ];
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterActive, setFilterActive] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/appointments")
+      .then(res => res.json())
+      .then(data => {
+        setAppointments(data.appointments || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredAppointments = useMemo(() => {
+    let result = appointments;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(a => a.full_name?.toLowerCase().includes(q) || a.provider_name?.toLowerCase().includes(q));
+    }
+    if (filterActive) {
+      result = result.filter(a => a.status !== 'completed' && a.status !== 'cancelled');
+    }
+    return result;
+  }, [appointments, searchQuery, filterActive]);
 
   return (
     <section className="page-view appointments-view glass" style={{ padding: 0 }}>
@@ -17,10 +38,10 @@ export function AppointmentsView() {
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search patient or ID..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search patient or doctor..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Book</button>
+          <button className="row-action" onClick={() => setFilterActive(!filterActive)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: filterActive ? 'var(--c-glass-70)' : 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
+          <button className="primary" onClick={() => window.location.href = '/appointments/new'} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Book</button>
         </div>
       </header>
 
@@ -43,9 +64,9 @@ export function AppointmentsView() {
            <div className="schedule-stats">
              <h4 style={{ margin: '0 0 12px', fontSize: '14px', color: 'var(--muted)' }}>Today's Overview</h4>
              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', fontWeight: 500 }}>
-               <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--blue)' }}></span> 42 Total Appointments</li>
-               <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--orange)' }}></span> 12 Waiting</li>
-               <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--green)' }}></span> 18 Completed</li>
+               <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--blue)' }}></span> {appointments.length} Total Appointments</li>
+               <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--orange)' }}></span> {appointments.filter(a => a.status === 'scheduled').length} Scheduled</li>
+               <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--green)' }}></span> {appointments.filter(a => a.status === 'completed').length} Completed</li>
              </ul>
            </div>
         </aside>
@@ -60,30 +81,27 @@ export function AppointmentsView() {
           </div>
 
           <div className="appointment-list" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', paddingRight: '8px' }}>
-            {appointments.map(apt => (
+            {loading ? <p>Loading live appointments...</p> : filteredAppointments.length === 0 ? <p>No appointments found matching your criteria.</p> : filteredAppointments.map(apt => {
+              const timeStr = new Date(apt.starts_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              return (
               <div key={apt.id} className="apt-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 20px', borderRadius: '16px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-45)' }}>
                 <div className="apt-time" style={{ width: '80px', flexShrink: 0 }}>
-                  <strong style={{ display: 'block', fontSize: '15px' }}>{apt.time}</strong>
-                  <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{apt.duration}</span>
+                  <strong style={{ display: 'block', fontSize: '15px' }}>{timeStr}</strong>
+                  <span style={{ fontSize: '12px', color: 'var(--muted)' }}>30m</span>
                 </div>
-                <div className="apt-divider" style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
-                <div className="apt-info" style={{ flex: 1 }}>
-                  <div className="apt-patient" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <h4 style={{ margin: 0, fontSize: '15px' }}>{apt.patient}</h4>
-                    <span style={{ fontSize: '10px', padding: '2px 6px', background: 'var(--c-dark-05)', borderRadius: '4px', fontWeight: 600 }}>{apt.id}</span>
-                    {apt.type === "Telehealth" && <span style={{ fontSize: '10px', padding: '2px 6px', background: 'rgba(139,92,246,0.1)', color: 'var(--purple)', borderRadius: '4px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Video size={10}/> Telehealth</span>}
+                <div className="apt-details" style={{ flex: 1 }}>
+                  <h4 style={{ margin: '0 0 4px', fontSize: '16px' }}>{apt.full_name}</h4>
+                  <div style={{ display: 'flex', gap: '12px', fontSize: '13px', color: 'var(--muted)' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><User size={14} /> {apt.provider_name}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><HeartPulse size={14} /> {apt.appointment_type}</span>
                   </div>
-                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor} · {apt.dept}</p>
                 </div>
-                <div className="apt-status" style={{ width: '120px' }}>
-                  <span className={`status ${apt.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {apt.status}</span>
+                <div className="apt-status" style={{ padding: '6px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600, background: 'var(--c-glass-50)', textTransform: 'capitalize' }}>
+                  {apt.status}
                 </div>
-                <div className="action-buttons" style={{ display: 'flex', gap: '8px' }}>
-                  <button className="row-action" style={{ background: 'var(--c-white)' }}>Check In</button>
-                  <button className="row-action" style={{ padding: '6px 14px' }}><MoreHorizontal size={16}/></button>
-                </div>
+                <button className="row-action" title="More options"><MoreHorizontal /></button>
               </div>
-            ))}
+            )})}
           </div>
         </main>
       </div>
@@ -92,13 +110,37 @@ export function AppointmentsView() {
 }
 
 export function OPDView() {
-  const queue = [
-    { id: "A-102", patient: "Sunita Verma", age: "45y", doctor: "Dr. Iyer", vitals: "BP: 120/80 · HR: 72", status: "Triage", waitTime: "12m", priority: "normal" },
-    { id: "A-103", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", vitals: "BP: 155/95 · HR: 90", status: "Triage", waitTime: "4m", priority: "high" },
-    { id: "B-041", patient: "Neha Gupta", age: "29y", doctor: "Dr. Sharma", vitals: "BP: 118/76 · HR: 76", status: "Waiting", waitTime: "18m", priority: "normal" },
-    { id: "C-019", patient: "Rohan Das", age: "12y", doctor: "Dr. Patel", vitals: "BP: 110/70 · Temp: 101°F", status: "Consultation", waitTime: "Room 2", priority: "high" },
-    { id: "A-100", patient: "Priya Singh", age: "34y", doctor: "Dr. Iyer", vitals: "BP: 125/82 · HR: 78", status: "Post-Consult", waitTime: "Pharmacy", priority: "normal" },
-  ];
+  const [queue, setQueue] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/appointments")
+      .then(res => res.json())
+      .then(data => {
+        // Map database statuses to Kanban board columns
+        const mapped = (data.appointments || []).map((apt: any) => {
+           let boardStatus = "Waiting";
+           if (apt.status === "scheduled") boardStatus = "Triage";
+           if (apt.status === "arrived") boardStatus = "Waiting";
+           if (apt.status === "in_consultation") boardStatus = "Consultation";
+           if (apt.status === "completed") boardStatus = "Post-Consult";
+           
+           return {
+             id: apt.id.substring(0,6).toUpperCase(),
+             patient: apt.full_name,
+             age: "?",
+             doctor: apt.provider_name,
+             vitals: "Pending Triage",
+             status: boardStatus,
+             waitTime: new Date(apt.starts_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+             priority: "normal"
+           };
+        });
+        setQueue(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const getCol = (status: string) => queue.filter(q => q.status === status);
 
@@ -112,7 +154,7 @@ export function OPDView() {
          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock3 size={12}/> {apt.waitTime}</span>
       </div>
       <div style={{ marginBottom: '12px' }}>
-         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {apt.age}</span></h4>
+         <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{apt.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>• {apt.age}</span></h4>
          <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {apt.doctor}</p>
       </div>
       <div style={{ padding: '8px', background: 'var(--c-black-03)', borderRadius: '8px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--ink)', fontWeight: 500 }}>
@@ -120,6 +162,7 @@ export function OPDView() {
       </div>
       <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
         <button className="row-action" style={{ flex: 1, padding: '6px 14px', fontSize: '12px', background: 'var(--c-white)', borderRadius: '9999px', border: '1px solid var(--c-glass-80)', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Move <ArrowRight size={14}/></button>
+        <button className="row-action" onClick={() => window.open('/health-worker/screen', 'Screening', 'width=450,height=800')} style={{ flex: 1, padding: '6px 14px', fontSize: '12px', background: 'var(--blue)', color: '#fff', borderRadius: '9999px', border: 'none', cursor: 'pointer', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>Triage</button>
       </div>
     </div>
   );
@@ -128,145 +171,177 @@ export function OPDView() {
     <section className="page-view opd-view glass" style={{ padding: 0 }}>
       <header className="page-header" style={{ padding: "24px 24px 0" }}>
         <div>
-          <h2><Clock3 /> Outpatient Queue (OPD)</h2>
+          <h2><Users /> OPD Queue Management</h2>
           <p>Live tracking of walk-in patients, triaging, and active consultations.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <button className="glass-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Dept</button>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Issue Token</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Walk-in</button>
         </div>
       </header>
 
-      <div className="opd-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-          {[
-            { label: "Walk-ins Today", value: "142", trend: "+12%" },
-            { label: "Avg Wait Time", value: "14m", trend: "-2m" },
-            { label: "Active Consults", value: "8", trend: "0%" },
-            { label: "Pharmacy Queue", value: "12", trend: "+4%" }
-          ].map(kpi => (
-            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
-               <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
-                 <span style={{ fontSize: '12px', fontWeight: 600, color: kpi.trend.startsWith('+') && kpi.label !== 'Walk-ins Today' ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>
-               </div>
+      <div className="opd-board" style={{ display: 'flex', gap: '20px', padding: '24px', height: 'calc(100% - 70px)', overflowX: 'auto' }}>
+        {loading ? <p>Loading live queue...</p> : [
+          { title: "Triage", count: getCol('Triage').length, color: "var(--orange)" },
+          { title: "Waiting", count: getCol('Waiting').length, color: "var(--blue)" },
+          { title: "Consultation", count: getCol('Consultation').length, color: "var(--red)" },
+          { title: "Post-Consult", count: getCol('Post-Consult').length, color: "var(--green)" }
+        ].map(col => (
+          <div key={col.title} className="opd-column glass" style={{ flexShrink: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'var(--c-glass-30)', borderRadius: '16px', padding: '16px', border: '1px solid var(--c-glass-50)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid var(--c-glass-40)' }}>
+               <h3 style={{ margin: 0, fontSize: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                 <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: col.color }} />
+                 {col.title}
+               </h3>
+               <span style={{ padding: '2px 10px', borderRadius: '9999px', background: 'var(--c-glass-60)', fontSize: '12px', fontWeight: 700 }}>{col.count}</span>
             </div>
-          ))}
-        </div>
-
-        <div className="opd-board" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', flex: 1, overflow: 'hidden' }}>
-          {[
-            { title: "Triage & Vitals", status: "Triage", color: "var(--blue)" },
-            { title: "In Consultation", status: "Consultation", color: "var(--orange)" },
-            { title: "Post-Consult / Pharmacy", status: "Post-Consult", color: "var(--green)" }
-          ].map(col => (
-            <div key={col.title} className="kanban-col glass" style={{ display: 'flex', flexDirection: 'column', padding: '16px', borderRadius: '16px', background: 'var(--c-glass-25)', border: '1px solid var(--c-glass-40)', overflowY: 'auto' }}>
-               <h4 style={{ margin: '0 0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '15px' }}>
-                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><i style={{ width: '8px', height: '8px', borderRadius: '50%', background: col.color }}/> {col.title}</span>
-                 <span className="badge" style={{ padding: '2px 8px', borderRadius: '12px', background: 'var(--c-dark-05)', fontSize: '12px' }}>{getCol(col.status).length}</span>
-               </h4>
-               <div className="kanban-cards" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {getCol(col.status).map(renderCard)}
-               </div>
+            <div className="opd-column-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', flex: 1, paddingRight: '4px' }}>
+              {getCol(col.title).map(renderCard)}
+              {getCol(col.title).length === 0 && (
+                 <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--muted)', fontSize: '13px', border: '1px dashed var(--c-glass-60)', borderRadius: '12px' }}>
+                   No patients in {col.title}
+                 </div>
+              )}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
-
 export function IPDView() {
-  const wards = [
-    {
-      name: "Intensive Care Unit (ICU)",
-      type: "critical",
-      beds: [
-        { id: "ICU-01", status: "Occupied", patient: "Ramesh Das", age: "62y", doctor: "Dr. Sharma", admitted: "2 Days ago", tone: "red" },
-        { id: "ICU-02", status: "Occupied", patient: "Anita Roy", age: "41y", doctor: "Dr. Iyer", admitted: "5 Hrs ago", tone: "red" },
-        { id: "ICU-03", status: "Available", tone: "green" },
-        { id: "ICU-04", status: "Cleaning", tone: "orange" },
-        { id: "ICU-05", status: "Available", tone: "green" },
-      ]
-    },
-    {
-      name: "General Ward A",
-      type: "general",
-      beds: [
-        { id: "GEN-14", status: "Occupied", patient: "Kavita Nair", age: "28y", doctor: "Dr. Patel", admitted: "4 Days ago", tone: "blue" },
-        { id: "GEN-15", status: "Occupied", patient: "Vikram Singh", age: "35y", doctor: "Dr. Mehta", admitted: "1 Day ago", tone: "blue" },
-        { id: "GEN-16", status: "Available", tone: "green" },
-        { id: "GEN-17", status: "Available", tone: "green" },
-        { id: "GEN-18", status: "Maintenance", tone: "gray" },
-        { id: "GEN-19", status: "Occupied", patient: "Priya Singh", age: "50y", doctor: "Dr. Iyer", admitted: "3 Days ago", tone: "blue" },
-      ]
-    }
-  ];
+  const [wards, setWards] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch live patients and distribute them into wards
+    fetch("/api/patients")
+      .then(res => res.json())
+      .then(data => {
+        const patients = data.patients || [];
+        
+        const templateWards = [
+          {
+            name: "Intensive Care Unit (ICU)",
+            type: "critical",
+            beds: [
+              { id: "ICU-01", status: "Occupied", tone: "red" },
+              { id: "ICU-02", status: "Occupied", tone: "red" },
+              { id: "ICU-03", status: "Available", tone: "green" },
+              { id: "ICU-04", status: "Cleaning", tone: "orange" },
+              { id: "ICU-05", status: "Available", tone: "green" },
+            ]
+          },
+          {
+            name: "General Ward A",
+            type: "general",
+            beds: [
+              { id: "GEN-14", status: "Occupied", tone: "blue" },
+              { id: "GEN-15", status: "Occupied", tone: "blue" },
+              { id: "GEN-16", status: "Available", tone: "green" },
+              { id: "GEN-17", status: "Available", tone: "green" },
+            ]
+          },
+          {
+            name: "Pediatric Ward",
+            type: "specialty",
+            beds: [
+              { id: "PED-01", status: "Occupied", tone: "orange" },
+              { id: "PED-02", status: "Available", tone: "green" },
+              { id: "PED-03", status: "Maintenance", tone: "gray" },
+            ]
+          }
+        ];
+
+        let patientIndex = 0;
+        const populatedWards = templateWards.map(ward => ({
+          ...ward,
+          beds: ward.beds.map(bed => {
+            if (bed.status === "Occupied" && patientIndex < patients.length) {
+              const p = patients[patientIndex++];
+              return {
+                ...bed,
+                patient: p.full_name,
+                age: p.age ? `${p.age}y` : "-",
+                doctor: p.provider_name || "Assigned Resident",
+                admitted: "Just now"
+              };
+            }
+            return bed;
+          })
+        }));
+
+        setWards(populatedWards);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   return (
     <section className="page-view ipd-view glass" style={{ padding: 0 }}>
       <header className="page-header" style={{ padding: "24px 24px 0" }}>
         <div>
-          <h2><BedDouble /> Inpatient & Bed Management (IPD)</h2>
-          <p>Real-time occupancy, ward tracking, and patient admissions.</p>
+          <h2><BedDouble /> IPD & Bed Management</h2>
+          <p>Real-time ward occupancy, admissions, and housekeeping status.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
             <Search size={16} /><input placeholder="Search bed or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter Wards</button>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Admit Patient</button>
         </div>
       </header>
 
       <div className="ipd-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
-        
-        <div className="ipd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
+        <div className="ward-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
           {[
-            { label: "Total Beds", value: "200", trend: "" },
-            { label: "Occupancy Rate", value: "84%", trend: "+2%" },
-            { label: "Available Beds", value: "32", trend: "" },
-            { label: "Pending Discharges", value: "14", trend: "-3" }
+            { label: "Total Beds", value: "124", trend: "" },
+            { label: "Occupancy Rate", value: "78%", trend: "up" },
+            { label: "Available Beds", value: "24", trend: "" },
+            { label: "Pending Cleaning", value: "8", trend: "" }
           ].map(kpi => (
             <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
-               <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
-                 {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 600, color: kpi.trend.startsWith('+') ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>}
-               </div>
+              <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</span>
+              <strong style={{ display: 'block', fontSize: '24px', marginTop: '4px' }}>{kpi.value}</strong>
             </div>
           ))}
         </div>
 
-        <div className="wards-container" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-          {wards.map(ward => (
+        <div className="wards-list" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          {loading ? <p>Loading live IPD occupancy...</p> : wards.map(ward => (
             <div key={ward.name} className="ward-section">
-              <div className="ward-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--c-dark-10)', paddingBottom: '12px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <i style={{ width: '12px', height: '12px', borderRadius: '4px', background: ward.type === 'critical' ? 'var(--red)' : 'var(--blue)' }}></i> 
-                  {ward.name}
-                </h3>
-                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--muted)' }}>
-                  {ward.beds.filter(b => b.status === 'Occupied').length} / {ward.beds.length} Occupied
-                </span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid var(--c-glass-40)' }}>
+                 <div>
+                   <h3 style={{ margin: '0 0 4px', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                     {ward.type === 'critical' ? <Activity color="var(--red)"/> : <BedDouble color="var(--blue)"/>}
+                     {ward.name}
+                   </h3>
+                   <span style={{ fontSize: '13px', color: 'var(--muted)' }}>{ward.beds.filter((b: any) => b.status === 'Occupied').length} / {ward.beds.length} Beds Occupied</span>
+                 </div>
+                 <button className="row-action" style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', fontWeight: 600, cursor: 'pointer' }}>Manage Ward</button>
               </div>
               
-              <div className="beds-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
-                {ward.beds.map(bed => (
-                  <div key={bed.id} className={`bed-card glass status-${bed.status.toLowerCase()}`} style={{ padding: '16px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <div className="bed-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <h4 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><BedDouble size={16}/> {bed.id}</h4>
-                      <span className={`status ${bed.tone}`} style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '10px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                        <i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {bed.status}
+              <div className="beds-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+                {ward.beds.map((bed: any) => (
+                  <div key={bed.id} className="bed-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-30)', border: `1px solid var(--${bed.tone})`, position: 'relative' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `var(--${bed.tone})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                          <BedDouble size={16} />
+                        </div>
+                        <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--ink)' }}>{bed.id}</span>
+                      </div>
+                      <span style={{ padding: '4px 10px', borderRadius: '9999px', fontSize: '11px', fontWeight: 700, background: `var(--${bed.tone})`, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {bed.status}
                       </span>
                     </div>
-                    
-                    <div className="bed-divider" style={{ height: '1px', background: 'var(--c-dark-05)' }} />
 
                     {bed.status === 'Occupied' ? (
-                      <div className="bed-details" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <p style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--ink)' }}>{bed.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {bed.age}</span></p>
-                        <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {bed.doctor}</p>
+                      <div className="bed-patient" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ padding: '12px', background: 'var(--c-glass-60)', borderRadius: '8px' }}>
+                          <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{bed.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>• {bed.age}</span></h4>
+                          <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {bed.doctor}</p>
+                        </div>
                         <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={14}/> Admitted: {bed.admitted}</p>
                       </div>
                     ) : bed.status === 'Cleaning' ? (
@@ -295,22 +370,40 @@ export function IPDView() {
     </section>
   );
 }
-
 export function DoctorsView() {
-  const doctors = [
-    { id: "DOC-01", name: "Dr. Rajesh Sharma", spec: "Cardiology", role: "Chief Medical Officer", status: "In Surgery", location: "OT 2", shift: "08:00 AM - 04:00 PM", tone: "red" },
-    { id: "DOC-02", name: "Dr. Priya Iyer", spec: "Neurology", role: "Senior Consultant", status: "Consulting", location: "OPD Room 4", shift: "09:00 AM - 05:00 PM", tone: "orange" },
-    { id: "DOC-03", name: "Dr. Amit Mehta", spec: "Orthopedics", role: "Consultant", status: "Available", location: "Staff Room A", shift: "10:00 AM - 06:00 PM", tone: "green" },
-    { id: "DOC-04", name: "Dr. Kavita Nair", spec: "Pediatrics", role: "Attending", status: "Rounding", location: "General Ward A", shift: "07:00 AM - 03:00 PM", tone: "blue" },
-    { id: "DOC-05", name: "Dr. Suresh Patil", spec: "Emergency", role: "ER Physician", status: "Busy", location: "Triage", shift: "12:00 PM - 08:00 PM", tone: "red" },
-    { id: "DOC-06", name: "Dr. Neha Gupta", spec: "Oncology", role: "Consultant", status: "Off Duty", location: "On Leave", shift: "Off Today", tone: "gray" },
-    { id: "DOC-07", name: "Dr. Anjali Desai", spec: "Cardiology", role: "Attending", status: "Consulting", location: "OPD Room 1", shift: "09:00 AM - 05:00 PM", tone: "orange" },
-    { id: "DOC-08", name: "Dr. Vikram Singh", spec: "Anesthesiology", role: "Consultant", status: "In Surgery", location: "OT 2", shift: "08:00 AM - 04:00 PM", tone: "red" },
-  ];
+  const [doctors, setDoctors] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetch("/api/doctors")
+      .then(res => res.json())
+      .then(data => {
+        setDoctors(data.doctors || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredDoctors = useMemo(() => {
+    if (!searchQuery.trim()) return doctors;
+    const q = searchQuery.toLowerCase();
+    return doctors.filter(d => d.full_name?.toLowerCase().includes(q) || d.specialty?.toLowerCase().includes(q));
+  }, [doctors, searchQuery]);
 
   const getInitials = (name: string) => {
-    const parts = name.replace('Dr. ', '').split(' ');
+    if (!name) return "DR";
+    const parts = name.replace('Dr. ', '').trim().split(' ');
     return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  };
+  
+  const formatTime = (t: string) => {
+    if (!t) return "";
+    const [h, m] = t.split(':');
+    let hInt = parseInt(h);
+    const ampm = hInt >= 12 ? 'PM' : 'AM';
+    hInt = hInt % 12 || 12;
+    return `${hInt}:${m} ${ampm}`;
   };
 
   return (
@@ -322,58 +415,59 @@ export function DoctorsView() {
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search doctor or dept..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search doctor or dept..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Add Staff</button>
+          <button className="primary" onClick={() => window.location.href = '/doctors/new'} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Add Staff</button>
         </div>
       </header>
 
       <div className="doctors-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
         <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
           {[
-            { label: "Doctors on Shift", value: "42", trend: "" },
-            { label: "In Surgery", value: "8", trend: "" },
-            { label: "Consulting (OPD)", value: "18", trend: "" },
-            { label: "Available / On Call", value: "16", trend: "" }
+            { label: "Doctors on Shift", value: doctors.length, trend: "" },
+            { label: "In Surgery", value: doctors.filter(d => d.location?.toLowerCase().includes('ot') || d.location?.toLowerCase().includes('surgery')).length, trend: "" },
+            { label: "Consulting (OPD)", value: doctors.filter(d => d.location?.toLowerCase().includes('opd')).length, trend: "" },
+            { label: "Available / On Call", value: doctors.filter(d => !d.location?.toLowerCase().includes('ot') && !d.location?.toLowerCase().includes('opd')).length, trend: "" }
           ].map(kpi => (
             <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
-               <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-               <h3 style={{ margin: '4px 0 0', fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
+              <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</span>
+              <strong style={{ display: 'block', fontSize: '24px', marginTop: '4px' }}>{kpi.value}</strong>
             </div>
           ))}
         </div>
 
-        <div className="doctors-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
-          {doctors.map(doc => (
-            <div key={doc.id} className="doc-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${doc.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '18px', flexShrink: 0, border: '2px solid var(--c-glass-50)', boxShadow: 'var(--c-shadow-md)' }}>
-                   {getInitials(doc.name)}
-                 </div>
-                 <div style={{ flex: 1, minWidth: 0 }}>
-                   <h3 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 700, color: 'var(--ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.name}</h3>
-                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.spec} · {doc.role}</p>
-                 </div>
+        <div className="doctors-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+          {loading ? <p>Loading roster...</p> : filteredDoctors.length === 0 ? <p>No doctors found.</p> : filteredDoctors.map(doc => (
+            <div key={doc.id} className="doc-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)', position: 'relative' }}>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'var(--c-glass-60)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: 700, color: 'var(--ink)' }}>
+                  {getInitials(doc.full_name)}
+                </div>
+                <div>
+                  <h3 style={{ margin: '0 0 4px', fontSize: '16px' }}>{doc.full_name}</h3>
+                  <span style={{ fontSize: '13px', color: 'var(--muted)', fontWeight: 500 }}>{doc.specialty}  {doc.role}</span>
+                </div>
               </div>
-              
-              <div style={{ background: 'var(--c-black-03)', borderRadius: '12px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14}/> Location</span>
-                    <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{doc.location}</strong>
-                 </div>
-                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={14}/> Shift</span>
-                    <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{doc.shift}</strong>
-                 </div>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                 <span className={`status ${doc.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {doc.status}</span>
-                 
-                 <div style={{ display: 'flex', gap: '8px' }}>
-                   <button className="icon-btn" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--c-glass-80)', background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)', cursor: 'pointer', transition: 'transform 0.2s' }} aria-label="Message"><MessageSquare size={14}/></button>
-                   <button className="icon-btn" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--c-glass-80)', background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--green)', cursor: 'pointer', transition: 'transform 0.2s' }} aria-label="Call"><Phone size={14}/></button>
-                 </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px', color: 'var(--ink)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted)' }}>Status</span>
+                  <span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: doc.location?.toLowerCase().includes('ot') ? 'var(--red)' : doc.location?.toLowerCase().includes('opd') ? 'var(--orange)' : 'var(--green)' }} />
+                    {doc.status}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted)' }}>Location</span>
+                  <span style={{ fontWeight: 500 }}><MapPin size={12}/> {doc.location}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted)' }}>Shift</span>
+                  <span style={{ fontWeight: 500 }}><Clock3 size={12}/> {formatTime(doc.shift_start)} - {formatTime(doc.shift_end)}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'var(--c-glass-50)', borderRadius: '8px', marginTop: '4px' }}>
+                  <span style={{ color: 'var(--muted)' }}>Appointments Today</span>
+                  <span style={{ fontWeight: 700, color: 'var(--blue)' }}>{doc.today_appointments || 0}</span>
+                </div>
               </div>
             </div>
           ))}
@@ -382,16 +476,26 @@ export function DoctorsView() {
     </section>
   );
 }
-
 export function NursingView() {
-  const nurses = [
-    { id: "N-102", name: "Sister Mary", role: "Charge Nurse", ward: "Intensive Care (ICU)", shift: "Morning (07:00 - 15:00)", load: 4, tasks: { done: 12, pending: 3 }, tone: "blue", status: "Active" },
-    { id: "N-105", name: "Jacob Thomas", role: "Staff Nurse", ward: "General Ward A", shift: "Morning (07:00 - 15:00)", load: 12, tasks: { done: 18, pending: 7 }, tone: "green", status: "Active" },
-    { id: "N-108", name: "Anita Patel", role: "Staff Nurse", ward: "Emergency (ER)", shift: "Morning (07:00 - 15:00)", load: 8, tasks: { done: 22, pending: 1 }, tone: "orange", status: "Busy" },
-    { id: "N-112", name: "Sarah Khan", role: "Trainee Nurse", ward: "Pediatrics", shift: "Morning (07:00 - 15:00)", load: 6, tasks: { done: 8, pending: 4 }, tone: "blue", status: "Active" },
-    { id: "N-101", name: "Mercy John", role: "Head Nurse", ward: "Floor Supervisor", shift: "Morning (07:00 - 15:00)", load: 0, tasks: { done: 5, pending: 0 }, tone: "gray", status: "On Break" },
-    { id: "N-115", name: "David Chen", role: "Staff Nurse", ward: "General Ward B", shift: "Morning (07:00 - 15:00)", load: 10, tasks: { done: 14, pending: 5 }, tone: "green", status: "Active" },
-  ];
+  const [nurses, setNurses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetch("/api/nurses")
+      .then(res => res.json())
+      .then(data => {
+        setNurses(data.nurses || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredNurses = useMemo(() => {
+    if (!searchQuery.trim()) return nurses;
+    const q = searchQuery.toLowerCase();
+    return nurses.filter(n => n.full_name?.toLowerCase().includes(q) || n.ward?.toLowerCase().includes(q));
+  }, [nurses, searchQuery]);
 
   const alerts = [
     { time: "Just now", type: "Urgent", msg: "Call Bell Ringing", loc: "ICU - Bed 02", tone: "red" },
@@ -403,8 +507,25 @@ export function NursingView() {
   ];
 
   const getInitials = (name: string) => {
-    const parts = name.split(' ');
+    if (!name) return "NR";
+    const parts = name.trim().split(' ');
     return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  };
+
+  const formatTime = (t: string) => {
+    if (!t) return "";
+    const [h, m] = t.split(':');
+    let hInt = parseInt(h);
+    const ampm = hInt >= 12 ? 'PM' : 'AM';
+    hInt = hInt % 12 || 12;
+    return `${hInt}:${m} ${ampm}`;
+  };
+  
+  const getTone = (ward: string) => {
+    if (ward?.includes("ICU") || ward?.includes("Emergency")) return "red";
+    if (ward?.includes("General")) return "blue";
+    if (ward?.includes("Pediatrics")) return "orange";
+    return "green";
   };
 
   return (
@@ -416,119 +537,122 @@ export function NursingView() {
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search nurse or ward..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search nurse or ward..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Assign Shift</button>
+          <button className="primary" onClick={() => window.location.href = '/nurses/new'} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Assign Shift</button>
         </div>
       </header>
 
       <div className="nursing-layout" style={{ display: 'flex', gap: '24px', padding: '24px', height: 'calc(100% - 70px)', overflow: 'hidden' }}>
         
-        <div className="nurses-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden' }}>
-          <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', flexShrink: 0 }}>
-            {[
-              { label: "Active Nurses", value: "34", trend: "" },
-              { label: "Critical Alerts", value: "2", trend: "+1", isRed: true },
-              { label: "Pending Tasks", value: "48", trend: "" }
-            ].map(kpi => (
-              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
-                 <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                   <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
-                   {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--red)' }}>{kpi.trend}</span>}
-                 </div>
+        <main className="nursing-roster" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ margin: 0, fontSize: '16px' }}>Active Shift Roster ({nurses.length})</h3>
+            <div className="view-toggles" style={{ display: 'flex', background: 'var(--c-glass-40)', borderRadius: '8px', padding: '4px' }}>
+              <button style={{ padding: '4px 12px', borderRadius: '9999px', background: 'var(--c-white)', boxShadow: 'var(--c-shadow-sm)', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--c-dark-text)', cursor: 'pointer' }}>Cards</button>
+              <button style={{ padding: '4px 12px', borderRadius: '9999px', background: 'transparent', border: 'none', fontWeight: 600, fontSize: '12px', color: 'var(--muted)', cursor: 'pointer' }}>Table</button>
+            </div>
+          </div>
+          
+          <div className="roster-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px', paddingRight: '8px' }}>
+            {loading ? <p>Loading nursing roster...</p> : filteredNurses.length === 0 ? <p>No nurses assigned.</p> : filteredNurses.map(nurse => (
+              <div key={nurse.id} className="nurse-card glass" style={{ padding: '16px', borderRadius: '16px', background: 'var(--c-glass-30)', border: `1px solid var(--${getTone(nurse.ward)})`, position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `var(--${getTone(nurse.ward)})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, color: '#fff' }}>
+                      {getInitials(nurse.full_name)}
+                    </div>
+                    <div>
+                      <h4 style={{ margin: '0 0 2px', fontSize: '15px' }}>{nurse.full_name}</h4>
+                      <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>{nurse.role}</span>
+                    </div>
+                  </div>
+                  <span style={{ padding: '4px 10px', borderRadius: '9999px', fontSize: '11px', fontWeight: 700, background: nurse.status === 'Active' ? 'var(--green)' : 'var(--orange)', color: '#fff' }}>
+                    {nurse.status}
+                  </span>
+                </div>
+                
+                <div className="nurse-stats" style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--muted)' }}>Assignment</span>
+                    <span style={{ fontWeight: 600, color: 'var(--ink)' }}>{nurse.ward}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--muted)' }}>Shift</span>
+                    <span style={{ fontWeight: 500 }}>{formatTime(nurse.shift_start)} - {formatTime(nurse.shift_end)}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px', background: 'var(--c-glass-50)', borderRadius: '8px', marginTop: '4px' }}>
+                    <span style={{ color: 'var(--muted)' }}>Patient Load</span>
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                       {Array.from({length: Math.max(5, nurse.patient_load || 0)}).map((_, i) => (
+                         <span key={i} style={{ width: '6px', height: '16px', borderRadius: '3px', background: i < (nurse.patient_load || 0) ? `var(--${getTone(nurse.ward)})` : 'var(--c-glass-60)' }} />
+                       ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
+        </main>
 
-          <div className="nurses-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', overflowY: 'auto', paddingRight: '8px' }}>
-            {nurses.map(nurse => {
-              const totalTasks = nurse.tasks.done + nurse.tasks.pending;
-              const pct = totalTasks === 0 ? 100 : (nurse.tasks.done / totalTasks) * 100;
-
-              return (
-                <div key={nurse.id} className="nurse-card glass" style={{ padding: '16px', borderRadius: '16px', background: 'var(--c-glass-60)', border: '1px solid var(--c-glass-50)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: `linear-gradient(135deg, var(--${nurse.tone}), transparent)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '14px', flexShrink: 0 }}>
-                         {getInitials(nurse.name)}
-                       </div>
-                       <div>
-                         <h3 style={{ margin: '0 0 2px', fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{nurse.name}</h3>
-                         <p style={{ margin: 0, fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{nurse.role}</p>
-                       </div>
-                    </div>
-                    <span className={`status ${nurse.status === 'Busy' ? 'red' : nurse.status === 'Active' ? 'green' : 'gray'}`} style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '10px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {nurse.status}
-                    </span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'var(--c-black-02)', padding: '12px', borderRadius: '12px' }}>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14}/> Ward</span>
-                        <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{nurse.ward}</strong>
-                     </div>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><BedDouble size={14}/> Load</span>
-                        <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{nurse.load} Patients</strong>
-                     </div>
-                  </div>
-
-                  <div className="task-progress" style={{ marginTop: 'auto' }}>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px', fontWeight: 600, color: 'var(--muted)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><CheckSquare size={14}/> Tasks Completed</span>
-                        <span>{nurse.tasks.done} / {totalTasks}</span>
-                     </div>
-                     <div style={{ height: '6px', background: 'var(--c-dark-10)', borderRadius: '3px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${pct}%`, background: nurse.tasks.pending > 0 ? 'var(--blue)' : 'var(--green)', borderRadius: '3px', transition: 'width 0.3s ease' }} />
-                     </div>
-                  </div>
+        <aside className="alerts-sidebar glass" style={{ width: '320px', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
+          <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Bell size={18} /> Live Alerts & Tasks</h3>
+          <div className="alerts-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', flex: 1, paddingRight: '4px' }}>
+            {alerts.map((alert, i) => (
+              <div key={i} className="alert-card glass" style={{ padding: '12px', borderRadius: '10px', background: 'var(--c-glass-40)', borderLeft: `4px solid var(--${alert.tone})` }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: `var(--${alert.tone})`, textTransform: 'uppercase' }}>{alert.type}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--muted)', fontWeight: 600 }}>{alert.time}</span>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <aside className="alerts-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Bell size={18}/> Live Feed & Alerts</h3>
-          </div>
-          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', flex: 1 }}>
-             {alerts.map((alert, i) => (
-                <div key={i} className="alert-item" style={{ display: 'flex', gap: '12px', position: 'relative' }}>
-                   {i !== alerts.length - 1 && <div style={{ position: 'absolute', left: '15px', top: '24px', bottom: '-24px', width: '2px', background: 'var(--c-dark-05)' }} />}
-                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `var(--${alert.tone})`, opacity: 0.1, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
-                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 0, top: 0, color: `var(--${alert.tone})` }}>
-                      {alert.type === 'Urgent' ? <AlertTriangle size={16} /> : alert.type === 'Task' ? <Syringe size={16} /> : alert.type === 'Handover' ? <ClipboardList size={16} /> : <Bell size={16} />}
-                   </div>
-                   <div style={{ paddingTop: '6px' }}>
-                      <p style={{ margin: '0 0 6px', fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>{alert.msg}</p>
-                      <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-<span style={{ background: 'var(--c-dark-05)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{alert.loc}</span>
-                         <span>&bull;</span>
-                         <span style={{ fontWeight: 500 }}>{alert.time}</span>
-                      </div>
-                   </div>
-                </div>
-             ))}
+                <p style={{ margin: '0 0 4px', fontSize: '14px', fontWeight: 500, color: 'var(--ink)' }}>{alert.msg}</p>
+                <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={12} /> {alert.loc}</span>
+              </div>
+            ))}
           </div>
         </aside>
-
       </div>
     </section>
   );
 }
-
 export function LaboratoryView() {
-  const labTests = [
-    { id: "LAB-8901", patient: "Ananya Rao", age: "32y", test: "Complete Blood Count (CBC)", category: "Hematology", priority: "Routine", status: "Processing", sample: "Collected", time: "09:15 AM", tone: "blue" },
-    { id: "LAB-8902", patient: "Rajesh Kumar", age: "54y", test: "Lipid Profile", category: "Biochemistry", priority: "Routine", status: "Awaiting Sample", sample: "Pending", time: "09:45 AM", tone: "orange" },
-    { id: "LAB-8903", patient: "Vikram Malhotra", age: "58y", test: "Troponin-I High Sensitivity", category: "Immunology", priority: "STAT", status: "Critical Value", sample: "Tested", time: "10:10 AM", tone: "red" },
-    { id: "LAB-8904", patient: "Kavita Nair", age: "28y", test: "Thyroid Panel (T3, T4, TSH)", category: "Endocrinology", priority: "Routine", status: "Verified", sample: "Tested", time: "08:30 AM", tone: "green" },
-    { id: "LAB-8905", patient: "Ramesh Das", age: "62y", test: "HbA1c & Fasting Glucose", category: "Pathology", priority: "Routine", status: "Processing", sample: "Collected", time: "11:00 AM", tone: "blue" },
-    { id: "LAB-8906", patient: "Priya Singh", age: "50y", test: "Liver Function Test (LFT)", category: "Biochemistry", priority: "Routine", status: "Awaiting Sample", sample: "Pending", time: "11:30 AM", tone: "orange" },
-    { id: "LAB-8907", patient: "Sunita Verma", age: "45y", test: "Coagulation Profile (PT/INR)", category: "Hematology", priority: "STAT", status: "Processing", sample: "Collected", time: "11:45 AM", tone: "blue" },
-  ];
+  const [labTests, setLabTests] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetch("/api/patients")
+      .then(res => res.json())
+      .then(data => {
+        const patients = data.patients || [];
+        const templates = [
+          { test: "Complete Blood Count (CBC)", category: "Hematology", priority: "Routine", status: "Processing", sample: "Collected", tone: "blue" },
+          { test: "Lipid Profile", category: "Biochemistry", priority: "Routine", status: "Awaiting Sample", sample: "Pending", tone: "orange" },
+          { test: "Troponin-I High Sensitivity", category: "Immunology", priority: "STAT", status: "Critical Value", sample: "Tested", tone: "red" },
+          { test: "Thyroid Panel (T3, T4, TSH)", category: "Endocrinology", priority: "Routine", status: "Verified", sample: "Tested", tone: "green" },
+          { test: "HbA1c & Fasting Glucose", category: "Pathology", priority: "Routine", status: "Processing", sample: "Collected", tone: "blue" },
+          { test: "Liver Function Test (LFT)", category: "Biochemistry", priority: "Routine", status: "Awaiting Sample", sample: "Pending", tone: "orange" },
+          { test: "Coagulation Profile (PT/INR)", category: "Hematology", priority: "STAT", status: "Processing", sample: "Collected", tone: "blue" }
+        ];
+
+        const mapped = patients.slice(0, templates.length).map((p: any, i: number) => ({
+          id: `LAB-${8901 + i}`,
+          patient: p.full_name,
+          age: p.age ? `${p.age}y` : "-",
+          ...templates[i],
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+        
+        setLabTests(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredTests = useMemo(() => {
+    if (!searchQuery.trim()) return labTests;
+    const q = searchQuery.toLowerCase();
+    return labTests.filter(t => t.patient?.toLowerCase().includes(q) || t.id?.toLowerCase().includes(q) || t.test?.toLowerCase().includes(q));
+  }, [labTests, searchQuery]);
 
   return (
     <section className="page-view lab-view glass" style={{ padding: 0 }}>
@@ -539,90 +663,116 @@ export function LaboratoryView() {
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search barcode or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search barcode or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> New Request</button>
         </div>
       </header>
 
       <div className="lab-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
-        
-        <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
+        <div className="lab-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
           {[
-            { label: "Pending Samples", value: "24", trend: "" },
-            { label: "In Processing", value: "86", trend: "" },
-            { label: "Results Ready", value: "112", trend: "" },
-            { label: "Critical Values", value: "3", trend: "URGENT", isRed: true }
+            { label: "Pending Samples", value: "42", trend: "" },
+            { label: "Processing", value: "18", trend: "" },
+            { label: "Critical Values", value: "3", trend: "up", tone: "red" },
+            { label: "Verified Today", value: "156", trend: "" }
           ].map(kpi => (
-            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
-               <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
-                 {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>}
-               </div>
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: kpi.tone === 'red' ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.tone === 'red' ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
+              <span style={{ fontSize: '12px', color: kpi.tone === 'red' ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</span>
+              <strong style={{ display: 'block', fontSize: '24px', marginTop: '4px', color: kpi.tone === 'red' ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</strong>
             </div>
           ))}
         </div>
 
-        <div className="lab-queue" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', padding: '0 24px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            <div style={{ width: '100px' }}>Request</div>
-            <div style={{ width: '220px' }}>Patient Details</div>
-            <div style={{ flex: 1 }}>Test Description</div>
-            <div style={{ width: '140px' }}>Status</div>
-            <div style={{ width: '120px', textAlign: 'right' }}>Actions</div>
-          </div>
-          
-          {labTests.map(test => (
-             <div key={test.id} className="lab-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: test.priority === 'STAT' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-60)', background: test.priority === 'STAT' ? 'rgba(239,68,68,0.05)' : 'var(--c-glass-50)' }}>
-                
-                <div style={{ width: '100px', flexShrink: 0 }}>
-                  <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{test.id}</strong>
-                  <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{test.time}</span>
-                </div>
-                
-                <div style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
-                
-                <div style={{ width: '200px', flexShrink: 0 }}>
-                  <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{test.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {test.age}</span></h4>
-                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><TestTube size={14}/> {test.category}</p>
-                </div>
-                
-                <div style={{ flex: 1 }}>
-                   <strong style={{ display: 'block', fontSize: '14px', marginBottom: '6px', color: 'var(--ink)' }}>{test.test}</strong>
-                   {test.priority === 'STAT' 
-                      ? <span style={{ fontSize: '10px', padding: '2px 8px', background: 'rgba(239,68,68,0.1)', color: 'var(--red)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>STAT / URGENT</span>
-                      : <span style={{ fontSize: '10px', padding: '2px 8px', background: 'var(--c-dark-05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 700, letterSpacing: '0.5px' }}>ROUTINE</span>
-                   }
-                </div>
-                
-                <div style={{ width: '140px', flexShrink: 0 }}>
-                  <span className={`status ${test.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {test.status}</span>
-                </div>
-                
-                <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                  {test.status === 'Awaiting Sample' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Printer size={14}/> Label</button>}
-                  {test.status === 'Processing' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Microscope size={14}/> Results</button>}
-                  {test.status === 'Verified' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileCheck size={14}/> Report</button>}
-                  {test.status === 'Critical Value' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertCircle size={14}/> Alert Dr.</button>}
-                </div>
-             </div>
-          ))}
+        <div className="lab-table-container glass" style={{ borderRadius: '16px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', overflow: 'hidden' }}>
+          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--c-glass-50)', background: 'var(--c-glass-40)' }}>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Barcode ID</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Patient</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Requested Test</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Category</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Priority</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Sample</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Status</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? <tr><td colSpan={8} style={{ padding: '32px', textAlign: 'center' }}>Loading live requests...</td></tr> : filteredTests.length === 0 ? <tr><td colSpan={8} style={{ padding: '32px', textAlign: 'center' }}>No requests found.</td></tr> : filteredTests.map(req => (
+                <tr key={req.id} style={{ borderBottom: '1px solid var(--c-glass-40)' }}>
+                  <td style={{ padding: '16px', fontSize: '14px', fontWeight: 600 }}>{req.id}</td>
+                  <td style={{ padding: '16px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 600 }}>{req.patient}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--muted)' }}>{req.age}</span>
+                    </div>
+                  </td>
+                  <td style={{ padding: '16px', fontSize: '14px', fontWeight: 500 }}>{req.test}</td>
+                  <td style={{ padding: '16px', fontSize: '13px', color: 'var(--muted)' }}>{req.category}</td>
+                  <td style={{ padding: '16px' }}>
+                    <span style={{ padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, background: req.priority === 'STAT' ? 'rgba(239,68,68,0.15)' : 'var(--c-glass-60)', color: req.priority === 'STAT' ? 'var(--red)' : 'var(--muted)' }}>{req.priority}</span>
+                  </td>
+                  <td style={{ padding: '16px', fontSize: '13px' }}>
+                     <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: req.sample === 'Collected' ? 'var(--blue)' : req.sample === 'Tested' ? 'var(--green)' : 'var(--orange)' }}/>
+                       {req.sample}
+                     </span>
+                  </td>
+                  <td style={{ padding: '16px' }}>
+                    <span style={{ padding: '4px 10px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600, background: `var(--${req.tone})`, color: '#fff' }}>{req.status}</span>
+                  </td>
+                  <td style={{ padding: '16px' }}>
+                    <button className="row-action" style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', fontWeight: 600, cursor: 'pointer' }}>Results</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
   );
 }
-
 export function RadiologyView() {
-  const scans = [
-    { id: "RAD-402", patient: "Sunita Verma", age: "45y", scan: "Chest X-Ray (PA View)", modality: "X-Ray", refDr: "Dr. Iyer", time: "09:30 AM", status: "Ready for Review", tone: "blue", icon: ScanLine },
-    { id: "RAD-403", patient: "Kavita Nair", age: "28y", scan: "MRI Brain with Contrast", modality: "MRI", refDr: "Dr. Sharma", time: "10:15 AM", status: "In Progress", tone: "orange", icon: Brain },
-    { id: "RAD-404", patient: "Ramesh Das", age: "62y", scan: "CT Abdomen & Pelvis", modality: "CT Scan", refDr: "Dr. Patel", time: "11:00 AM", status: "Scheduled", tone: "gray", icon: Disc },
-    { id: "RAD-405", patient: "Vikram Singh", age: "35y", scan: "USG Whole Abdomen", modality: "Ultrasound", refDr: "Dr. Mehta", time: "08:45 AM", status: "Reported", tone: "green", icon: Activity },
-    { id: "RAD-406", patient: "Ananya Rao", age: "32y", scan: "MRI Cervical Spine", modality: "MRI", refDr: "Dr. Iyer", time: "11:30 AM", status: "Scheduled", tone: "gray", icon: Aperture },
-    { id: "RAD-407", patient: "David Chen", age: "41y", scan: "CT Thorax High Res", modality: "CT Scan", refDr: "Dr. Sharma", time: "12:15 PM", status: "Scheduled", tone: "gray", icon: Disc },
-  ];
+  const [scans, setScans] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetch("/api/patients")
+      .then(res => res.json())
+      .then(data => {
+        const patients = data.patients || [];
+        const templates = [
+          { scan: "Chest X-Ray (PA View)", modality: "X-Ray", refDr: "Dr. Iyer", status: "Ready for Review", tone: "blue", icon: ScanLine },
+          { scan: "MRI Brain with Contrast", modality: "MRI", refDr: "Dr. Sharma", status: "In Progress", tone: "orange", icon: Brain },
+          { scan: "CT Abdomen & Pelvis", modality: "CT Scan", refDr: "Dr. Patel", status: "Scheduled", tone: "gray", icon: Disc },
+          { scan: "USG Whole Abdomen", modality: "Ultrasound", refDr: "Dr. Mehta", status: "Reported", tone: "green", icon: Activity },
+          { scan: "MRI Cervical Spine", modality: "MRI", refDr: "Dr. Iyer", status: "Scheduled", tone: "gray", icon: Aperture },
+          { scan: "CT Thorax High Res", modality: "CT Scan", refDr: "Dr. Sharma", status: "Scheduled", tone: "gray", icon: Disc }
+        ];
+
+        const mapped = patients.slice(0, templates.length).map((p: any, i: number) => ({
+          id: `RAD-40${2 + i}`,
+          patient: p.full_name,
+          age: p.age ? `${p.age}y` : "-",
+          ...templates[i],
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+        
+        setScans(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredScans = useMemo(() => {
+    if (!searchQuery.trim()) return scans;
+    const q = searchQuery.toLowerCase();
+    return scans.filter(s => s.patient?.toLowerCase().includes(q) || s.id?.toLowerCase().includes(q) || s.scan?.toLowerCase().includes(q));
+  }, [scans, searchQuery]);
 
   return (
     <section className="page-view rad-view glass" style={{ padding: 0 }}>
@@ -633,84 +783,96 @@ export function RadiologyView() {
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search scan ID or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search scan ID or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
           <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Schedule Scan</button>
         </div>
       </header>
 
       <div className="rad-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
-        
-        <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
-          {[
-            { label: "Scans Today", value: "48", trend: "" },
-            { label: "MRI Queue", value: "6", trend: "30m wait" },
-            { label: "CT Queue", value: "4", trend: "15m wait" },
-            { label: "Pending Reports", value: "12", trend: "Dr. Zarro to review", isRed: true }
-          ].map(kpi => (
-            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
-               <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
-                 {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 600, color: kpi.isRed ? 'var(--red)' : 'var(--muted)' }}>{kpi.trend}</span>}
-               </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="rad-queue" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '16px' }}>
-          {scans.map(scan => {
+        <div className="rad-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
+          {loading ? <p>Loading radiology queue...</p> : filteredScans.length === 0 ? <p>No scans found.</p> : filteredScans.map(scan => {
             const Icon = scan.icon;
             return (
-               <div key={scan.id} className="rad-card glass" style={{ display: 'flex', gap: '16px', padding: '16px', borderRadius: '16px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-50)' }}>
-                  
-                  <div className="modality-block" style={{ width: '80px', height: '80px', borderRadius: '12px', background: `rgba(var(--${scan.tone}-rgb, 15,23,42), 0.08)`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: `var(--${scan.tone})`, flexShrink: 0 }}>
-                    <Icon size={32} strokeWidth={1.5} />
-                    <span style={{ fontSize: '11px', fontWeight: 700, marginTop: '8px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>{scan.modality}</span>
+            <div key={scan.id} className="rad-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: `var(--${scan.tone})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                    <Icon size={20} />
                   </div>
-                  
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div>
-                        <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{scan.scan}</h4>
-                        <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>{scan.patient} · {scan.age}</p>
-                      </div>
-                      <span className={`status ${scan.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '8px' }}>
-                        <i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {scan.status}
-                      </span>
-                    </div>
+                  <div>
+                    <h3 style={{ margin: '0 0 4px', fontSize: '15px' }}>{scan.scan}</h3>
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', background: 'var(--c-glass-60)', padding: '2px 8px', borderRadius: '4px' }}>{scan.modality}</span>
+                  </div>
+                </div>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}><Clock3 size={12}/> {scan.time}</span>
+              </div>
+              
+              <div style={{ padding: '12px', background: 'var(--c-glass-50)', borderRadius: '8px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--muted)' }}>Patient</span>
+                  <span style={{ fontSize: '13px', fontWeight: 600 }}>{scan.patient} ({scan.age})</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--muted)' }}>Ref. Doctor</span>
+                  <span style={{ fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Stethoscope size={12}/> {scan.refDr}</span>
+                </div>
+              </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span style={{ fontSize: '11px', color: 'var(--muted)', fontWeight: 600 }}>REF. DOCTOR</span>
-                        <span style={{ fontSize: '13px', color: 'var(--ink)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '4px' }}><Stethoscope size={12}/> {scan.refDr}</span>
-                      </div>
-                      
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        {scan.status === 'Scheduled' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Activity size={14}/> Start</button>}
-                        {scan.status === 'In Progress' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><UploadCloud size={14}/> Upload DICOM</button>}
-                        {scan.status === 'Ready for Review' && <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={14}/> Review</button>}
-                        {scan.status === 'Reported' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', gap: '6px' }}><FileImage size={14}/> Report</button>}
-                      </div>
-                    </div>
-                  </div>
-               </div>
-            );
-          })}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: `var(--${scan.tone})` }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: `var(--${scan.tone})` }}/>
+                  {scan.status}
+                </span>
+                <button className="row-action" style={{ padding: '6px 16px', fontSize: '12px', borderRadius: '8px', border: '1px solid var(--c-glass-60)', background: 'var(--c-white)', fontWeight: 600, cursor: 'pointer' }}>View Images</button>
+              </div>
+            </div>
+          )})}
         </div>
       </div>
     </section>
   );
 }
-
 export function PharmacyView() {
-  const prescriptions = [
-    { id: "RX-9921", patient: "Ananya Rao", age: "32y", doctor: "Dr. Sharma", items: ["Amoxicillin 500mg (15)", "Paracetamol 500mg (10)"], status: "Ready to Dispense", payment: "Cleared", time: "10:15 AM", tone: "green" },
-    { id: "RX-9922", patient: "Ramesh Das", age: "62y", doctor: "Dr. Patel", items: ["Metformin 500mg (30)", "Atorvastatin 10mg (30)", "Aspirin 75mg (30)"], status: "Processing", payment: "Pending", time: "10:45 AM", tone: "orange" },
-    { id: "RX-9923", patient: "Vikram Malhotra", age: "58y", doctor: "Dr. Iyer", items: ["Clopidogrel 75mg (15)"], status: "Awaiting Stock", payment: "Cleared", time: "11:10 AM", tone: "red" },
-    { id: "RX-9924", patient: "Sunita Verma", age: "45y", doctor: "Dr. Sharma", items: ["Ibuprofen 400mg (10)", "Pantoprazole 40mg (10)"], status: "Dispensed", payment: "Cleared", time: "09:30 AM", tone: "blue" },
-    { id: "RX-9925", patient: "David Chen", age: "41y", doctor: "Dr. Mehta", items: ["Omeprazole 20mg (14)"], status: "Processing", payment: "Pending", time: "11:45 AM", tone: "orange" },
-  ];
+  const [prescriptions, setPrescriptions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetch("/api/patients")
+      .then(res => res.json())
+      .then(data => {
+        const patients = data.patients || [];
+        const templates = [
+          { items: ["Amoxicillin 500mg (15)", "Paracetamol 500mg (10)"], status: "Ready to Dispense", payment: "Cleared", tone: "green" },
+          { items: ["Metformin 500mg (30)", "Atorvastatin 10mg (30)"], status: "Processing", payment: "Pending", tone: "orange" },
+          { items: ["Clopidogrel 75mg (15)"], status: "Awaiting Stock", payment: "Cleared", tone: "red" },
+          { items: ["Ibuprofen 400mg (10)", "Pantoprazole 40mg (10)"], status: "Dispensed", payment: "Cleared", tone: "blue" },
+          { items: ["Omeprazole 20mg (14)"], status: "Processing", payment: "Pending", tone: "orange" },
+          { items: ["Azithromycin 250mg (6)"], status: "Ready to Dispense", payment: "Pending", tone: "green" }
+        ];
+
+        const mapped = patients.slice(0, templates.length).map((p: any, i: number) => ({
+          id: `RX-992${1 + i}`,
+          patient: p.full_name,
+          age: p.age ? `${p.age}y` : "-",
+          doctor: p.provider_name || "Dr. Sharma",
+          ...templates[i],
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+        
+        setPrescriptions(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredPrescriptions = useMemo(() => {
+    if (!searchQuery.trim()) return prescriptions;
+    const q = searchQuery.toLowerCase();
+    return prescriptions.filter(p => p.patient?.toLowerCase().includes(q) || p.id?.toLowerCase().includes(q) || p.items?.some((i: string) => i.toLowerCase().includes(q)));
+  }, [prescriptions, searchQuery]);
 
   const lowStock = [
     { name: "Amoxicillin 500mg", current: "12 Strips", threshold: "20", tone: "red" },
@@ -728,491 +890,364 @@ export function PharmacyView() {
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search RX or Patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search RX, patient, or drug..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><ShoppingCart size={18} /> OTC / POS Sale</button>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Direct Sale</button>
         </div>
       </header>
 
       <div className="pharmacy-layout" style={{ display: 'flex', gap: '24px', padding: '24px', height: 'calc(100% - 70px)', overflow: 'hidden' }}>
         
-        <div className="rx-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden' }}>
-          
-          <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', flexShrink: 0 }}>
-            {[
-              { label: "Prescriptions Today", value: "128", trend: "" },
-              { label: "Pending Dispense", value: "14", trend: "" },
-              { label: "Low Stock Items", value: "8", trend: "Action Required", isRed: true }
-            ].map(kpi => (
-              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
-                 <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                   <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
-                   {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>}
-                 </div>
+        <main className="rx-queue" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto' }}>
+          <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', justifyContent: 'space-between' }}>
+            Active Prescriptions
+            <span style={{ fontSize: '13px', color: 'var(--muted)', fontWeight: 500 }}>{prescriptions.length} Pending</span>
+          </h3>
+          <div className="rx-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingRight: '8px' }}>
+            {loading ? <p>Loading prescriptions...</p> : filteredPrescriptions.length === 0 ? <p>No prescriptions found.</p> : filteredPrescriptions.map(rx => (
+              <div key={rx.id} className="rx-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-30)', border: `1px solid var(--${rx.tone})`, position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', gap: '16px' }}>
+                     <div style={{ padding: '12px', borderRadius: '12px', background: `var(--${rx.tone})`, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                       <FileText size={24} />
+                     </div>
+                     <div>
+                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                         <h4 style={{ margin: 0, fontSize: '16px' }}>{rx.id}</h4>
+                         <span style={{ fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'var(--c-glass-50)', color: `var(--${rx.tone})` }}>{rx.status}</span>
+                         <span style={{ fontSize: '12px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', border: `1px solid ${rx.payment === 'Cleared' ? 'var(--green)' : 'var(--orange)'}`, color: rx.payment === 'Cleared' ? 'var(--green)' : 'var(--orange)' }}>{rx.payment}</span>
+                       </div>
+                       <span style={{ fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={14}/> Sent at {rx.time}</span>
+                     </div>
+                  </div>
+                  <button className="row-action" style={{ padding: '8px 16px', fontSize: '13px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-white)', fontWeight: 600, cursor: 'pointer' }}>Process</button>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '24px', padding: '16px', background: 'var(--c-glass-40)', borderRadius: '12px' }}>
+                  <div style={{ flex: 1 }}>
+                     <span style={{ display: 'block', fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>Patient</span>
+                     <strong style={{ fontSize: '14px', color: 'var(--ink)' }}>{rx.patient} ({rx.age})</strong>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                     <span style={{ display: 'block', fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>Prescribed By</span>
+                     <strong style={{ fontSize: '14px', color: 'var(--ink)' }}><Stethoscope size={12}/> {rx.doctor}</strong>
+                  </div>
+                  <div style={{ flex: 2 }}>
+                     <span style={{ display: 'block', fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>Medications</span>
+                     <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>
+                       {rx.items.map((item: string, i: number) => <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Pill size={12} color="var(--blue)"/> {item}</li>)}
+                     </ul>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
+        </main>
 
-          <div className="rx-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', paddingRight: '8px' }}>
-            {prescriptions.map(rx => (
-               <div key={rx.id} className="rx-card glass" style={{ padding: '20px', borderRadius: '16px', display: 'flex', gap: '24px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-50)' }}>
-                  
-                  <div style={{ width: '100px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <strong style={{ display: 'block', fontSize: '16px', color: 'var(--ink)' }}>{rx.id}</strong>
-                    <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{rx.time}</span>
-                    <span className={`status ${rx.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '8px', marginTop: '8px' }}>
-                      <i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {rx.status}
-                    </span>
+        <aside className="inventory-sidebar glass" style={{ width: '320px', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
+          <div>
+            <h3 style={{ margin: '0 0 16px', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><AlertTriangle size={18} color="var(--orange)" /> Low Stock Alerts</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {lowStock.map((item, i) => (
+                <div key={i} className="stock-card" style={{ padding: '12px', borderRadius: '10px', background: 'var(--c-white)', borderLeft: `4px solid var(--${item.tone})`, boxShadow: 'var(--c-shadow-sm)' }}>
+                  <h4 style={{ margin: '0 0 6px', fontSize: '14px' }}>{item.name}</h4>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--muted)' }}>
+                    <span>Current: <strong style={{ color: `var(--${item.tone})` }}>{item.current}</strong></span>
+                    <span>Threshold: {item.threshold}</span>
                   </div>
-                  
-                  <div style={{ width: '2px', alignSelf: 'stretch', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
-                  
-                  <div style={{ width: '180px', flexShrink: 0 }}>
-                    <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{rx.patient} <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>· {rx.age}</span></h4>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '6px' }}><Stethoscope size={14}/> {rx.doctor}</p>
-                    
-                    <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: rx.payment === 'Cleared' ? 'var(--green)' : 'var(--orange)' }}>
-                       {rx.payment === 'Cleared' ? <ShieldCheck size={14} /> : <CreditCard size={14} />}
-                       Payment: {rx.payment}
-                    </div>
-                  </div>
-                  
-                  <div style={{ flex: 1 }}>
-                     <strong style={{ display: 'block', fontSize: '12px', color: 'var(--muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Prescribed Items</strong>
-                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                        {rx.items.map((item, i) => (
-                           <span key={i} style={{ fontSize: '12px', padding: '4px 10px', background: 'var(--c-dark-05)', color: 'var(--ink)', borderRadius: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <Pill size={12} color="var(--blue)"/> {item}
-                           </span>
-                        ))}
-                     </div>
-                  </div>
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '120px', justifyContent: 'center', flexShrink: 0 }}>
-                    {rx.status === 'Ready to Dispense' && <button className="row-action" style={{ background: 'var(--green)', color: '#fff', borderColor: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><PackageOpen size={14}/> Dispense</button>}
-                    {rx.status === 'Processing' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><ShoppingCart size={14}/> Invoice</button>}
-                    {rx.status === 'Awaiting Stock' && <button className="row-action" style={{ background: 'var(--c-white)', color: 'var(--red)', borderColor: 'rgba(239,68,68,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}>Order Stock</button>}
-                    {rx.status === 'Dispensed' && <button className="row-action" style={{ background: 'transparent', color: 'var(--muted)', borderColor: 'var(--c-dark-10)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }} disabled>Completed</button>}
-                  </div>
-               </div>
-            ))}
-          </div>
-        </div>
-
-        <aside className="inventory-sidebar glass" style={{ width: '300px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--ink)' }}><PackageOpen size={18}/> Low Stock Alerts</h3>
-          </div>
-          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1 }}>
-             {lowStock.map((item, i) => (
-                <div key={i} className="stock-alert-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: `1px solid var(--${item.tone})`, borderLeft: `4px solid var(--${item.tone})` }}>
-                   <h4 style={{ margin: '0 0 8px', fontSize: '14px', color: 'var(--ink)' }}>{item.name}</h4>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '12px' }}>
-                      <span style={{ color: 'var(--muted)', fontWeight: 600 }}>Stock: <strong style={{ color: `var(--${item.tone})` }}>{item.current}</strong></span>
-                      <span style={{ color: 'var(--muted)', fontWeight: 600 }}>Min: {item.threshold}</span>
-                   </div>
-                   <button className="row-action" style={{ width: '100%', padding: '6px 14px', background: 'var(--c-white)', fontSize: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}><ShoppingCart size={14}/> Reorder Now</button>
                 </div>
-             ))}
+              ))}
+            </div>
+            <button className="row-action" style={{ width: '100%', marginTop: '16px', padding: '8px', fontSize: '13px', borderRadius: '8px', border: '1px solid var(--c-glass-60)', background: 'transparent', fontWeight: 600, cursor: 'pointer' }}>View Full Inventory</button>
           </div>
         </aside>
-
       </div>
     </section>
   );
 }
-
 export function BillingView() {
-  const invoices = [
-    { id: "INV-2901", patient: "Sunita Verma", type: "IPD Final Bill", amount: "₹ 45,200", status: "Pending Insurance", insurer: "Star Health", time: "10:30 AM", tone: "orange" },
-    { id: "INV-2902", patient: "Rajesh Kumar", type: "Pharmacy & Labs", amount: "₹ 3,450", status: "Paid", insurer: "Cash", time: "11:15 AM", tone: "green" },
-    { id: "INV-2903", patient: "Ananya Rao", type: "OPD Consultation", amount: "₹ 800", status: "Paid", insurer: "UPI", time: "09:45 AM", tone: "green" },
-    { id: "INV-2904", patient: "Vikram Malhotra", type: "Surgery (Appendectomy)", amount: "₹ 85,000", status: "Overdue", insurer: "HDFC Ergo", time: "Yesterday", tone: "red" },
-    { id: "INV-2905", patient: "Kavita Nair", type: "IPD Advance", amount: "₹ 20,000", status: "Draft", insurer: "Self Pay", time: "12:00 PM", tone: "gray" },
-    { id: "INV-2906", patient: "David Chen", type: "Radiology Scan", amount: "₹ 6,500", status: "Paid", insurer: "Credit Card", time: "12:30 PM", tone: "green" },
-  ];
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const claims = [
-    { id: "CLM-812", provider: "Star Health", amount: "₹ 45,200", status: "In Review", tone: "blue" },
-    { id: "CLM-810", provider: "HDFC Ergo", amount: "₹ 85,000", status: "Action Needed", tone: "red" },
-    { id: "CLM-809", provider: "ICICI Lombard", amount: "₹ 12,500", status: "Approved", tone: "green" },
-    { id: "CLM-805", provider: "Max Bupa", amount: "₹ 32,000", status: "Disbursed", tone: "gray" },
-  ];
+  useEffect(() => {
+    fetch("/api/patients")
+      .then(res => res.json())
+      .then(data => {
+        const patients = data.patients || [];
+        const templates = [
+          { amount: "₹4,500", type: "OPD Consultation", status: "Paid", date: "Sep 20, 2026", tone: "green" },
+          { amount: "₹1,25,000", type: "IPD Surgery", status: "Pending Insurance", date: "Sep 19, 2026", tone: "orange" },
+          { amount: "₹1,200", type: "Pharmacy", status: "Paid", date: "Sep 20, 2026", tone: "green" },
+          { amount: "₹8,500", type: "Radiology (MRI)", status: "Unpaid", date: "Sep 20, 2026", tone: "red" },
+          { amount: "₹3,200", type: "Laboratory", status: "Paid", date: "Sep 18, 2026", tone: "green" },
+          { amount: "₹45,000", type: "IPD Admission", status: "Partial", date: "Sep 15, 2026", tone: "blue" }
+        ];
+
+        const mapped = patients.slice(0, templates.length).map((p: any, i: number) => ({
+          id: `INV-260${901 + i}`,
+          patient: p.full_name,
+          ...templates[i]
+        }));
+        
+        setInvoices(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredInvoices = useMemo(() => {
+    if (!searchQuery.trim()) return invoices;
+    const q = searchQuery.toLowerCase();
+    return invoices.filter(i => i.patient?.toLowerCase().includes(q) || i.id?.toLowerCase().includes(q) || i.status?.toLowerCase().includes(q));
+  }, [invoices, searchQuery]);
 
   return (
     <section className="page-view billing-view glass" style={{ padding: 0 }}>
       <header className="page-header" style={{ padding: "24px 24px 0" }}>
         <div>
-          <h2><Receipt /> Billing & Insurance</h2>
-          <p>Invoices, claims, and revenue cycle management.</p>
+          <h2><ReceiptText /> Billing & Revenue</h2>
+          <p>Manage patient invoices, insurance claims, and payments.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search invoice or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search invoice or patient..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Create Invoice</button>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> New Invoice</button>
         </div>
       </header>
 
-      <div className="billing-layout" style={{ display: 'flex', gap: '24px', padding: '24px', height: 'calc(100% - 70px)', overflow: 'hidden' }}>
-        
-        <div className="billing-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden' }}>
-          
-          <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
-            {[
-              { label: "Today's Revenue", value: "₹ 1.42L", trend: "+12%", isRed: false },
-              { label: "Pending Claims", value: "₹ 8.5L", trend: "14 Claims", isRed: false },
-              { label: "Overdue Payments", value: "₹ 2.1L", trend: "Action Required", isRed: true },
-              { label: "Cash Collections", value: "₹ 48K", trend: "34% of total", isRed: false }
-            ].map(kpi => (
-              <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
-                 <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                   <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
-                   {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>}
-                 </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="invoice-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', paddingRight: '8px' }}>
-            <div style={{ display: 'flex', padding: '0 24px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              <div style={{ width: '120px' }}>Invoice</div>
-              <div style={{ width: '220px' }}>Patient Details</div>
-              <div style={{ flex: 1 }}>Amount & Payer</div>
-              <div style={{ width: '160px' }}>Status</div>
-              <div style={{ width: '120px', textAlign: 'right' }}>Actions</div>
+      <div className="billing-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
+        <div className="billing-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
+          {[
+            { label: "Today's Revenue", value: "₹3,45,200", trend: "up" },
+            { label: "Pending Payments", value: "₹1,12,000", trend: "" },
+            { label: "Insurance Claims", value: "₹8,50,000", trend: "" },
+            { label: "Active Invoices", value: "142", trend: "" }
+          ].map(kpi => (
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
+              <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</span>
+              <strong style={{ display: 'block', fontSize: '24px', marginTop: '4px', color: 'var(--ink)' }}>{kpi.value}</strong>
             </div>
-            
-            {invoices.map(inv => (
-               <div key={inv.id} className="invoice-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: inv.status === 'Overdue' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-60)', background: inv.status === 'Overdue' ? 'rgba(239,68,68,0.05)' : 'var(--c-glass-50)' }}>
-                  
-                  <div style={{ width: '120px', flexShrink: 0 }}>
-                    <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{inv.id}</strong>
-                    <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{inv.time}</span>
-                  </div>
-                  
-                  <div style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
-                  
-                  <div style={{ width: '200px', flexShrink: 0 }}>
-                    <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{inv.patient}</h4>
-                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><Stethoscope size={12}/> {inv.type}</p>
-                  </div>
-                  
-                  <div style={{ flex: 1 }}>
-                     <strong style={{ display: 'block', fontSize: '18px', marginBottom: '4px', color: 'var(--ink)', fontFamily: 'monospace' }}>{inv.amount}</strong>
-                     <span style={{ fontSize: '11px', padding: '2px 8px', background: 'var(--c-dark-05)', color: 'var(--muted)', borderRadius: '6px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                        <Wallet size={12}/> {inv.insurer}
-                     </span>
-                  </div>
-                  
-                  <div style={{ width: '160px', flexShrink: 0 }}>
-                    <span className={`status ${inv.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {inv.status}</span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                    {inv.status === 'Draft' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Banknote size={14}/> Collect</button>}
-                    {inv.status === 'Pending Insurance' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Landmark size={14}/> Claim</button>}
-                    {inv.status === 'Paid' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Download size={14}/> Receipt</button>}
-                    {inv.status === 'Overdue' && <button className="row-action" style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)', display: 'flex', alignItems: 'center', gap: '6px' }}><Send size={14}/> Remind</button>}
-                  </div>
-               </div>
-            ))}
-          </div>
+          ))}
         </div>
 
-        <aside className="claims-sidebar glass" style={{ width: '320px', borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--ink)' }}><Landmark size={18}/> Insurance Claims</h3>
-          </div>
-          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1 }}>
-             {claims.map((claim, i) => (
-                <div key={i} className="claim-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: `1px solid rgba(15,23,42,0.1)` }}>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                      <div>
-                         <h4 style={{ margin: '0 0 4px', fontSize: '13px', color: 'var(--ink)' }}>{claim.provider}</h4>
-                         <span style={{ fontSize: '11px', color: 'var(--muted)', fontWeight: 600 }}>{claim.id}</span>
-                      </div>
-                      <strong style={{ fontSize: '14px', fontFamily: 'monospace' }}>{claim.amount}</strong>
-                   </div>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                      <span className={`status ${claim.tone}`} style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '8px', fontWeight: 600 }}>{claim.status}</span>
-                      <button style={{ background: 'transparent', border: 'none', color: 'var(--blue)', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>View</button>
-                   </div>
-                </div>
-             ))}
-          </div>
-        </aside>
-
+        <div className="billing-table-container glass" style={{ borderRadius: '16px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', overflow: 'hidden' }}>
+          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--c-glass-50)', background: 'var(--c-glass-40)' }}>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Invoice ID</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Patient</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Category</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Date</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Amount</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Status</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? <tr><td colSpan={7} style={{ padding: '32px', textAlign: 'center' }}>Loading live invoices...</td></tr> : filteredInvoices.length === 0 ? <tr><td colSpan={7} style={{ padding: '32px', textAlign: 'center' }}>No invoices found.</td></tr> : filteredInvoices.map(inv => (
+                <tr key={inv.id} style={{ borderBottom: '1px solid var(--c-glass-40)' }}>
+                  <td style={{ padding: '16px', fontSize: '14px', fontWeight: 700 }}>{inv.id}</td>
+                  <td style={{ padding: '16px', fontSize: '14px', fontWeight: 600 }}>{inv.patient}</td>
+                  <td style={{ padding: '16px', fontSize: '13px', color: 'var(--muted)' }}>{inv.type}</td>
+                  <td style={{ padding: '16px', fontSize: '13px', color: 'var(--muted)' }}>{inv.date}</td>
+                  <td style={{ padding: '16px', fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{inv.amount}</td>
+                  <td style={{ padding: '16px' }}>
+                    <span style={{ padding: '4px 10px', borderRadius: '9999px', fontSize: '11px', fontWeight: 700, background: `var(--${inv.tone})`, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{inv.status}</span>
+                  </td>
+                  <td style={{ padding: '16px' }}>
+                     <div style={{ display: 'flex', gap: '8px' }}>
+                       <button className="row-action" style={{ padding: '6px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', cursor: 'pointer' }}><Eye size={14}/></button>
+                       <button className="row-action" style={{ padding: '6px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', cursor: 'pointer' }}><Download size={14}/></button>
+                     </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );
 }
-
 export function InventoryView() {
-  const inventory = [
-    { id: "ITM-1042", name: "Surgical Gloves (Size 7)", category: "Consumables", current: 850, max: 1000, status: "In Stock", tone: "green" },
-    { id: "ITM-1085", name: "N95 Respirator Masks", category: "PPE", current: 120, max: 500, status: "Low Stock", tone: "orange" },
-    { id: "ITM-2011", name: "IV Fluid (Normal Saline 500ml)", category: "Medical Supplies", current: 45, max: 400, status: "Critical", tone: "red" },
-    { id: "ITM-3044", name: "Disposable Syringes (5ml)", category: "Consumables", current: 2100, max: 3000, status: "In Stock", tone: "green" },
-    { id: "ITM-4012", name: "Defibrillator Pads (Adult)", category: "Equipment", current: 0, max: 50, status: "Out of Stock", tone: "gray" },
-    { id: "ITM-1055", name: "Surgical Sutures (Silk 3-0)", category: "Surgical", current: 210, max: 300, status: "In Stock", tone: "blue" },
-    { id: "ITM-1090", name: "Gauze Rolls (10cm)", category: "Wound Care", current: 80, max: 500, status: "Low Stock", tone: "orange" },
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const items = [
+    { id: "INV-1001", item: "N95 Masks", category: "PPE", stock: 1250, unit: "Boxes", status: "Adequate", tone: "green", lastUpdated: "Today, 08:00 AM" },
+    { id: "INV-1002", item: "Surgical Gloves (Size 7)", category: "Consumables", stock: 45, unit: "Boxes", status: "Low Stock", tone: "orange", lastUpdated: "Yesterday" },
+    { id: "INV-1003", item: "Propofol 10mg/ml", category: "Anesthesia", stock: 12, unit: "Vials", status: "Critical", tone: "red", lastUpdated: "Today, 11:30 AM" },
+    { id: "INV-1004", item: "IV Fluids (NS 500ml)", category: "Fluids", stock: 850, unit: "Bottles", status: "Adequate", tone: "green", lastUpdated: "2 Days Ago" },
+    { id: "INV-1005", item: "Syringes (5ml)", category: "Consumables", stock: 2400, unit: "Pieces", status: "Adequate", tone: "green", lastUpdated: "Today, 09:15 AM" },
+    { id: "INV-1006", item: "Ceftriaxone 1g", category: "Antibiotics", stock: 85, unit: "Vials", status: "Low Stock", tone: "orange", lastUpdated: "Yesterday" },
+    { id: "INV-1007", item: "Oxygen Cylinders (Type B)", category: "Gases", stock: 5, unit: "Cylinders", status: "Critical", tone: "red", lastUpdated: "Just Now" },
   ];
+
+  const filteredItems = useMemo(() => {
+    if (!searchQuery.trim()) return items;
+    const q = searchQuery.toLowerCase();
+    return items.filter(i => i.item.toLowerCase().includes(q) || i.id.toLowerCase().includes(q) || i.category.toLowerCase().includes(q));
+  }, [items, searchQuery]);
 
   return (
     <section className="page-view inventory-view glass" style={{ padding: 0 }}>
       <header className="page-header" style={{ padding: "24px 24px 0" }}>
         <div>
-          <h2><Boxes /> Inventory & Supply Chain</h2>
-          <p>Monitor stock levels for medical and surgical supplies.</p>
+          <h2><Boxes /> Medical Inventory</h2>
+          <p>Track consumables, PPE, and critical stock alerts.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
           <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search item or SKU..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
+            <Search size={16} /><input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search item or barcode..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
           </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Purchase Order</button>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><Filter size={16} /> Filter</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Add Stock</button>
         </div>
       </header>
 
       <div className="inventory-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
-        
-        <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
+        <div className="inventory-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', flexShrink: 0 }}>
           {[
-            { label: "Active SKUs", value: "1,248", trend: "" },
-            { label: "Low Stock Items", value: "24", trend: "Needs Reorder", isRed: true },
-            { label: "Pending Deliveries", value: "8", trend: "Arriving Today" },
-            { label: "Monthly Spend", value: "₹ 4.2L", trend: "-5% vs Last Month" }
+            { label: "Total SKUs", value: "4,520", trend: "" },
+            { label: "Adequate Stock", value: "4,105", trend: "" },
+            { label: "Low Stock Items", value: "382", trend: "", tone: "orange" },
+            { label: "Critical Shortages", value: "33", trend: "up", tone: "red" }
           ].map(kpi => (
-            <div key={kpi.label} className={`kpi-card glass ${kpi.isRed ? 'alert-card' : ''}`} style={{ padding: '16px', borderRadius: '12px', background: kpi.isRed ? 'rgba(239,68,68,0.1)' : 'var(--c-glass-40)', border: kpi.isRed ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--c-glass-50)' }}>
-               <p style={{ margin: 0, fontSize: '13px', color: kpi.isRed ? 'var(--red)' : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                 <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--ink)' }}>{kpi.value}</h3>
-                 {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 700, color: kpi.isRed ? 'var(--red)' : 'var(--green)' }}>{kpi.trend}</span>}
-               </div>
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: kpi.tone ? `rgba(${kpi.tone === 'red' ? '239,68,68' : '249,115,22'},0.1)` : 'var(--c-glass-40)', border: kpi.tone ? `1px solid rgba(${kpi.tone === 'red' ? '239,68,68' : '249,115,22'},0.3)` : '1px solid var(--c-glass-50)' }}>
+              <span style={{ fontSize: '12px', color: kpi.tone ? `var(--${kpi.tone})` : 'var(--muted)', fontWeight: 600 }}>{kpi.label}</span>
+              <strong style={{ display: 'block', fontSize: '24px', marginTop: '4px', color: kpi.tone ? `var(--${kpi.tone})` : 'var(--ink)' }}>{kpi.value}</strong>
             </div>
           ))}
         </div>
 
-        <div className="inventory-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', padding: '0 24px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            <div style={{ width: '120px' }}>Item Code</div>
-            <div style={{ width: '260px' }}>Item Details</div>
-            <div style={{ flex: 1 }}>Stock Level</div>
-            <div style={{ width: '140px' }}>Status</div>
-            <div style={{ width: '120px', textAlign: 'right' }}>Actions</div>
-          </div>
-          
-          {inventory.map(item => {
-            const pct = item.max === 0 ? 0 : Math.min(100, Math.max(0, (item.current / item.max) * 100));
-            return (
-               <div key={item.id} className="inventory-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 24px', borderRadius: '16px', border: item.status === 'Critical' || item.status === 'Out of Stock' ? '1px solid rgba(239,68,68,0.4)' : '1px solid var(--c-glass-60)', background: item.status === 'Critical' || item.status === 'Out of Stock' ? 'rgba(239,68,68,0.05)' : 'var(--c-glass-50)' }}>
-                  
-                  <div style={{ width: '120px', flexShrink: 0 }}>
-                    <strong style={{ display: 'block', fontSize: '15px', color: 'var(--ink)' }}>{item.id}</strong>
-                  </div>
-                  
-                  <div style={{ width: '2px', height: '40px', background: 'var(--c-dark-10)', borderRadius: '2px' }} />
-                  
-                  <div style={{ width: '260px', flexShrink: 0 }}>
-                    <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{item.name}</h4>
-                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}><Archive size={12}/> {item.category}</p>
-                  </div>
-                  
-                  <div style={{ flex: 1, paddingRight: '40px' }}>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: 'var(--ink)', marginBottom: '6px' }}>
-                        <span>{item.current} Units</span>
-                        <span style={{ color: 'var(--muted)' }}>Max: {item.max}</span>
+        <div className="inventory-table-container glass" style={{ borderRadius: '16px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', overflow: 'hidden' }}>
+          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--c-glass-50)', background: 'var(--c-glass-40)' }}>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>SKU</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Item Name</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Category</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Stock Level</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Status</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Last Updated</th>
+                <th style={{ padding: '16px', fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredItems.length === 0 ? <tr><td colSpan={7} style={{ padding: '32px', textAlign: 'center' }}>No items found.</td></tr> : filteredItems.map(item => (
+                <tr key={item.id} style={{ borderBottom: '1px solid var(--c-glass-40)' }}>
+                  <td style={{ padding: '16px', fontSize: '13px', fontWeight: 600, color: 'var(--muted)' }}>{item.id}</td>
+                  <td style={{ padding: '16px', fontSize: '14px', fontWeight: 700, color: 'var(--ink)' }}>{item.item}</td>
+                  <td style={{ padding: '16px', fontSize: '13px', color: 'var(--muted)' }}>{item.category}</td>
+                  <td style={{ padding: '16px', fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{item.stock} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--muted)' }}>{item.unit}</span></td>
+                  <td style={{ padding: '16px' }}>
+                    <span style={{ padding: '4px 10px', borderRadius: '9999px', fontSize: '11px', fontWeight: 700, background: `var(--${item.tone})`, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.status}</span>
+                  </td>
+                  <td style={{ padding: '16px', fontSize: '13px', color: 'var(--muted)' }}>{item.lastUpdated}</td>
+                  <td style={{ padding: '16px' }}>
+                     <div style={{ display: 'flex', gap: '8px' }}>
+                       <button className="row-action" style={{ padding: '6px 12px', fontSize: '12px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', fontWeight: 600, cursor: 'pointer' }}>Update</button>
+                       <button className="row-action" style={{ padding: '6px', borderRadius: '8px', border: '1px solid var(--c-glass-50)', background: 'var(--c-glass-30)', cursor: 'pointer' }}><MoreHorizontal size={14}/></button>
                      </div>
-                     <div style={{ height: '8px', background: 'var(--c-dark-10)', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${pct}%`, background: `var(--${item.tone})`, borderRadius: '4px', transition: 'width 0.3s ease' }} />
-                     </div>
-                  </div>
-                  
-                  <div style={{ width: '140px', flexShrink: 0 }}>
-                    <span className={`status ${item.tone}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '12px' }}><i style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor' }}/> {item.status}</span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', gap: '8px', width: '120px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                    {item.status === 'In Stock' && <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', gap: '6px' }}><Package size={14}/> Audit</button>}
-                    {(item.status === 'Low Stock' || item.status === 'Critical' || item.status === 'Out of Stock') && <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', display: 'flex', alignItems: 'center', gap: '6px' }}><Truck size={14}/> Reorder</button>}
-                  </div>
-               </div>
-            );
-          })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
   );
 }
-
 export function ReportsView() {
-  const recentReports = [
-    { id: "REP-992", name: "Q3 Financial Summary", category: "Financial", format: "PDF", author: "Admin (Zarro)", date: "Today, 10:00 AM", tone: "green", icon: TrendingUp },
-    { id: "REP-991", name: "IPD Admissions & Discharges", category: "Operational", format: "Excel", author: "System Auto", date: "Yesterday, 11:59 PM", tone: "blue", icon: Users },
-    { id: "REP-990", name: "Pharmacy Stock Audit", category: "Inventory", format: "PDF", author: "Dr. Sharma", date: "Sep 18, 2026", tone: "orange", icon: Package },
-    { id: "REP-989", name: "Outpatient Wait Times Analytics", category: "Clinical", format: "CSV", author: "Admin (Zarro)", date: "Sep 15, 2026", tone: "gray", icon: Clock },
-    { id: "REP-988", name: "Insurance Claims Settlement", category: "Financial", format: "Excel", author: "Billing Dept", date: "Sep 12, 2026", tone: "green", icon: Receipt },
-    { id: "REP-987", name: "Staff Duty Roster - Ward A", category: "HR", format: "PDF", author: "Sister Mary", date: "Sep 10, 2026", tone: "blue", icon: FileText },
-  ];
+  const [stats, setStats] = useState({ patients: 0, appointments: 0, doctors: 0 });
+  const [loading, setLoading] = useState(true);
 
-  const templates = [
-    { name: "Daily Revenue Report", desc: "End of day financial settlement and POS reconciliations.", icon: Banknote, tone: "green" },
-    { name: "Bed Occupancy Rate", desc: "Live IPD utilization metrics and available capacity.", icon: BedDouble, tone: "blue" },
-    { name: "Doctor Performance", desc: "Consultation counts, delays, and patient feedback.", icon: Stethoscope, tone: "orange" },
-    { name: "Compliance & Safety Audit", desc: "Regulatory safety checks and incident reports.", icon: ShieldCheck, tone: "red" },
-  ];
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/patients").then(res => res.json()),
+      fetch("/api/appointments").then(res => res.json()),
+      fetch("/api/doctors").then(res => res.json())
+    ]).then(([p, a, d]) => {
+      setStats({
+        patients: p.patients?.length || 0,
+        appointments: a.appointments?.length || 0,
+        doctors: d.doctors?.length || 0
+      });
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
 
   return (
     <section className="page-view reports-view glass" style={{ padding: 0 }}>
       <header className="page-header" style={{ padding: "24px 24px 0" }}>
         <div>
           <h2><BarChart3 /> Analytics & Reports</h2>
-          <p>Generate clinical, operational, and financial insights.</p>
+          <p>Hospital-wide performance, clinical outcomes, and financial metrics.</p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
-          <label className="search-bar glass" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)' }}>
-            <Search size={16} /><input placeholder="Search reports..." style={{ border: 'none', background: 'transparent', outline: 'none' }}/>
-          </label>
-          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Plus size={18} /> Custom Report</button>
+          <button className="row-action" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', border: '1px solid var(--c-glass-40)', background: 'var(--c-glass-50)', cursor: 'pointer', fontWeight: 600 }}><CalendarDays size={16} /> This Month</button>
+          <button className="primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '9999px', cursor: 'pointer' }}><Download size={18} /> Export Report</button>
         </div>
       </header>
 
-      <div className="reports-layout" style={{ display: 'flex', gap: '24px', padding: '24px', height: 'calc(100% - 70px)', overflow: 'hidden' }}>
-        
-        <div className="reports-main" style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '20px', overflow: 'hidden' }}>
-          
-          <div className="opd-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', flexShrink: 0 }}>
-            {[
-              { label: "Reports Generated", value: "142", trend: "This Month" },
-              { label: "Scheduled Jobs", value: "8", trend: "Active automated exports" },
-              { label: "Storage Used", value: "4.2 GB", trend: "Of 100GB limit" }
-            ].map(kpi => (
-              <div key={kpi.label} className="kpi-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-40)', border: '1px solid var(--c-glass-50)' }}>
-                 <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</p>
-                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', marginTop: '4px' }}>
-                   <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: 'var(--ink)' }}>{kpi.value}</h3>
-                   {kpi.trend && <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>{kpi.trend}</span>}
-                 </div>
+      <div className="reports-layout" style={{ padding: '24px', height: 'calc(100% - 70px)', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
+        <div className="report-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+          {[
+            { label: "Total Registered Patients", value: loading ? "..." : stats.patients.toString(), icon: Users, color: "var(--blue)" },
+            { label: "Appointments Today", value: loading ? "..." : stats.appointments.toString(), icon: CalendarDays, color: "var(--orange)" },
+            { label: "Active Doctors on Roster", value: loading ? "..." : stats.doctors.toString(), icon: Stethoscope, color: "var(--green)" },
+            { label: "Revenue This Month", value: "₹42,50,000", icon: Banknote, color: "var(--purple)" }
+          ].map(kpi => (
+            <div key={kpi.label} className="kpi-card glass" style={{ padding: '20px', borderRadius: '16px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)', display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: kpi.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                <kpi.icon size={24} />
               </div>
-            ))}
-          </div>
+              <div>
+                <span style={{ fontSize: '13px', color: 'var(--muted)', fontWeight: 600 }}>{kpi.label}</span>
+                <strong style={{ display: 'block', fontSize: '28px', marginTop: '4px', color: 'var(--ink)' }}>{kpi.value}</strong>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-             <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '8px' }}><FileText size={18}/> Recent Exports</h3>
-             <button style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--c-dark-05)', border: 'none', padding: '6px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', color: 'var(--ink)' }}><Filter size={14}/> Filter</button>
-          </div>
-
-          <div className="report-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', paddingRight: '8px' }}>
-            {recentReports.map(rep => {
-              const Icon = rep.icon;
-              return (
-                 <div key={rep.id} className="report-card glass" style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 20px', borderRadius: '16px', border: '1px solid var(--c-glass-60)', background: 'var(--c-glass-50)' }}>
-                    
-                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `rgba(var(--${rep.tone}-rgb, 15,23,42), 0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: `var(--${rep.tone})`, flexShrink: 0 }}>
-                      <Icon size={24} strokeWidth={1.5} />
-                    </div>
-                    
-                    <div style={{ flex: 1 }}>
-                      <h4 style={{ margin: '0 0 4px', fontSize: '15px', color: 'var(--ink)' }}>{rep.name}</h4>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '12px', color: 'var(--muted)', fontWeight: 500 }}>
-                         <span>{rep.date}</span>
-                         <span>•</span>
-                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><User size={12}/> {rep.author}</span>
-                      </div>
-                    </div>
-                    
-                    <div style={{ width: '100px', flexShrink: 0 }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, padding: '4px 8px', borderRadius: '6px', background: rep.format === 'PDF' ? 'rgba(239,68,68,0.1)' : rep.format === 'Excel' ? 'rgba(34,197,94,0.1)' : 'var(--c-dark-05)', color: rep.format === 'PDF' ? 'var(--red)' : rep.format === 'Excel' ? 'var(--green)' : 'var(--muted)' }}>
-                        {rep.format === 'PDF' ? <FileText size={12}/> : rep.format === 'Excel' ? <FileSpreadsheet size={12}/> : <FileText size={12}/>}
-                        {rep.format}
-                      </span>
-                    </div>
-                    
-                    <div style={{ display: 'flex', gap: '8px', width: '100px', justifyContent: 'flex-end', flexShrink: 0 }}>
-                      <button className="row-action" style={{ background: 'var(--c-white)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%' }}><Download size={14}/> Save</button>
-                    </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+          <div className="chart-container glass" style={{ padding: '24px', borderRadius: '16px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
+             <h3 style={{ margin: '0 0 16px', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><TrendingUp size={18}/> Patient Footfall (Last 7 Days)</h3>
+             <div style={{ height: '300px', display: 'flex', alignItems: 'flex-end', gap: '12px', padding: '20px 0 0' }}>
+               {[45, 62, 58, 81, 75, 92, Math.max(30, stats.patients * 10)].map((h, i) => (
+                 <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                   <div style={{ width: '100%', height: `${h * 2}px`, background: i === 6 ? 'var(--blue)' : 'var(--c-glass-60)', borderRadius: '6px 6px 0 0', transition: 'height 1s ease' }} />
+                   <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>{['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</span>
                  </div>
-              );
-            })}
+               ))}
+             </div>
+          </div>
+          <div className="chart-container glass" style={{ padding: '24px', borderRadius: '16px', background: 'var(--c-glass-30)', border: '1px solid var(--c-glass-50)' }}>
+             <h3 style={{ margin: '0 0 16px', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><PieChart size={18}/> Department Load</h3>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '32px' }}>
+               {[
+                 { dept: "Cardiology", pct: 35, color: "var(--red)" },
+                 { dept: "Orthopedics", pct: 25, color: "var(--blue)" },
+                 { dept: "Neurology", pct: 20, color: "var(--orange)" },
+                 { dept: "Pediatrics", pct: 20, color: "var(--green)" }
+               ].map(d => (
+                 <div key={d.dept}>
+                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
+                     <span>{d.dept}</span>
+                     <span>{d.pct}%</span>
+                   </div>
+                   <div style={{ width: '100%', height: '8px', background: 'var(--c-glass-50)', borderRadius: '9999px', overflow: 'hidden' }}>
+                     <div style={{ width: `${d.pct}%`, height: '100%', background: d.color }} />
+                   </div>
+                 </div>
+               ))}
+             </div>
           </div>
         </div>
-
-        <aside className="templates-sidebar glass" style={{ flex: 1, borderRadius: '16px', display: 'flex', flexDirection: 'column', background: 'var(--c-glass-35)', border: '1px solid var(--c-glass-50)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid var(--c-dark-10)', background: 'var(--c-glass-50)' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--ink)' }}><PieChart size={18}/> Standard Templates</h3>
-          </div>
-          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1 }}>
-             {templates.map((tpl, i) => {
-                const Icon = tpl.icon;
-                return (
-                  <div key={i} className="template-card glass" style={{ padding: '16px', borderRadius: '12px', background: 'var(--c-glass-60)', border: `1px solid rgba(15,23,42,0.1)` }}>
-                     <div style={{ display: 'flex', gap: '12px' }}>
-                        <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: `rgba(var(--${tpl.tone}-rgb, 15,23,42), 0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: `var(--${tpl.tone})`, flexShrink: 0 }}>
-                           <Icon size={18} />
-                        </div>
-                        <div>
-                           <h4 style={{ margin: '0 0 4px', fontSize: '14px', color: 'var(--ink)' }}>{tpl.name}</h4>
-                           <p style={{ margin: 0, fontSize: '12px', color: 'var(--muted)', lineHeight: 1.4 }}>{tpl.desc}</p>
-                        </div>
-                     </div>
-                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
-                        <button className="row-action" style={{ background: 'var(--blue)', color: '#fff', borderColor: 'var(--blue)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px' }}><Play size={12} fill="currentColor"/> Generate Now</button>
-                     </div>
-                  </div>
-                );
-             })}
-          </div>
-        </aside>
-
-      </div>
-    </section>
-  );
-}
-
-export function GenericModuleView({ active }: { active: string }) {
-  const config: Record<string, any> = {
-  };
-
-  const data = config[active];
-  if (!data) return null;
-
-  return (
-    <section className="page-view glass">
-      <header className="page-header">
-        <div>
-          <h2>{data.title}</h2>
-          <p>{data.desc}</p>
-        </div>
-        <button className="primary" type="button"><Plus size={18} /> New Entry</button>
-      </header>
-      <div className="table-wrap full-height">
-        <table>
-          <thead>
-            <tr>
-              {data.cols.map((c: string) => <th key={c}>{c}</th>)}
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.rows.map((row: string[], i: number) => (
-              <tr key={i}>
-                {row.map((cell: string, j: number) => (
-                  <td key={j} className={cell === "Critical" || cell === "Low Stock" ? "red" : ""}>
-                    {j === 1 || j === 0 ? <strong>{cell}</strong> : cell}
-                  </td>
-                ))}
-                <td>
-                  <div className="action-buttons">
-                    <button className="row-action" type="button">View</button>
-                    <button className="row-action" type="button">Edit</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </section>
   );

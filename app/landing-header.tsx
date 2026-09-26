@@ -46,7 +46,7 @@ export function LandingHeader({ clerkEnabled }: { clerkEnabled: boolean }) {
             <>
               <Show when="signed-out">
                 <Link href="/sign-in" className="sign-in-link">Sign in</Link>
-                <Link href="/dashboard" className="btn btn-black get-started-btn">Get HospitalX <ArrowRight size={16} /></Link>
+                <Link href="/dashboard" className="btn btn-black get-started-btn">Open HospitalX <ArrowRight size={16} /></Link>
               </Show>
               <Show when="signed-in">
                 <Link href="/dashboard" className="btn btn-black get-started-btn">Dashboard <ArrowRight size={16} /></Link>
@@ -56,7 +56,7 @@ export function LandingHeader({ clerkEnabled }: { clerkEnabled: boolean }) {
           ) : (
             <>
               <Link href="/sign-in" className="sign-in-link">Sign in</Link>
-              <Link href="/dashboard" className="btn btn-black get-started-btn">Get HospitalX <ArrowRight size={16} /></Link>
+              <Link href="/dashboard" className="btn btn-black get-started-btn">Open HospitalX <ArrowRight size={16} /></Link>
             </>
           )}
         </div>
