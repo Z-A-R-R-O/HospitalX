@@ -3,62 +3,68 @@
 import { useEffect, useRef } from "react";
 
 export function HeroScrollVideo() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    const wrapper = wrapperRef.current?.closest<HTMLElement>(".hero-wrapper");
+    if (!video || !wrapper) return;
 
-    let rafId: number;
+    let rafId = 0;
     let targetTime = 0;
-    
-    // We want the video to be fully scrubbed by the time we scroll 3x viewport height
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const openingOffset = 0.2;
+
     const handleScroll = () => {
-      if (video.duration) {
-        const scrollMax = window.innerHeight * 3.0;
-        const scrollFraction = Math.min(window.scrollY / scrollMax, 1);
-        targetTime = scrollFraction * video.duration;
+      if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+      const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      const scrollDistance = Math.max(wrapper.offsetHeight - window.innerHeight, 1);
+      const progress = Math.max(0, Math.min((window.scrollY - wrapperTop) / scrollDistance, 1));
+      targetTime = openingOffset + progress * Math.max(video.duration - openingOffset, 0);
+    };
+
+    const revealOpeningFrame = () => {
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && video.currentTime < openingOffset) {
+        video.currentTime = openingOffset;
       }
+      handleScroll();
     };
 
     const renderLoop = () => {
-      if (video && video.duration) {
-        // Smoothly interpolate current time towards target time
-        // The closer to 1 the lerp factor, the stiffer. 0.1 is very smooth/buttery.
-        video.currentTime += (targetTime - video.currentTime) * 0.08;
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        video.currentTime = reducedMotion ? targetTime : video.currentTime + (targetTime - video.currentTime) * 0.12;
       }
       rafId = requestAnimationFrame(renderLoop);
     };
 
-    // Initialize
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
-    // Play video briefly to load first frame properly on iOS
-    video.play().then(() => {
-      video.pause();
-      rafId = requestAnimationFrame(renderLoop);
-    }).catch(e => {
-      // Autoplay might be blocked, but we can still scrub
-      rafId = requestAnimationFrame(renderLoop);
-    });
+    video.addEventListener("loadedmetadata", handleScroll);
+    video.addEventListener("loadeddata", revealOpeningFrame);
+    video.addEventListener("canplay", revealOpeningFrame);
+    revealOpeningFrame();
+    rafId = requestAnimationFrame(renderLoop);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      video.removeEventListener("loadedmetadata", handleScroll);
+      video.removeEventListener("loadeddata", revealOpeningFrame);
+      video.removeEventListener("canplay", revealOpeningFrame);
       cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
-    <div className="hero-bg" style={{ background: '#000' }}>
+    <div ref={wrapperRef} className="hero-bg" aria-hidden="true">
       <video
         ref={videoRef}
         src="/Hero-scroll.mp4"
         poster="/hero_bg.jpg"
         className="bg-img"
-        preload="metadata"
+        preload="auto"
         muted
         playsInline
-        style={{ objectFit: 'cover', width: '100%', height: '100%', opacity: 1 }}
+        tabIndex={-1}
       />
     </div>
   );
