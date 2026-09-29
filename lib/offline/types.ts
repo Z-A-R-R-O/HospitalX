@@ -7,16 +7,21 @@
  */
 
 // Sync queue mutation types
-export type SyncStatus = 'pending' | 'syncing' | 'synced' | 'failed';
-export type SyncAction = 'create_patient' | 'create_screening' | 'create_referral';
+export type SyncStatus = 'live' | 'demo' | 'offline' | 'pending' | 'syncing' | 'synced' | 'failed' | 'conflict' | 'stale';
+export type SyncAction = 'create_patient' | 'update_patient' | 'create_screening' | 'create_referral';
 export interface SyncMutation {
   id: string;              // Local UUID
-  idempotencyKey: string;  // Sent to server for dedup
+  idempotencyKey: string;  // Sent to server for dedup
+
+  /** The record version observed by this device.  Required for updates; 0 means a new record. */
+  baseVersion: number;
   entity: SyncAction;
   payload: Record<string, unknown>;
   status: SyncStatus;
   attempts: number;
-  errorMessage?: string;
+  errorMessage?: string;
+
+  serverVersion?: number;
   createdAt: number;       // Date.now()
   syncedAt?: number;
 }
@@ -88,4 +93,4 @@ export interface ConnectivityState {
   syncingCount: number;
   failedCount: number;
 }
-
+

@@ -11,7 +11,12 @@ const { neon } = require('@neondatabase/serverless');
 const { drizzle } = require('drizzle-orm/neon-http');
 const { migrate } = require('drizzle-orm/neon-http/migrator');
 async function run() {
-  const sql = neon(process.env.DATABASE_URL);
+  const connectionString = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
+  if (!connectionString) throw new Error('DATABASE_URL_UNPOOLED (preferred) or DATABASE_URL is required.');
+  if (!process.env.DATABASE_URL_UNPOOLED && connectionString.includes('-pooler')) {
+    throw new Error('Refusing to migrate through a pooled URL. Set DATABASE_URL_UNPOOLED to a direct Neon connection.');
+  }
+  const sql = neon(connectionString);
   const db = drizzle(sql);
   
   console.log('Running Drizzle migrations...');
@@ -22,4 +27,4 @@ run().catch((err) => {
   console.error('Migration failed:', err);
   process.exit(1);
 });
-
+

@@ -21,8 +21,8 @@ export async function createAppointment(
   const valid = validateCreateAppointment(input);
   const db = sql();
   const idempotencyKey = valid.idempotencyKey || crypto.randomUUID();
-  // Status can be scheduled, waiting, in_progress, completed
-  const status = (input as any).status || 'scheduled';
+  // Canonical appointment workflow starts with REQUESTED.
+  const status = (input as any).status || 'REQUESTED';
   const result = await db`
     INSERT INTO appointments (
       idempotency_key, organization_id, patient_id, full_name, provider_id, 
@@ -78,4 +78,4 @@ export async function updateAppointmentStatus(
   }
   return appointment;
 }
-
+

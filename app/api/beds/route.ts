@@ -11,15 +11,10 @@ import { sql } from "@/db/client";
 import { requireOrganizationContext } from "@/lib/request-context";
 import { requirePermission } from "@/lib/permissions/guard";
 export const runtime = "nodejs";
-async function ensure(){
-  const db=sql();
-  await db`CREATE TABLE IF NOT EXISTS beds (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id TEXT NOT NULL DEFAULT 'city-care', facility TEXT NOT NULL, ward TEXT NOT NULL, label TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'available', patient_id UUID, updated_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
-  return db;
-}
 export async function GET(){
   try{
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'read:inventory' as any); // Or appropriate permission
+    requirePermission(ctx, 'inventory:read'); // Or appropriate permission
     const db=sql();
     const beds=await db`SELECT * FROM beds WHERE organization_id = ${ctx.organizationId} ORDER BY facility, ward, label`;
     return NextResponse.json({beds,source:"neon"});
@@ -31,7 +26,7 @@ export async function GET(){
 export async function POST(request:Request){
   try{
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'write:inventory' as any);
+    requirePermission(ctx, 'inventory:write');
     const b=await request.json();
     if(!b.facility||!b.ward||!b.label) return NextResponse.json({error:"facility, ward, and label are required"},{status:400});
     const db=sql();
@@ -42,4 +37,4 @@ export async function POST(request:Request){
     return NextResponse.json({error: e instanceof Error ? e.message : "Unable to create bed"},{status:500});
   }
 }
-
+

@@ -16,7 +16,7 @@ type CountRow = { count?: number };
 export async function GET() {
   try {
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'read:dashboard' as any); // Assuming read:dashboard or similar permission exists
+    requirePermission(ctx, 'tasks:read'); // Assuming read:dashboard or similar permission exists
     const db = sql();
     // Assuming tables have organization_id except beds/tasks if they don't, but they should.
     // For now, filter patients and appointments by organization_id. We'll filter beds and tasks as well.

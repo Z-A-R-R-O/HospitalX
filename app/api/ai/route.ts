@@ -7,30 +7,43 @@
  */
 
 import { NextResponse } from 'next/server';
+import { getPermissionFilteredContext } from "@/lib/ai/context";
+import { guardMadhuRequest } from "@/lib/ai/guardrails";
+import { env } from "@/lib/env";
+import { requireOrganizationContext } from "@/lib/request-context";
+import { requirePermission, UnauthorizedError } from "@/lib/permissions";
+
+export const runtime = "nodejs";
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
-    
-    // Hardcoded demo key for OpenRouter
-        // Embedded demo key (obfuscated to bypass GitHub secret scanning block)
-    const p1 = "sk-or-v1-178ac";
-    const p2 = "b424766cf5ae6cce0c7c414a82f";
-    const p3 = "1b5849068d5de64d8bac63e6a26a0b57";
-    const apiKey = p1 + p2 + p3;
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const identity = await requireOrganizationContext();
+    requirePermission(identity, "patients:read");
+    const { messages } = await req.json();
+    const requestText = Array.isArray(messages) ? messages.filter((message: unknown) => typeof (message as { content?: unknown })?.content === "string").map((message: { content: string }) => message.content).join("\n") : "";
+    const safety = guardMadhuRequest(requestText);
+    if (safety.blocked) {
+      return NextResponse.json({ summary: safety.text, openItems: [], nextAction: "Ask an authorized clinician to review the patient and make the decision.", sources: [], freshness: new Date().toISOString(), approvalBoundary: safety.safety, text: safety.text, blocked: true }, { status: 400 });
+    }
+    const context = await getPermissionFilteredContext();
+    if ("error" in context) return NextResponse.json({ error: context.error }, { status: 403 });
+    if (!env.openRouterKey) {
+      return NextResponse.json({ summary: "Madhu is ready to summarize protected workflow context once an AI provider is configured.", openItems: [], nextAction: "Review the visible queue and assign the next accountable owner.", sources: context.sources, freshness: context.freshness, approvalBoundary: "HUMAN_REVIEW_REQUIRED", text: "Madhu is temporarily unavailable." }, { status: 503 });
+    }
+    const response = await fetch(env.aiApiUrl || "https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${env.openRouterKey}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "nvidia/nemotron-3.5-lightning:free", // This is very fast and currently working
+        model: env.aiModel || "nvidia/nemotron-3.5-lightning:free",
         messages: [
           { 
             role: "system", 
-            content: "You are Madhu, a bright, deeply knowledgeable, and caring AI Nurse Assistant for HospitalX. You help doctors and hospital administrators with operational insights, patient care coordination, medical data summaries, and hospital efficiency. Keep your tone professional yet warm and supportive. Provide concise, actionable answers. Never break character or refer to yourself as a large language model." 
-          },
-          ...(messages || [])
+            content: "You are Madhu, HospitalX's operational assistant. Use only the supplied permission-filtered context. You may summarize workflow status and prepare drafts, but never diagnose, prescribe, recommend treatment, or approve actions. An authorized human retains the approval boundary."
+          },
+          ...(Array.isArray(messages) ? messages.slice(-12) : []),
+          { role: "system", content: `Protected context: ${JSON.stringify(context.data)}` }
         ]
       })
     });
@@ -45,10 +58,13 @@ export async function POST(req: Request) {
       }
     }
     const data = await response.json();
-    return NextResponse.json({ text: data.choices?.[0]?.message?.content || "No response generated." });
-  } catch (error) {
+    const text = data.choices?.[0]?.message?.content || "No response generated.";
+    return NextResponse.json({ summary: text, openItems: [], nextAction: "Review the visible queue and assign the next accountable owner.", sources: context.sources, freshness: context.freshness, approvalBoundary: "HUMAN_REVIEW_REQUIRED", text });
+  } catch (error) {
+    if (error instanceof UnauthorizedError) return NextResponse.json({ error: error.message }, { status: 403 });
+    if ((error as Error).name === "AuthenticationError") return NextResponse.json({ error: "Authentication required." }, { status: 401 });
     console.error("AI Route Error:", error);
     return NextResponse.json({ error: "Failed to generate AI response." }, { status: 500 });
   }
 }
-
+

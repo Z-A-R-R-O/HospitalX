@@ -11,16 +11,10 @@ import { sql } from "@/db/client";
 import { requireOrganizationContext } from "@/lib/request-context";
 import { requirePermission } from "@/lib/permissions/guard";
 export const runtime = "nodejs";
-async function ensure(){
-  const db=sql();
-  await db`CREATE TABLE IF NOT EXISTS patients (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id TEXT NOT NULL, full_name TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
-  await db`CREATE TABLE IF NOT EXISTS clinical_orders (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), patient_id UUID NOT NULL REFERENCES patients(id), order_type TEXT NOT NULL, test_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'ordered', result TEXT, ordered_at TIMESTAMPTZ NOT NULL DEFAULT now(), completed_at TIMESTAMPTZ)`;
-  return db;
-}
 export async function GET(request:Request){
   try{
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'read:clinical' as any);
+    requirePermission(ctx, 'clinical_notes:read');
     const db=sql();
     const type=new URL(request.url).searchParams.get("type");
     const rows=type
@@ -35,7 +29,7 @@ export async function GET(request:Request){
 export async function POST(request:Request){
   try{
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'write:clinical' as any);
+    requirePermission(ctx, 'clinical_notes:write');
     const b=await request.json();
     if(!b.patientId||!b.orderType||!b.testName)return NextResponse.json({error:"patientId, orderType, and testName are required"},{status:400});
     const db=sql();
@@ -50,4 +44,4 @@ export async function POST(request:Request){
     return NextResponse.json({error: e instanceof Error ? e.message : "Unable to create order"},{status:500});
   }
 }
-
+

@@ -11,25 +11,6 @@ import { sql } from "@/db/client";
 import { requireOrganizationContext } from "@/lib/request-context";
 import { requirePermission } from "@/lib/permissions";
 export const runtime = "nodejs";
-async function ensure() {
-  const db = sql();
-  await db`CREATE TABLE IF NOT EXISTS patients (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
-    organization_id TEXT NOT NULL, 
-    full_name TEXT NOT NULL, 
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`;
-  await db`CREATE TABLE IF NOT EXISTS billing_transactions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
-    patient_id UUID NOT NULL REFERENCES patients(id), 
-    description TEXT NOT NULL, 
-    amount NUMERIC(12,2) NOT NULL, 
-    status TEXT NOT NULL DEFAULT 'pending', 
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(), 
-    paid_at TIMESTAMPTZ
-  )`;
-  return db;
-}
 export async function GET() {
   try {
     const context = await requireOrganizationContext();
@@ -80,4 +61,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unable to create bill" }, { status: 500 });
   }
 }
-
+

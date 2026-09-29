@@ -1,8 +1,14 @@
 # HospitalX Developer Guide
 
-Welcome. This is the practical companion to the product and architecture documents in [`ZRO/`](../ZRO/README.md).
+Welcome to the Bit N Build 2026 engineering guide for HospitalX—the practical companion to the product and architecture documents in [`ZRO/`](../ZRO/README.md).
 
-If you are here because the landing page made you curious, excellent. If you are here because something is broken five minutes before a demo, also excellent—we have all been there. This guide answers the useful questions: where does the work live, how do you run it, and what must stay true while you change it?
+If you are here because the landing page made you curious, excellent. If you are here five minutes before a demo with one eyebrow raised, also excellent—we planned for that energy. This guide answers the useful questions: where does the work live, how do you run it, and what must stay true while you change it?
+
+## Start here
+
+- [Bit N Build 2026 submission guide](BIT-N-BUILD-2026.md) — reviewer path, proof points, and demo scope.
+- [Zero-to-Release documentation](../ZRO/README.md) — product and architecture decisions.
+- [Root README](../README.md) — product overview and quick start.
 
 ## Working agreement
 

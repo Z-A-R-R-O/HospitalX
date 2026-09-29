@@ -1,13 +1,48 @@
-{
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1790654891749,
-      "tag": "0000_needy_lord_hawal",
-      "breakpoints": true
-    }
-  ]
-}
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790654891749,
+      "tag": "0000_needy_lord_hawal",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790654891750,
+      "tag": "0001_proof_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790654891751,
+      "tag": "0002_event_chain",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790654891752,
+      "tag": "0003_demo_evidence",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790654891753,
+      "tag": "0004_reliability_run_lease",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790654891754,
+      "tag": "0005_inventory_tenant_scope",
+      "breakpoints": true
+    }
+  ]
+}

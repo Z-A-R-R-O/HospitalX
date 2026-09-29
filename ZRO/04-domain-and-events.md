@@ -39,6 +39,14 @@ Events must not contain unnecessary clinical data. Store references and retrieve
 subject details through permission-checked APIs. Consumers must be idempotent by
 `event_id` and tolerate delayed or repeated delivery.
 
+## Proof chain
+
+HospitalX chains persisted `domain_events` **per organization**, rather than per
+aggregate. The database locks that organization's chain head while appending an
+event, stores the predecessor hash and SHA-256 envelope hash, and advances the
+head in the same transaction. This yields one independently verifiable timeline
+for each tenant and prevents concurrent commands from creating chain forks.
+
 ## Event families
 
 `patient.registered`, `appointment.scheduled`, `queue.entry.created`,

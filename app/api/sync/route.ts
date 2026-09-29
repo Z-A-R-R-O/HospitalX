@@ -6,11 +6,15 @@
  * accordance with the terms of the license agreement you entered into with Veyminore.
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { sql } from "@/db/client";
+import { requireOrganizationContext } from "@/lib/request-context";
+import { requirePermission, UnauthorizedError } from "@/lib/permissions";
 export const runtime = "nodejs";
 export async function POST(req: Request) {
   try {
+    const context = await requireOrganizationContext();
+    requirePermission(context, "patients:write");
     const db = sql();
 
     const body = await req.json();
@@ -29,7 +33,7 @@ export async function POST(req: Request) {
         if (entity === "create_patient") {
           const res = (await db`
             INSERT INTO patients (idempotency_key, organization_id, full_name, date_of_birth, sex, phone)
-            VALUES (${idempotencyKey}, ${payload.organization_id || "demo-org"}, ${payload.full_name}, ${payload.date_of_birth || null}, ${payload.sex || null}, ${payload.phone || null})
+            VALUES (${idempotencyKey}, ${context.organizationId}, ${payload.full_name}, ${payload.date_of_birth || null}, ${payload.sex || null}, ${payload.phone || null})
             ON CONFLICT (idempotency_key) DO NOTHING
             RETURNING id
           `) as any[];
@@ -37,13 +41,13 @@ export async function POST(req: Request) {
           if (res.length > 0) {
             results.push({ idempotencyKey, status: "created", serverId: res[0].id });
           } else {
-            const existing = (await db`SELECT id FROM patients WHERE idempotency_key = ${idempotencyKey} LIMIT 1`) as any[];
+            const existing = (await db`SELECT id FROM patients WHERE idempotency_key = ${idempotencyKey} AND organization_id = ${context.organizationId} LIMIT 1`) as any[];
             results.push({ idempotencyKey, status: "exists", serverId: existing[0]?.id });
           }
         } else if (entity === "create_screening") {
           let patientId = payload.patientServerId;
           if (!patientId && payload.patientIdempotencyKey) {
-            const p = (await db`SELECT id FROM patients WHERE idempotency_key = ${payload.patientIdempotencyKey} LIMIT 1`) as any[];
+            const p = (await db`SELECT id FROM patients WHERE idempotency_key = ${payload.patientIdempotencyKey} AND organization_id = ${context.organizationId} LIMIT 1`) as any[];
             patientId = p[0]?.id;
           }
           if (!patientId) {
@@ -57,8 +61,8 @@ export async function POST(req: Request) {
               duration_seconds, completed_at, synced_at
             )
             VALUES (
-              ${idempotencyKey}, ${patientId}, ${payload.worker_id || "demo-worker"},
-              ${payload.organization_id || "demo-org"}, ${payload.status || "in_progress"},
+              ${idempotencyKey}, ${patientId}, ${context.userId},
+              ${context.organizationId}, ${payload.status || "in_progress"},
               ${payload.total_score || null}, ${payload.max_score || null}, ${payload.risk_level || null},
               ${JSON.stringify(payload.responses || [])}::jsonb,
               ${JSON.stringify(payload.observations || [])}::jsonb,
@@ -70,19 +74,19 @@ export async function POST(req: Request) {
           if (res.length > 0) {
             results.push({ idempotencyKey, status: "created", serverId: res[0].id });
           } else {
-            const existing = (await db`SELECT id FROM screenings WHERE idempotency_key = ${idempotencyKey} LIMIT 1`) as any[];
+            const existing = (await db`SELECT id FROM screenings WHERE idempotency_key = ${idempotencyKey} AND organization_id = ${context.organizationId} LIMIT 1`) as any[];
             results.push({ idempotencyKey, status: "exists", serverId: existing[0]?.id });
           }
         } else if (entity === "create_referral") {
           let patientId = payload.patientServerId;
           if (!patientId && payload.patientIdempotencyKey) {
-            const p = (await db`SELECT id FROM patients WHERE idempotency_key = ${payload.patientIdempotencyKey} LIMIT 1`) as any[];
+            const p = (await db`SELECT id FROM patients WHERE idempotency_key = ${payload.patientIdempotencyKey} AND organization_id = ${context.organizationId} LIMIT 1`) as any[];
             patientId = p[0]?.id;
           }
           
           let screeningId = payload.screeningServerId || null;
           if (!screeningId && payload.screeningIdempotencyKey) {
-            const s = (await db`SELECT id FROM screenings WHERE idempotency_key = ${payload.screeningIdempotencyKey} LIMIT 1`) as any[];
+            const s = (await db`SELECT id FROM screenings WHERE idempotency_key = ${payload.screeningIdempotencyKey} AND organization_id = ${context.organizationId} LIMIT 1`) as any[];
             screeningId = s[0]?.id;
           }
           if (!patientId) {
@@ -92,8 +96,8 @@ export async function POST(req: Request) {
           let appointmentId = null;
           if (payload.urgency === 'urgent') {
             const appt = (await db`
-              INSERT INTO appointments (patient_id, provider_name, appointment_type, status, starts_at)
-              VALUES (${patientId}, 'Assigned Specialist', ${payload.specialty}, 'scheduled', now() + interval '1 day')
+              INSERT INTO appointments (organization_id, patient_id, provider_name, appointment_type, status, starts_at)
+              VALUES (${context.organizationId}, ${patientId}, 'Assigned Specialist', ${payload.specialty}, 'scheduled', now() + interval '1 day')
               RETURNING id
             `) as any[];
             appointmentId = appt[0].id;
@@ -104,8 +108,8 @@ export async function POST(req: Request) {
               specialty, urgency, reason, worker_notes, status, appointment_id, synced_at
             )
             VALUES (
-              ${idempotencyKey}, ${screeningId}, ${patientId}, ${payload.worker_id || "demo-worker"},
-              ${payload.organization_id || "demo-org"}, ${payload.specialty}, ${payload.urgency || "routine"},
+              ${idempotencyKey}, ${screeningId}, ${patientId}, ${context.userId},
+              ${context.organizationId}, ${payload.specialty}, ${payload.urgency || "routine"},
               ${payload.reason}, ${payload.worker_notes || null}, ${payload.status || "pending"},
               ${appointmentId}, now()
             )
@@ -115,7 +119,7 @@ export async function POST(req: Request) {
           if (res.length > 0) {
             results.push({ idempotencyKey, status: "created", serverId: res[0].id });
           } else {
-            const existing = (await db`SELECT id FROM referrals WHERE idempotency_key = ${idempotencyKey} LIMIT 1`) as any[];
+            const existing = (await db`SELECT id FROM referrals WHERE idempotency_key = ${idempotencyKey} AND organization_id = ${context.organizationId} LIMIT 1`) as any[];
             results.push({ idempotencyKey, status: "exists", serverId: existing[0]?.id });
           }
         } else {
@@ -127,9 +131,11 @@ export async function POST(req: Request) {
       }
     }
     return NextResponse.json({ results, source: "neon" });
-  } catch (error: any) {
+  } catch (error: any) {
+    if (error instanceof UnauthorizedError) return NextResponse.json({ error: error.message }, { status: 403 });
+    if (error?.name === "AuthenticationError") return NextResponse.json({ error: "Authentication required." }, { status: 401 });
     console.error("Sync error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
-
+

@@ -36,8 +36,9 @@
     "next-env.d.ts",
     ".next-desktop/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
-}
-
+  "exclude": [
+    "node_modules",
+    "tests/**/*.spec.ts"
+  ]
+}
+

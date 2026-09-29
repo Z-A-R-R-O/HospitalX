@@ -18,3 +18,21 @@ push-trace.log
 .env*.local
 .vercel
 .env*
+.neon
+
+# Local investigation and handoff artifacts
+Agent-*-report.md
+Docs/Agent-*-report.md
+add-*.js
+check-*.js
+clear-lease.js
+drop*.js
+run-migs.js
+test-appt.js
+test-insert.js
+scripts/patch-command.py
+veyminore.bat
+tsconfig.tsbuildinfo
+
+# Local planning notes; keep out of release and validation artifacts
+Docs/plans/

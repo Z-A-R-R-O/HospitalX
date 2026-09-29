@@ -17,7 +17,8 @@ export interface Appointment {
   status: string;
   priority: string;
   starts_at: string;
-  duration_minutes: number;
+  duration_minutes: number;
+  version: number;
   created_at: Date;
 }
 export interface CreateAppointmentInput {
@@ -30,4 +31,4 @@ export interface CreateAppointmentInput {
   durationMinutes?: string | number;
   idempotencyKey?: string;
 }
-
+

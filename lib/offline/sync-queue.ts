@@ -18,7 +18,9 @@ import { savePatient, saveScreening, saveReferral, addToSyncQueue, getPatient, g
 export async function queuePatientSync(patient: OfflinePatient): Promise<void> {
   const mutation: SyncMutation = {
     id: uuidv4(),
-    idempotencyKey: patient.idempotencyKey,
+    idempotencyKey: patient.idempotencyKey,
+
+    baseVersion: 0,
     entity: 'create_patient',
     payload: {
       // Flat snake_case to match /api/sync expectations
@@ -42,7 +44,9 @@ export async function queueScreeningSync(screening: OfflineScreening): Promise<v
   
   const mutation: SyncMutation = {
     id: uuidv4(),
-    idempotencyKey: screening.idempotencyKey,
+    idempotencyKey: screening.idempotencyKey,
+
+    baseVersion: 0,
     entity: 'create_screening',
     payload: {
       worker_id: screening.workerId || 'demo-worker',
@@ -71,7 +75,9 @@ export async function queueReferralSync(referral: OfflineReferral): Promise<void
   const screening = await getScreening(referral.screeningLocalId);
   const mutation: SyncMutation = {
     id: uuidv4(),
-    idempotencyKey: referral.idempotencyKey,
+    idempotencyKey: referral.idempotencyKey,
+
+    baseVersion: 0,
     entity: 'create_referral',
     payload: {
       worker_id: referral.workerId || 'demo-worker',
@@ -92,5 +98,16 @@ export async function queueReferralSync(referral: OfflineReferral): Promise<void
     createdAt: Date.now(),
   };
   await addToSyncQueue(mutation);
-}
-
+}
+
+/** Queue an edit with the exact server version the device last observed. */
+export async function queuePatientUpdateSync(patient: OfflinePatient, baseVersion: number, changes: Pick<OfflinePatient, 'fullName' | 'dateOfBirth' | 'sex' | 'phone'>): Promise<void> {
+  if (!patient.serverId) throw new Error('Cannot queue a patient update before the patient has a server id.');
+  if (!Number.isInteger(baseVersion) || baseVersion < 1) throw new Error('baseVersion must be a positive integer.');
+  await addToSyncQueue({
+    id: uuidv4(), idempotencyKey: uuidv4(), entity: 'update_patient', baseVersion,
+    payload: { serverId: patient.serverId, full_name: changes.fullName, date_of_birth: changes.dateOfBirth ?? null, sex: changes.sex ?? null, phone: changes.phone ?? null, organization_id: 'demo-org', _localId: patient.localId },
+    status: 'pending', attempts: 0, createdAt: Date.now(),
+  });
+}
+

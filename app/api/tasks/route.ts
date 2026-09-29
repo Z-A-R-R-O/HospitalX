@@ -11,15 +11,10 @@ import { sql } from "@/db/client";
 import { requireOrganizationContext } from "@/lib/request-context";
 import { requirePermission } from "@/lib/permissions/guard";
 export const runtime = "nodejs";
-async function ensure(){
-  const db=sql();
-  await db`CREATE TABLE IF NOT EXISTS hospital_tasks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id TEXT NOT NULL DEFAULT 'city-care', text TEXT NOT NULL, severity TEXT NOT NULL DEFAULT 'attention', owner TEXT NOT NULL DEFAULT 'Operations', resolved_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT now())`;
-  return db;
-}
 export async function GET(){
   try{
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'read:dashboard' as any);
+    requirePermission(ctx, 'tasks:read');
     const db=sql();
     const tasks=await db`SELECT id,text,severity,owner,created_at FROM hospital_tasks WHERE organization_id = ${ctx.organizationId} AND resolved_at IS NULL ORDER BY created_at DESC`;
     return NextResponse.json({tasks,source:"neon"});
@@ -31,7 +26,7 @@ export async function GET(){
 export async function POST(request:Request){
   try{
     const ctx = await requireOrganizationContext();
-    requirePermission(ctx, 'write:dashboard' as any);
+    requirePermission(ctx, 'tasks:write');
     const b=await request.json();
     if(!b.text)return NextResponse.json({error:"text is required"},{status:400});
     const db=sql();
@@ -42,4 +37,4 @@ export async function POST(request:Request){
     return NextResponse.json({error: e instanceof Error ? e.message : "Unable to create task"},{status:500});
   }
 }
-
+

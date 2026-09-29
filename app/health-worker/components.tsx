@@ -7,8 +7,9 @@
  * accordance with the terms of the license agreement you entered into with Veyminore.
  */
 
-import React from 'react';
+import React from 'react';
 import { Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle2 } from 'lucide-react';
+import type { SyncStatus } from '@/lib/offline/types';
 export function StatusBar({ isOnline, pendingCount, syncingCount, failedCount }: { isOnline: boolean, pendingCount: number, syncingCount: number, failedCount: number }) {
   return (
     <div style={{
@@ -123,19 +124,29 @@ export function WorkerCard({ icon, title, subtitle, count, color, onClick }: { i
     </button>
   );
 }
-export function SyncStatusBadge({ status }: { status: 'pending' | 'syncing' | 'synced' | 'failed' }) {
-  const colors = {
-    pending: 'var(--orange)',
-    syncing: 'var(--blue)',
-    synced: 'var(--green)',
-    failed: 'var(--red)'
-  };
+export function SyncStatusBadge({ status }: { status: SyncStatus }) {
+  const colors = {
+    live: 'var(--green)',
+    demo: 'var(--purple)',
+    offline: 'var(--orange)',
+    pending: 'var(--orange)',
+    syncing: 'var(--blue)',
+    synced: 'var(--green)',
+    failed: 'var(--red)',
+    conflict: 'var(--red)',
+    stale: 'var(--orange)'
+  };
   
   const labels = {
-    pending: 'Pending Sync',
-    syncing: 'Syncing...',
-    synced: 'Synced',
-    failed: 'Sync Failed'
+    live: 'Live',
+    demo: 'Demo',
+    offline: 'Offline',
+    pending: 'Pending Sync',
+    syncing: 'Syncing...',
+    synced: 'Synced',
+    failed: 'Sync Failed',
+    conflict: 'Needs Conflict Resolution',
+    stale: 'Stale Data'
   };
   return (
     <span style={{
@@ -155,7 +166,7 @@ export function SyncStatusBadge({ status }: { status: 'pending' | 'syncing' | 's
     </span>
   );
 }
-export function PatientCard({ patient, onClick }: { patient: { localId: string, fullName: string, age?: number, sex?: string, location?: string, syncStatus?: 'pending' | 'syncing' | 'synced' | 'failed' }, onClick?: () => void }) {
+export function PatientCard({ patient, onClick }: { patient: { localId: string, fullName: string, age?: number, sex?: string, location?: string, syncStatus?: SyncStatus }, onClick?: () => void }) {
   const isSynced = patient.syncStatus === 'synced';
   
   return (
@@ -264,4 +275,4 @@ export function EmptyState({ icon, title, description, action }: { icon: React.R
     </div>
   );
 }
-
+

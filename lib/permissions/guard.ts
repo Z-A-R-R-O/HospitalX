@@ -19,10 +19,16 @@ export class UnauthorizedError extends Error {
  * Enforces a clinical safety or data boundary.
  * Throws an UnauthorizedError if the context role lacks the required permission.
  */
-export function requirePermission(context: OrganizationContext, permission: Permission) {
+export function requirePermission(context: OrganizationContext, permission: Permission) {
   if (!hasPermission(context.role, permission)) {
     console.error(`[SECURITY GUARD] Blocked attempt: Role '${context.role}' lacks permission '${permission}' for user '${context.userId}' in org '${context.organizationId}'`);
     throw new UnauthorizedError(`Your role (${context.role || 'none'}) is not authorized to perform this action.`);
-  }
-}
-
+  }
+}
+
+export function requireRole(context: OrganizationContext, roles: string[]) {
+  if (!context.role || !roles.map((role) => role.toLowerCase()).includes(context.role)) {
+    throw new UnauthorizedError(`Your role (${context.role || "none"}) is not authorized to perform this action.`);
+  }
+}
+

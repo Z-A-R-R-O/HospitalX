@@ -1,0 +1,34 @@
+name: Verify HospitalX
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:unit
+      - run: npm run test:integration
+      - run: npm run test:security
+      - run: npm run test:workflows
+      - run: npm run test:reliability
+      # The Reliability Lab is intentionally database-backed. Run this proof
+      # when a dedicated CI database is configured; the unit and security
+      # suites remain mandatory on every push and pull request.
+      - run: npm run test:e2e
+        if: ${{ secrets.DATABASE_URL != '' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - run: npm run build

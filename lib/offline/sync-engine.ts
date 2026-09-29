@@ -54,7 +54,7 @@ class SyncEngine {
         if (response.ok) {
           const data = await response.json();
           const result = data.results?.[0];
-          if (result && (result.status === 'created' || result.status === 'exists')) {
+          if (result && (result.status === 'created' || result.status === 'exists' || result.status === 'acknowledged')) {
             await removeSyncMutation(mutation.id);
             if (result.serverId) {
               await this.updateEntityAfterSync(
@@ -63,7 +63,9 @@ class SyncEngine {
                 result.serverId
               );
             }
-          } else {
+          } else if (result?.status === 'conflict') {
+            await updateSyncMutation(mutation.id, { status: 'conflict', errorMessage: result.message || 'Version conflict', serverVersion: result.serverVersion });
+          } else {
             throw new Error(result?.error || 'Sync returned unexpected status');
           }
         } else {
@@ -89,7 +91,7 @@ class SyncEngine {
     const now = Date.now();
     const localId = payload._localId as string;
     if (!localId) return;
-    if (action === 'create_patient') {
+    if (action === 'create_patient' || action === 'update_patient') {
       const patient = await getPatient(localId);
       if (patient) {
         patient.serverId = serverId;
@@ -130,4 +132,4 @@ export function useSyncEngine() {
   }, [runSync]);
   return { triggerSync };
 }
-
+

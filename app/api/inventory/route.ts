@@ -16,7 +16,7 @@ export async function GET() {
     const context = await requireOrganizationContext();
     requirePermission(context, 'inventory:read');
     
-    const items = await getInventory();
+    const items = await getInventory(context.organizationId);
     return NextResponse.json({ items, source: "neon" });
   } catch (error: any) {
     if (error.name === "UnauthorizedError") return NextResponse.json({ error: error.message }, { status: 403 });
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     requirePermission(context, 'inventory:write');
     
     const body = await request.json();
-    const item = await createInventoryItem(body);
+    const item = await createInventoryItem(context.organizationId, body);
     return NextResponse.json({ item, source: "neon" }, { status: 201 });
   } catch (error: any) {
     if (error.name === "UnauthorizedError") return NextResponse.json({ error: error.message }, { status: 403 });
@@ -37,4 +37,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unable to create item" }, { status: 500 });
   }
 }
-
+

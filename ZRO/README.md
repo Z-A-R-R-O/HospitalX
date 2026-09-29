@@ -2,6 +2,8 @@
 
 > The decision record for taking HospitalX from product prototype to a safe, operable release.
 
+For a concise Bit N Build 2026 reviewer walkthrough, see the [submission guide](../Docs/BIT-N-BUILD-2026.md). This Zero-to-Release set remains the decision record behind that demonstration.
+
 HospitalX is a real-time operating system for hospital operations. It does not
 attempt to be another collection of hospital-management screens: it maintains a
 trusted operational state, identifies blockers, and coordinates the next action.

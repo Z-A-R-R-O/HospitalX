@@ -10,7 +10,9 @@ export const env = {
   isProduction: process.env.NODE_ENV === 'production',
   isDemoMode: !process.env.DATABASE_URL,
   databaseUrl: process.env.DATABASE_URL,
-  openRouterKey: process.env.OPENROUTER_API_KEY,
+  openRouterKey: process.env.OPENROUTER_API_KEY,
+  aiApiUrl: process.env.AI_API_URL,
+  aiModel: process.env.AI_MODEL,
   
   requireDb: () => {
     if (!process.env.DATABASE_URL) {

@@ -2,9 +2,17 @@
 
 > **Care flows further.**
 
+> **Built for Bit N Build 2026** — because a patient handoff should not require detective work, a lucky Wi-Fi signal, and three cups of tea.
+
 What happens when a patient’s story has to travel farther than the patient does?
 
 HospitalX is an offline-conscious hospital operations experience designed to keep patient context, team ownership, and the next action connected—from arrival to continuity of care. It is our answer to a very human problem: good people can still lose the thread when the work is spread across queues, handoffs, and systems that do not talk to each other.
+
+## Proof-first demo
+
+The local demo provides a judge-facing path: [Judge Mode](/judge) resets the fixed `DEMO-2026-09-30` hero journey, [Reliability Lab](/reliability) runs visible adversarial scenarios, and [Integrity Verifier](/verify) replays persisted event history. Judge Mode reads persisted demo counts and the latest Lab-run metrics; it does not manufacture browser-only scores.
+
+For the focused Bit N Build walkthrough, start with the [submission guide](Docs/BIT-N-BUILD-2026.md).
 
 [![Watch the HospitalX Section 04 product film](public/readme/hospitalx-section-04-thumbnail.png)](public/interfrozt/media/hospitalx-evolved.mp4)
 
@@ -25,7 +33,7 @@ HospitalX turns that scattered journey into one calmer operational view:
 
 ## V1 at a glance
 
-Think of V1 as the opening shift: the story, the work surfaces, and the foundations are here. The clinical pilot controls still have to earn their place.
+Think of V1 as the opening shift: a focused, working proof of connected care operations with the safety controls that must earn their place before a clinical pilot.
 
 | Surface | What it delivers |
 | --- | --- |
@@ -150,7 +158,7 @@ The [Zero-to-Release documentation](ZRO/README.md) is the source of truth for pr
 
 ## Before real-world use
 
-HospitalX V1 is a product prototype and engineering foundation. It is **not a clinical decision system**, a certified medical device, or production-ready clinical software. The honest version is important: polished screens are not a substitute for authorization, audit trails, privacy controls, validation, compliance, and operational approval. Do not use it for diagnosis, treatment, prescribing, emergency triage, or real patient care until those controls are implemented, tested, and approved.
+HospitalX V1 is a focused product prototype and engineering foundation. It is **not a clinical decision system**, a certified medical device, or approved clinical software. It demonstrates operational continuity—not a replacement for professional judgment. Do not use it for diagnosis, treatment, prescribing, emergency triage, or real patient care until the required controls are implemented, independently validated, and approved.
 
 ## Team and links
 
