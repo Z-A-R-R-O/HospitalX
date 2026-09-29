@@ -1,0 +1,17 @@
+# Local repositories, Next.js build caches, and install artifacts must never
+# be uploaded with a source deployment. Vercel installs dependencies and builds
+# this project in a clean remote environment.
+.git/
+.next/
+.next*/
+node_modules/
+dist/
+desktop-installer/
+*.log
+.env*
+.vercel/
+public/downloads/HospitalX-Setup.exe
+repo-utf8.export
+repo.export
+repo.import
+hospitalx-deploy.tar

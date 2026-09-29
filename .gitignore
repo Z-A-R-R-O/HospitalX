@@ -1,0 +1,20 @@
+# Dependencies and generated output
+node_modules/
+.next*/
+dist/
+desktop-installer/
+
+# Distribution and internal export artifacts are released separately
+public/downloads/HospitalX-Setup.exe
+repo-utf8.export
+repo.export
+repo.import
+hospitalx-deploy.tar
+
+# Local logs and environment values
+*.log
+push-trace.log
+.env.local
+.env*.local
+.vercel
+.env*

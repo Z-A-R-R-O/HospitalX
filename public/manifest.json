@@ -1,0 +1,38 @@
+{
+  "name": "HospitalX ΓÇö Veyminore Edition",
+  "short_name": "HospitalX",
+  "description": "One connected operating system for hospital care, teams, and operations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090a09",
+  "theme_color": "#090a09",
+  "categories": ["medical", "health", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Open HospitalX",
+      "short_name": "Dashboard",
+      "url": "/dashboard"
+    },
+    {
+      "name": "Patient directory",
+      "short_name": "Patients",
+      "url": "/patients"
+    },
+    {
+      "name": "Appointments",
+      "short_name": "Appointments",
+      "url": "/appointments"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

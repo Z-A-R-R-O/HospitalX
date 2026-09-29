@@ -1,0 +1,20 @@
+/* Product typography scale */
+:root{--type-display:clamp(2.25rem,3.4vw,3.2rem);--type-title:1.1rem;--type-body:.875rem;--type-caption:.75rem;--leading-tight:1.08;--leading-body:1.45}
+body{font-size:var(--type-body);line-height:var(--leading-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,p{margin-block-start:0}
+h1{font-weight:700;line-height:var(--leading-tight);letter-spacing:-.045em}
+h2{font-weight:700;line-height:1.2;letter-spacing:-.025em}
+button{font-weight:500;letter-spacing:-.01em}
+input,select,textarea{font-size:.875rem;line-height:1.35}
+.hero h1,.empty h1{font-size:var(--type-display);font-weight:700;line-height:var(--leading-tight);letter-spacing:-.055em}
+.hero p,.empty p{font-weight:500;letter-spacing:.18em;text-transform:uppercase}
+.hero span,.empty span{line-height:1.4}
+.brand strong{font-weight:700;letter-spacing:-.04em}.brand small{font-size:.6875rem;letter-spacing:.01em}
+.metrics b{font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.035em}.metrics small{font-weight:400;letter-spacing:0}.metrics em{font-weight:600;letter-spacing:.01em}
+.queue h2,.chart h2,.quick h2{font-size:var(--type-title);font-weight:700}.queue h2 small{font-weight:600;letter-spacing:.01em}
+table{font-variant-numeric:tabular-nums}th{font-weight:600;letter-spacing:.035em;text-transform:uppercase}td{line-height:1.35}td b{font-weight:600;color:#25324b}
+.status{font-weight:600;letter-spacing:.005em}.attention h2{font-weight:700}.attention button span{line-height:1.35}.attention em{font-style:normal;font-variant-numeric:tabular-nums}
+.chart strong{font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.04em}.chart strong small{font-weight:600;letter-spacing:0}.chart p{line-height:1.7}
+.form-card h1{font-size:clamp(2rem,4vw,2.6rem);font-weight:700;line-height:1.05}.form-card>span{line-height:1.45}.form-card label{font-weight:500}.form-status{line-height:1.4}
+footer{font-size:.6875rem;letter-spacing:.01em}
+@media(max-width:640px){body{font-size:.8125rem}.hero h1,.empty h1{font-size:2rem}.hero span,.empty span{font-size:.875rem}.queue h2,.chart h2,.quick h2{font-size:1rem}.metrics b{font-size:1.2rem}}

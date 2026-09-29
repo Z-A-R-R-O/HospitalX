@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "HospitalX",
+  "version": "0.1.0",
+  "identifier": "com.hospitalx.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:3000",
+    "frontendDist": "../native-shell"
+  },
+  "app": {
+    "windows": [],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Medical",
+    "shortDescription": "HospitalX connected hospital operating system",
+    "longDescription": "The Veyminore edition of HospitalX for connected clinical care, operations, and continuity."
+  }
+}
+

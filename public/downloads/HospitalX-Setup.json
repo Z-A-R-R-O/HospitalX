@@ -1,0 +1,8 @@
+﻿{
+    "product":  "HospitalX - Veyminore Edition",
+    "version":  "0.1.0",
+    "file":  "HospitalX-Setup.exe",
+    "defaultAppUrl":  "http://127.0.0.1:4678/dashboard",
+    "sha256":  "620dd75f61016ed0955011441b45c138a639ea0e669c2ad0380962f21272d629",
+    "builtAt":  "2026-09-30T03:18:00.3596414Z"
+}

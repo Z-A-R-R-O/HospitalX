@@ -1,0 +1,10 @@
+{
+	"appId": "com.hospitalx.app",
+	"appName": "HospitalX",
+	"webDir": "native-shell",
+	"server": {
+		"url": "http://10.0.2.2:3000",
+		"cleartext": true,
+		"androidScheme": "https"
+	}
+}
