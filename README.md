@@ -19,7 +19,6 @@ HospitalX is an offline-conscious hospital operations experience designed to kee
 
 This is a team-built prototype. Use the [current implementation status](ZRO/10-current-implementation.md) and [security and compliance notes](ZRO/06-security-compliance.md) to distinguish implemented workflows from production requirements.
 
-
 ## Proof-first demo
 
 The local demo provides a judge-facing path: [Judge Mode](/judge) resets the fixed `DEMO-2026-09-30` hero journey, [Reliability Lab](/reliability) runs visible adversarial scenarios, and [Integrity Verifier](/verify) replays persisted event history. Judge Mode reads persisted demo counts and the latest Lab-run metrics; it does not manufacture browser-only scores.
