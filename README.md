@@ -8,6 +8,17 @@ What happens when a patient’s story has to travel farther than the patient doe
 
 HospitalX is an offline-conscious hospital operations experience designed to keep patient context, team ownership, and the next action connected—from arrival to continuity of care. It is our answer to a very human problem: good people can still lose the thread when the work is spread across queues, handoffs, and systems that do not talk to each other.
 
+## Engineering snapshot
+
+| Area | Evidence in this repository |
+| --- | --- |
+| Application | Next.js 15, React 19, TypeScript/JavaScript |
+| Data and resilience | PostgreSQL/Neon, Drizzle ORM, IndexedDB support, service-worker and offline-queue foundations |
+| Quality checks | Unit, integration, security, workflow, reliability, and Playwright end-to-end test commands are defined in the project scripts |
+| Readiness | Product prototype and engineering foundation; not approved clinical software |
+
+This is a team-built prototype. Use the [current implementation status](ZRO/10-current-implementation.md) and [security and compliance notes](ZRO/06-security-compliance.md) to distinguish implemented workflows from production requirements.
+
 ## Proof-first demo
 
 The local demo provides a judge-facing path: [Judge Mode](/judge) resets the fixed `DEMO-2026-09-30` hero journey, [Reliability Lab](/reliability) runs visible adversarial scenarios, and [Integrity Verifier](/verify) replays persisted event history. Judge Mode reads persisted demo counts and the latest Lab-run metrics; it does not manufacture browser-only scores.
